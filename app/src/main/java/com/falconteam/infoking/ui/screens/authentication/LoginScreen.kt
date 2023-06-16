@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.falconteam.infoking.ui.theme.InfoKingTheme
+import com.falconteam.infoking.ui.theme.Typography
 
 @Composable
 fun LoginContent(
@@ -23,27 +24,27 @@ fun LoginContent(
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
-            .background(color = Color.White),
+            .background(color = Color(0xFF031926)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             modifier = Modifier.clickable { onClick() },
             text = "LOGIN",
-            fontSize = MaterialTheme.typography.h3.fontSize,
-            fontWeight = FontWeight.Bold
+            style = Typography.displayMedium,
+            color = Color.White
         )
         Text(
             modifier = Modifier.clickable { onSignUpClick() },
             text = "Sign Up",
-            fontSize = MaterialTheme.typography.body1.fontSize,
-            fontWeight = FontWeight.Medium
+            style = Typography.bodyLarge,
+            color = Color.White
         )
         Text(
             modifier = Modifier.clickable { onForgotClick() },
             text = "Forgot Password",
-            fontSize = MaterialTheme.typography.body1.fontSize,
-            fontWeight = FontWeight.Medium
+            style = Typography.bodyLarge,
+            color = Color.White
         )
     }
 }
