@@ -1,4 +1,4 @@
-package com.falconteam.infoking.ui.screens.home
+package com.falconteam.infoking.ui.navigation.admin.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -30,28 +30,27 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.falconteam.infoking.ui.navigation.graphs.HomeNavGraph
-import com.falconteam.infoking.ui.screens.BottomBar
+import com.falconteam.infoking.ui.navigation.PressBackAgainToExit
+import com.falconteam.infoking.ui.navigation.admin.AdminBottomBar
+import com.falconteam.infoking.ui.navigation.admin.graphs.AdminHomeNavGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BattleScreen(navController: NavHostController = rememberNavController()) {
+fun AdminScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = { AdminBottomBar(navController = navController) }
     ) {
-        HomeNavGraph(navController = navController)
+        AdminHomeNavGraph(navController = navController)
     }
+    PressBackAgainToExit()
 }
 
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun AdminBottomBar(navController: NavHostController) {
     val screens = listOf(
-        BottomBar.Ranking,
-        BottomBar.Inventory,
-        BottomBar.Battle,
-        BottomBar.Map,
-        BottomBar.Profile,
+        AdminBottomBar.BanUsers,
+        AdminBottomBar.AdminSettings
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -63,13 +62,13 @@ fun BottomBar(navController: NavHostController) {
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         ) {
             BottomNavigation(
-               backgroundColor = Color(0xFF09486D)
+                backgroundColor = Color(0xFF09486D)
             ) {
                 screens.forEach {screen ->
-                    AddItem(
+                    AddItemAdmin(
                         screen = screen,
                         currentDestination = currentDestination,
-                        navController = navController,
+                        navController = navController
                     )
                 }
             }
@@ -78,10 +77,10 @@ fun BottomBar(navController: NavHostController) {
 }
 
 @Composable
-fun RowScope.AddItem(
-    screen: BottomBar,
+fun RowScope.AddItemAdmin(
+    screen: AdminBottomBar,
     currentDestination: NavDestination?,
-    navController: NavHostController,
+    navController: NavHostController
 ) {
     val primaryColor = Color(0xFF031926)
 
@@ -93,26 +92,26 @@ fun RowScope.AddItem(
 
     BottomNavigationItem(
         icon = {
-               Box(
-                   modifier = Modifier
-                       .clip(RoundedCornerShape(10.dp))
-                       .background(background)
-               )
-               {
-                   Row(
-                       modifier = Modifier
-                           .padding(8.dp),
-                       verticalAlignment = Alignment.CenterVertically,
-                       horizontalArrangement = Arrangement.spacedBy(2.dp),
-                   ){
-                       Icon(
-                           modifier = Modifier.size(32.dp),
-                           imageVector = screen.icon,
-                           contentDescription = "Nav Icon",
-                           tint = Color(0xFF468189)
-                       )
-                   }
-               }
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(background)
+            )
+            {
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                ){
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        imageVector = screen.icon,
+                        contentDescription = "Nav Icon",
+                        tint = Color(0xFF468189)
+                    )
+                }
+            }
 
         },
 

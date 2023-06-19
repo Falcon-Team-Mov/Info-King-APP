@@ -4,19 +4,33 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.falconteam.infoking.ui.screens.ScreenContent
-import com.falconteam.infoking.ui.screens.authentication.LoginContent
+import com.falconteam.infoking.ui.navigation.user.screens.ScreenContent
+import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginContent
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     navigation(
         route = Graph.AUTH,
         startDestination = AuthScreen.Login.route
     ) {
+        val userType = "user"
+
         composable(route = AuthScreen.Login.route) {
             LoginContent(
                 onClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.BATTLE)
+                    val isValidUser = true
+                    // TODO: function to verify credentials
+
+                    if (isValidUser) {
+                        if (userType == "user"){
+                            navController.popBackStack()
+                            navController.navigate(Graph.BATTLE)
+                        } else if (userType == "admin") {
+                            navController.popBackStack()
+                            navController.navigate(Graph.ADMIN_HOME)
+                        }
+                    } else {
+                        // Invalid credentials
+                    }
                 },
                 onSignUpClick = {
                     navController.navigate(AuthScreen.SignUp.route)
