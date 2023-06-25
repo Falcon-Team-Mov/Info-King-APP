@@ -19,7 +19,9 @@ private val DarkColorScheme = darkColorScheme(
     primary = primaryColor,
     secondary = secondaryAquaColor,
     tertiary = secondaryBlueColor,
-    background = primaryColor
+    background = primaryColor,
+    onSecondary = buttonOKColor,
+    error = buttonCancelColor
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -27,6 +29,8 @@ private val LightColorScheme = lightColorScheme(
     secondary = secondaryAquaColor,
     tertiary = secondaryBlueColor,
     background = primaryColor,
+    onSecondary = buttonOKColor,
+    error = buttonCancelColor
 
 //    primary = Purple40,
 //    secondary = PurpleGrey40,

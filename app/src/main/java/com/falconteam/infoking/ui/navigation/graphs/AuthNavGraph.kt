@@ -1,19 +1,20 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.falconteam.infoking.ui.navigation.user.screens.ScreenContent
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginContent
+import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpScreen
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
         route = Graph.AUTH,
         startDestination = AuthScreen.Login.route
     ) {
-        val userType = "user"
+        val userType = "admin"
 
+        // Login
         composable(route = AuthScreen.Login.route) {
             LoginContent(
                 onClick = {
@@ -41,12 +42,9 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
             )
         }
 
+        // SignUp
         composable(route = AuthScreen.SignUp.route) {
-            ScreenContent(name = AuthScreen.SignUp.route) {}
-        }
-
-        composable(route = AuthScreen.ForgotPass.route) {
-            ScreenContent(name = AuthScreen.ForgotPass.route) {}
+            SignUpScreen()
         }
     }
 }
