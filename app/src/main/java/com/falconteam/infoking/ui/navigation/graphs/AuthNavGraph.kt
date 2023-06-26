@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginContent
+import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpCharacterScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpScreen
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
@@ -44,7 +45,21 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 
         // SignUp
         composable(route = AuthScreen.SignUp.route) {
-            SignUpScreen()
+            SignUpScreen(
+                onClick = {
+                    navController.navigate(AuthScreen.CharacterSignUp.route)
+                }
+            )
+        }
+        // Character SignUp
+        composable(route = AuthScreen.CharacterSignUp.route) {
+            SignUpCharacterScreen(
+                onSignUp = {},
+                onBack = {
+                    navController.popBackStack()
+                },
+                infoRegister = MutableList(4) { "" }
+            )
         }
     }
 }
@@ -52,5 +67,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 sealed class AuthScreen(val route: String) {
     object Login : AuthScreen(route = "LOGIN")
     object SignUp : AuthScreen(route = "SIGN_UP")
+    object CharacterSignUp : AuthScreen(route = "CHARACTER_SIGN_UP")
     object ForgotPass : AuthScreen(route = "FORGOT_PASS")
 }

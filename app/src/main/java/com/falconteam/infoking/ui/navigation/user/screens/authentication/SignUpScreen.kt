@@ -41,7 +41,9 @@ import com.falconteam.infoking.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    onClick: () -> Unit
+) {
     InfoKingTheme() {
         val context = LocalContext.current
         val secondaryColor = MaterialTheme.colorScheme.secondary
@@ -315,6 +317,7 @@ fun SignUpScreen() {
                         isValidEmail = isValidEmail(emailInput)
                         isValidPassword = passWordInput == repeatPasswordInput
                         if (!isValidPassword) Toast.makeText(context, "La contraseña debe ser la misma", Toast.LENGTH_SHORT).show()
+                        onClick()
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
                     modifier = Modifier
@@ -341,6 +344,6 @@ fun isValidEmail(email: String): Boolean {
 @Composable
 fun SignUpScreenPreview() {
     InfoKingTheme(darkTheme = true) {
-        SignUpScreen()
+        SignUpScreen(onClick = { })
     }
 }
