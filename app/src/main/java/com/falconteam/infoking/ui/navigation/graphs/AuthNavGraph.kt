@@ -3,9 +3,11 @@ package com.falconteam.infoking.ui.navigation.graphs
 import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.falconteam.infoking.data.models.SignUpFormOne
+import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginContent
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpCharacterScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpScreen
