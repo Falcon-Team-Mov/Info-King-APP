@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.laboratorio11.repository.CredentialsRepository
 import com.falconteam.infoking.data.network.repository.CharacterRepository
+import com.falconteam.infoking.data.network.repository.SignUpRepository
 import com.falconteam.infoking.data.network.retrofit.RetrofitInstance
 
 class RetrofitApplication : Application() {
@@ -22,9 +23,16 @@ class RetrofitApplication : Application() {
     private fun getCharacterService() = with(RetrofitInstance){
         getCharacterService()
     }
+    private fun getRegisterService() = with(RetrofitInstance){
+        getSignUpService()
+    }
 
     val _characterRepository: CharacterRepository by lazy {
         CharacterRepository(getCharacterService())
+    }
+
+    val _registerRepository: SignUpRepository by lazy {
+        SignUpRepository(getRegisterService())
     }
 
     companion object {

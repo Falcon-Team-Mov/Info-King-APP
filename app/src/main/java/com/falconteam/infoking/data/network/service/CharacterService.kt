@@ -13,7 +13,4 @@ interface CharacterService {
     @GET("api/personaje")
     suspend fun getCharacters(): CharacterResponse
 
-    @POST("api/personaje")
-    suspend fun postCharacter(@Body credentials: RegisterRequest): CharacterResponse
-
 }

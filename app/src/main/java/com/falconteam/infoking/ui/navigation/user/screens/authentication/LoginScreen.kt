@@ -87,7 +87,7 @@ fun LoginContent(
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    InfoKingTheme {
+    InfoKingTheme(darkTheme = true) {
         LoginContent(onClick = {}, onSignUpClick = {}, onForgotClick = {})
     }
 }

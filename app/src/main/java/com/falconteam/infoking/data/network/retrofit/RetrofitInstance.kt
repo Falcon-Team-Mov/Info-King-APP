@@ -2,6 +2,7 @@ package com.falconteam.infoking.data.network.retrofit
 
 import com.falconteam.infoking.data.network.service.AuthService
 import com.falconteam.infoking.data.network.service.CharacterService
+import com.falconteam.infoking.data.network.service.SignUpService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,5 +28,7 @@ object RetrofitInstance {
     fun getCharacterService(): CharacterService {
         return retrofit.create(CharacterService::class.java)
     }
-
+    fun getSignUpService(): SignUpService {
+        return retrofit.create(SignUpService::class.java)
+    }
 }
