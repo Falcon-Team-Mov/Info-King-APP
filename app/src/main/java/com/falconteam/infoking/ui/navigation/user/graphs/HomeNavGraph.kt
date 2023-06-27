@@ -1,5 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.graphs
 
+import androidx.activity.compose.BackHandler
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -15,6 +16,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         startDestination = UserBottomBar.Battle.route,
     ) {
         composable(route = UserBottomBar.Ranking.route) {
+            BackHandler(
+                enabled = true,
+                onBack = { navController.navigate(UserBottomBar.Battle.route) }
+            )
             ScreenContent(
                 name = UserBottomBar.Ranking.route,
                 onClick = {},
@@ -23,6 +28,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         }
 
         composable(route = UserBottomBar.Inventory.route) {
+            BackHandler(
+                enabled = true,
+                onBack = { navController.navigate(UserBottomBar.Battle.route) }
+            )
             ScreenContent(
                 name = UserBottomBar.Inventory.route,
                 onClick = {},
@@ -31,7 +40,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         }
 
         composable(route = UserBottomBar.Battle.route) {
-            PressBackAgainToExit()
+            PressBackAgainToExit(navController)
             ScreenContent(
                 name = UserBottomBar.Battle.route,
                 onClick = {},
@@ -40,6 +49,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         }
 
         composable(route = UserBottomBar.Map.route) {
+            BackHandler(
+                enabled = true,
+                onBack = { navController.navigate(UserBottomBar.Battle.route) }
+            )
             ScreenContent(
                 name = UserBottomBar.Map.route,
                 onClick = {},
@@ -48,6 +61,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         }
 
         composable(route = UserBottomBar.Profile.route) {
+            BackHandler(
+                enabled = true,
+                onBack = { navController.navigate(UserBottomBar.Battle.route) }
+            )
             ScreenContent(
                 name = UserBottomBar.Profile.route,
                 onClick = {},

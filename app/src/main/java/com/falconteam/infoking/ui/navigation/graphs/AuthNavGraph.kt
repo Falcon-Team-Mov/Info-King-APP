@@ -1,8 +1,6 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -17,7 +15,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         route = Graph.AUTH,
         startDestination = AuthScreen.Login.route
     ) {
-        val userType = "admin"
+        val userType = "user"
 
         // Login
         composable(route = AuthScreen.Login.route) {
@@ -37,27 +35,24 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     } else {
                         // Invalid credentials
                     }
-                },
-                onSignUpClick = {
-                    navController.navigate(AuthScreen.SignUp.route)
-                },
-                onForgotClick = {
-                    navController.navigate(AuthScreen.ForgotPass.route)
                 }
-            )
+            ) {
+                navController.navigate(AuthScreen.SignUp.route)
+            }
         }
 
         // SignUp
         composable(route = AuthScreen.SignUp.route) {
             SignUpScreen(
                 onClick = { username, email, password ->
-                    if(username.isEmpty() || email.isEmpty() || password.isEmpty()){
-                        val routeWithArgs = "${AuthScreen.CharacterSignUp.route}/${"a"}/${"a"}/${"a"}"
+                    if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        val routeWithArgs =
+                            "${AuthScreen.CharacterSignUp.route}/${"a"}/${"a"}/${"a"}"
                         Log.d("Pruebas", "authNavGraph: $routeWithArgs")
                         navController.navigate(routeWithArgs)
-                    }
-                    else{
-                        val routeWithArgs = "${AuthScreen.CharacterSignUp.route}/${username}/${email}/${password}"
+                    } else {
+                        val routeWithArgs =
+                            "${AuthScreen.CharacterSignUp.route}/${username}/${email}/${password}"
                         Log.d("Pruebas", "authNavGraph: $routeWithArgs")
                         navController.navigate(routeWithArgs)
                     }

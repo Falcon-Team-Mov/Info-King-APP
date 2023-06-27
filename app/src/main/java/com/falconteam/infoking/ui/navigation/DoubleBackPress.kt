@@ -9,10 +9,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import kotlinx.coroutines.delay
 
 @Composable
-fun PressBackAgainToExit() {
+fun PressBackAgainToExit(navController: NavController) {
     val context = LocalContext.current
 
     var showToast by remember {
@@ -30,7 +32,11 @@ fun PressBackAgainToExit() {
 
     LaunchedEffect(key1 = backPressState) {
         if(backPressState == BackPress.FirstPress) {
-            delay(2000) // wait 2 seconds until next change
+            navController.popBackStack(UserBottomBar.Inventory.route, inclusive = true)
+            navController.popBackStack(UserBottomBar.Map.route, inclusive = true)
+            navController.popBackStack(UserBottomBar.Ranking.route, inclusive = true)
+            navController.popBackStack(UserBottomBar.Profile.route, inclusive = true)
+            delay(2000) // wait 2 seconds until next changeq
             backPressState = BackPress.Idle //return to Idle state
         }
     }

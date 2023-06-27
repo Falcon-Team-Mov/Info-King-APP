@@ -32,7 +32,7 @@ import com.falconteam.infoking.ui.theme.InfoKingTheme
 
 @Composable
 fun UserBottomBarComponent(navController: NavHostController) {
-    InfoKingTheme(darkTheme = true) {
+    InfoKingTheme {
         val screens = listOf(
             UserBottomBar.Ranking,
             UserBottomBar.Inventory,
