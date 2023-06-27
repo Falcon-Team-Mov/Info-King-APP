@@ -17,7 +17,9 @@ class CharacterViewModel() : ViewModel() {
 
     val repository = retrofitApplication._characterRepository
 
+    fun agregarPersonaje(personaje: Personaje) {
 
+    }
     fun obtenerPersonajes() {
         viewModelScope.launch {
 
