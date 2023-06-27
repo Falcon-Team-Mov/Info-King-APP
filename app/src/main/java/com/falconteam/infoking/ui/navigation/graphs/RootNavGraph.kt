@@ -1,29 +1,45 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.falconteam.infoking.ui.navigation.admin.screens.AdminScreen
-import com.falconteam.infoking.ui.navigation.user.screens.home.BattleScreen
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.falconteam.infoking.ui.components.AdminBottomBarComponent
+import com.falconteam.infoking.ui.components.UserBottomBarComponent
+import com.falconteam.infoking.ui.navigation.admin.graphs.adminHomeNavGraph
+import com.falconteam.infoking.ui.navigation.user.graphs.homeNavGraph
 
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RootNavGraph(navController: NavHostController) {
-    NavHost(
-        modifier = Modifier.background(Color(0xFF031926)),
-        navController = navController,
-        route = Graph.ROOT,
-        startDestination = Graph.AUTH
-    ) {
-        authNavGraph(navController = navController)
-        composable(route = Graph.BATTLE) {
-            BattleScreen()
+    Scaffold(
+        bottomBar = {
+            val actualDestination = navController.currentBackStackEntryAsState().value?.destination?.route.toString()
+            val currentBackStackEntry = navController.currentBackStackEntry
+            val currentGraph = currentBackStackEntry?.destination?.parent?.route.toString()
+
+            if (currentGraph != Graph.AUTH) {
+                UserBottomBarComponent(navController = navController)
+                AdminBottomBarComponent(navController = navController)
+            }
         }
-        composable(route = Graph.ADMIN_HOME) {
-            AdminScreen()
+    ) {
+        NavHost(
+            modifier = Modifier.background(MaterialTheme.colorScheme.primary),
+            navController = navController,
+            route = Graph.ROOT,
+            startDestination = Graph.AUTH
+        ) {
+            authNavGraph(navController = navController)
+            homeNavGraph(navController = navController)
+            adminHomeNavGraph(navController = navController)
         }
     }
 }

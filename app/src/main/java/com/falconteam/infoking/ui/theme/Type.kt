@@ -56,8 +56,8 @@ val Typography = Typography(
     ),
 
     headlineSmall = TextStyle(
-        fontFamily = jostSemiBold,
-        fontSize = 24.sp,
+        fontFamily = jostBold,
+        fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
