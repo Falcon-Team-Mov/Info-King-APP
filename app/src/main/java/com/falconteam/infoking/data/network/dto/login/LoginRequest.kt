@@ -1,0 +1,6 @@
+package com.falconteam.infoking.data.network.dto.login
+
+data class LoginRequest (
+    val email: String,
+    val password: String
+)

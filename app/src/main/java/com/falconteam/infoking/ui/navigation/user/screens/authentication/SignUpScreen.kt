@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -41,8 +43,10 @@ import com.falconteam.infoking.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
-    InfoKingTheme {
+fun SignUpScreen(
+    onClick: (username: String, email: String, password: String) -> Unit
+) {
+    InfoKingTheme(darkTheme = true) {
         val context = LocalContext.current
         val secondaryColor = MaterialTheme.colorScheme.secondary
         val errorColor = MaterialTheme.colorScheme.error
@@ -90,7 +94,8 @@ fun SignUpScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFF031926)),
+                .background(color = Color(0xFF031926))
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -145,7 +150,10 @@ fun SignUpScreen() {
                         placeholderColor = secondaryColor.copy(alpha = 0.5f),
                         unfocusedLabelColor = secondaryColor,
                         unfocusedIndicatorColor = secondaryColor,
-                        selectionColors = TextSelectionColors(handleColor = MaterialTheme.colorScheme.tertiary, backgroundColor = Color.Transparent)
+                        selectionColors = TextSelectionColors(
+                            handleColor = MaterialTheme.colorScheme.tertiary,
+                            backgroundColor = Color.Transparent
+                        )
                     )
                 )
 
@@ -155,7 +163,7 @@ fun SignUpScreen() {
                     onValueChange = {
                         emailInput = it
                         emailError = false
-                        if(isValidEmail(emailInput)) isValidEmail = true
+                        if (isValidEmail(emailInput)) isValidEmail = true
                     },
                     label = { Text("Correo") },
                     textStyle = Typography.bodySmall,
@@ -186,7 +194,10 @@ fun SignUpScreen() {
                         unfocusedLabelColor = secondaryColor,
                         unfocusedIndicatorColor = secondaryColor,
                         cursorColor = MaterialTheme.colorScheme.tertiary,
-                        selectionColors = TextSelectionColors(handleColor = MaterialTheme.colorScheme.tertiary, backgroundColor = Color.Transparent)
+                        selectionColors = TextSelectionColors(
+                            handleColor = MaterialTheme.colorScheme.tertiary,
+                            backgroundColor = Color.Transparent
+                        )
                     )
                 )
 
@@ -243,7 +254,10 @@ fun SignUpScreen() {
                         unfocusedLabelColor = secondaryColor,
                         unfocusedIndicatorColor = secondaryColor,
                         cursorColor = MaterialTheme.colorScheme.tertiary,
-                        selectionColors = TextSelectionColors(handleColor = MaterialTheme.colorScheme.tertiary, backgroundColor = Color.Transparent)
+                        selectionColors = TextSelectionColors(
+                            handleColor = MaterialTheme.colorScheme.tertiary,
+                            backgroundColor = Color.Transparent
+                        )
                     )
                 )
 
@@ -300,7 +314,10 @@ fun SignUpScreen() {
                         unfocusedLabelColor = secondaryColor,
                         unfocusedIndicatorColor = secondaryColor,
                         cursorColor = MaterialTheme.colorScheme.tertiary,
-                        selectionColors = TextSelectionColors(handleColor = MaterialTheme.colorScheme.tertiary, backgroundColor = Color.Transparent)
+                        selectionColors = TextSelectionColors(
+                            handleColor = MaterialTheme.colorScheme.tertiary,
+                            backgroundColor = Color.Transparent
+                        )
                     ),
                 )
             }
@@ -311,10 +328,20 @@ fun SignUpScreen() {
                         usernameError = usernameInput.isBlank()
                         emailError = emailInput.isBlank()
                         passwordError = passWordInput.isBlank() or (passWordInput.length < 8)
-                        repeatPasswordError = repeatPasswordInput.isBlank() or (repeatPasswordInput.length < 8)
+                        repeatPasswordError =
+                            repeatPasswordInput.isBlank() or (repeatPasswordInput.length < 8)
                         isValidEmail = isValidEmail(emailInput)
                         isValidPassword = passWordInput == repeatPasswordInput
-                        if (!isValidPassword) Toast.makeText(context, "La contraseña debe ser la misma", Toast.LENGTH_SHORT).show()
+                        if (!isValidPassword) Toast.makeText(
+                            context,
+                            "La contraseña debe ser la misma",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        if (!usernameError && !emailError && !passwordError && !repeatPasswordError && isValidEmail && isValidPassword) onClick(
+                            usernameInput,
+                            emailInput,
+                            passWordInput
+                        )
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
                     modifier = Modifier
@@ -333,14 +360,14 @@ fun SignUpScreen() {
 }
 
 fun isValidEmail(email: String): Boolean {
-    val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$")
+    val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,4})+$")
     return email.matches(emailRegex)
 }
 
 @Preview
 @Composable
 fun SignUpScreenPreview() {
-    InfoKingTheme {
-        SignUpScreen()
+    InfoKingTheme(darkTheme = true) {
+        SignUpScreen(onClick = { _, _, _ -> })
     }
 }

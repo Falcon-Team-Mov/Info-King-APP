@@ -1,12 +1,15 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.falconteam.infoking.data.models.SignUpFormOne
 import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginContent
+import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpCharacterScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpScreen
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
@@ -24,7 +27,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     // TODO: function to verify credentials
 
                     if (isValidUser) {
-                        if (userType == "user"){
+                        if (userType == "user") {
                             navController.popBackStack()
                             navController.navigate(Graph.BATTLE)
                         } else if (userType == "admin") {
@@ -42,7 +45,46 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 
         // SignUp
         composable(route = AuthScreen.SignUp.route) {
-            SignUpScreen()
+            SignUpScreen(
+                onClick = { username, email, password ->
+                    if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        val routeWithArgs =
+                            "${AuthScreen.CharacterSignUp.route}/${"a"}/${"a"}/${"a"}"
+                        Log.d("Pruebas", "authNavGraph: $routeWithArgs")
+                        navController.navigate(routeWithArgs)
+                    } else {
+                        val routeWithArgs =
+                            "${AuthScreen.CharacterSignUp.route}/${username}/${email}/${password}"
+                        Log.d("Pruebas", "authNavGraph: $routeWithArgs")
+                        navController.navigate(routeWithArgs)
+                    }
+                },
+            )
+        }
+
+// Character SignUp
+        composable(route = "${AuthScreen.CharacterSignUp.route}/{username}/{email}/{password}") { backStackEntry ->
+            val username = backStackEntry.arguments?.getString("username") ?: ""
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            val password = backStackEntry.arguments?.getString("password") ?: ""
+            val infoRegister = SignUpFormOne(username, email, password, "")
+
+            SignUpCharacterScreen(
+                onSignUp = {},
+                onBack = { msg ->
+                    Log.d("Pruebas", "Log de msg: $msg")
+                    var returnValue: String? = null
+                    msg?.let {
+                        if (it == "Cuenta creada exitosamente, verifica tu correo electronico") {
+                            navController.popBackStack(AuthScreen.Login.route, false)
+                        }
+                        returnValue = it
+                    }
+                    returnValue ?: ""
+                },
+                infoRegister = infoRegister
+            )
+
         }
     }
 }
@@ -50,5 +92,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 sealed class AuthScreen(val route: String) {
     object Login : AuthScreen(route = "LOGIN")
     object SignUp : AuthScreen(route = "SIGN_UP")
+    object CharacterSignUp : AuthScreen(route = "CHARACTER_SIGN_UP")
     object ForgotPass : AuthScreen(route = "FORGOT_PASS")
 }
