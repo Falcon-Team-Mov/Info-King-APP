@@ -15,7 +15,7 @@ fun NavGraphBuilder.adminHomeNavGraph(navController: NavController) {
         startDestination = AdminBottomBar.BanUsers.route
     ) {
         composable(route = AdminBottomBar.BanUsers.route) {
-            PressBackAgainToExit()
+            PressBackAgainToExit(navController)
             ScreenContent(
                 name = AdminBottomBar.BanUsers.route,
                 onClick = {},

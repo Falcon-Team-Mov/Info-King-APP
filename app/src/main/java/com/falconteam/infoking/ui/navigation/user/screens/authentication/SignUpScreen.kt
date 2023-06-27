@@ -42,7 +42,7 @@ import com.falconteam.infoking.ui.theme.Typography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen() {
-    InfoKingTheme() {
+    InfoKingTheme {
         val context = LocalContext.current
         val secondaryColor = MaterialTheme.colorScheme.secondary
         val errorColor = MaterialTheme.colorScheme.error
@@ -340,7 +340,7 @@ fun isValidEmail(email: String): Boolean {
 @Preview
 @Composable
 fun SignUpScreenPreview() {
-    InfoKingTheme(darkTheme = true) {
+    InfoKingTheme {
         SignUpScreen()
     }
 }

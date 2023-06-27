@@ -21,8 +21,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
-            InfoKingTheme {
-                isSystemInDarkTheme()
+            InfoKingTheme(darkTheme = true) {
                 RootNavGraph(navController = rememberNavController())
             }
         }
