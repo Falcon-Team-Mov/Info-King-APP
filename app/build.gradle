@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storePassword '18:5A:BB:52:56:8C:43:D6:3A:28:53:47:AC:CE:EB:97'
+            keyAlias 'upload'
+            keyPassword '18:5A:BB:52:56:8C:43:D6:3A:28:53:47:AC:CE:EB:97'
+            storeFile file('/home/marroquin/Descargas/deployment_cert.der')
+        }
+    }
     namespace 'com.falconteam.infoking'
     compileSdk 33
 
