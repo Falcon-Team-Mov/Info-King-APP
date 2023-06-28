@@ -17,7 +17,7 @@ class LoginRepository(private val api: LoginService) {
         }
         catch (e: HttpException){
             if(e.code() === 400){
-                return ApiResponse.ErrorWithMessage("Credenciales incorrectas"")
+                return ApiResponse.ErrorWithMessage("Credenciales incorrectas")
             }
             else if(e.code() === 404){
                 return ApiResponse.ErrorWithMessage("Verificacion de correo electronico no realizada")
