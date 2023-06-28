@@ -1,6 +1,5 @@
 package com.falconteam.infoking.ui.navigation.user.screens.authentication
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -14,15 +13,21 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,6 +41,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,9 +52,11 @@ import com.falconteam.infoking.data.network.dto.login.LoginResponse
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
+import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
+import com.falconteam.infoking.ui.theme.white
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,32 +66,35 @@ fun LoginScreen(
 ) {
     InfoKingTheme(darkTheme = true) {
         val secondaryColor = secondaryBlueColor
-        val errorColor = MaterialTheme.colorScheme.error
+        val errorColor = buttonCancelColor
         val maxLength = 32
 
         // Inputs
         var usernameInput by rememberSaveable { mutableStateOf("") }
         var passwordInput by rememberSaveable { mutableStateOf("") }
 
+        var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
         // Errors
         var usernameError by rememberSaveable { mutableStateOf(false) }
         var passwordError by rememberSaveable { mutableStateOf(false) }
 
+
         // Supporting Texts and Colors
         val usernameSupportingText = if (usernameError) "Error: Obligatorio" else "*Obligatorio"
         val usernameSupportingColor =
-            if (usernameError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+            if (usernameError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
         val passwordSupportingText = if (passwordError) "Mínimo 8 caracteres" else "*Obligatorio"
         val passwordSupportingColor =
-            if (passwordError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+            if (passwordError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
         val loginViewModel: LoginViewModel = viewModel()
         val errors = loginViewModel.errors.value
-        val data = loginViewModel.data[0]
+        var data = loginViewModel.data[0]
         val isLogin = remember {
             mutableStateOf(false)
         }
 
-        if(!isLogin.value){
+        if (!isLogin.value) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -134,11 +146,11 @@ fun LoginScreen(
                         ),
                         singleLine = true,
                         colors = TextFieldDefaults.textFieldColors(
-                            textColor = secondaryColor,
+                            textColor = white.copy(alpha = 0.5f),
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = secondaryColor,
                             focusedLabelColor = secondaryColor,
-                            placeholderColor = secondaryColor.copy(alpha = 0.5f),
+                            placeholderColor = white.copy(alpha = 0.5f),
                             unfocusedLabelColor = secondaryColor,
                             unfocusedIndicatorColor = secondaryColor,
                             selectionColors = TextSelectionColors(
@@ -150,17 +162,20 @@ fun LoginScreen(
 
                     // Password
                     TextField(
-                        modifier = Modifier
-                            .padding(vertical = 32.dp, horizontal = 54.dp)
-                            .fillMaxWidth(),
                         value = passwordInput,
                         onValueChange = {
                             passwordInput = it
                             passwordError = passwordInput.length < 8
                         },
-                        textStyle = Typography.bodySmall,
-                        label = { Text("Contraseña") },
-                        placeholder = { Text("••••••••") },
+                        label = { Text(text = "Contraseña") },
+                        placeholder = { Text(text = "••••••••") },
+                        textStyle = Typography.bodyLarge,
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                        ),
                         supportingText = {
                             Text(
                                 text = passwordSupportingText,
@@ -170,17 +185,31 @@ fun LoginScreen(
                             )
                         },
                         isError = passwordError,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Send
-                        ),
-                        singleLine = true,
+                        trailingIcon = {
+                            val image = if (passwordVisible)
+                                Icons.Filled.Visibility
+                            else Icons.Filled.VisibilityOff
+
+                            val description =
+                                if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(
+                                    imageVector = image,
+                                    description,
+                                    tint = if (passwordError) errorColor else secondaryColor
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(vertical = 35.dp, horizontal = 54.dp)
+                            .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            textColor = if (passwordError) errorColor else secondaryColor,
+                            textColor = white.copy(alpha = 0.5f),
                             containerColor = Color.Transparent,
                             focusedIndicatorColor = secondaryColor,
                             focusedLabelColor = secondaryColor,
-                            placeholderColor = secondaryColor.copy(alpha = 0.5f),
+                            placeholderColor = white.copy(alpha = 0.5f),
                             unfocusedLabelColor = secondaryColor,
                             unfocusedIndicatorColor = secondaryColor,
                             cursorColor = MaterialTheme.colorScheme.tertiary,
@@ -234,17 +263,17 @@ fun LoginScreen(
                     }
                 }
             }
-        }
-        else{
+        } else {
             LoadingScreen()
         }
         if (isLogin.value) {
             if (data != null) {
                 isLogin.value = false
                 onClick(data)
+                data = null
             }
         }
-        if(errors != "" && isLogin.value){
+        if (errors != "" && isLogin.value) {
             Log.d("Pruebas", "LoginScreen: $errors")
             Toast.makeText(LocalContext.current, errors, Toast.LENGTH_SHORT).show()
             loginViewModel.errors.value = ""

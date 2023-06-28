@@ -44,6 +44,7 @@ import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.primaryColorLight
+import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.viewmodels.SignUpViewModel
 
@@ -72,7 +73,7 @@ fun SignUpCharacterScreen(
                 Column() {
                     Text(
                         text = "ESCOGE TU PERSONAJE",
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = secondaryAquaColor,
                         modifier = Modifier
                     )
 
@@ -136,7 +137,7 @@ fun SignUpCharacterScreen(
                                     )
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+                            colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                             modifier = Modifier
                                 .padding(vertical = 24.dp, horizontal = 54.dp)
                         ) {

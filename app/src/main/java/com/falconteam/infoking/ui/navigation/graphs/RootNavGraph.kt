@@ -1,6 +1,7 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +15,7 @@ import com.falconteam.infoking.ui.components.AdminBottomBarComponent
 import com.falconteam.infoking.ui.components.UserBottomBarComponent
 import com.falconteam.infoking.ui.navigation.admin.graphs.adminHomeNavGraph
 import com.falconteam.infoking.ui.navigation.user.graphs.homeNavGraph
+import com.falconteam.infoking.ui.theme.primaryColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -25,14 +27,16 @@ fun RootNavGraph(navController: NavHostController) {
             val currentBackStackEntry = navController.currentBackStackEntry
             val currentGraph = currentBackStackEntry?.destination?.parent?.route.toString()
 
-            if (currentGraph != Graph.AUTH) {
-                UserBottomBarComponent(navController = navController)
+            if (currentGraph === Graph.ADMIN_HOME) {
                 AdminBottomBarComponent(navController = navController)
+            }
+            else {
+                UserBottomBarComponent(navController = navController)
             }
         }
     ) {
         NavHost(
-            modifier = Modifier.background(MaterialTheme.colorScheme.primary),
+            modifier = Modifier.background(primaryColor),
             navController = navController,
             route = Graph.ROOT,
             startDestination = Graph.AUTH

@@ -17,13 +17,14 @@ import androidx.navigation.NavController
 import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import com.falconteam.infoking.ui.navigation.user.screens.ranking.RankingScreen
 import com.falconteam.infoking.ui.theme.Typography
+import com.falconteam.infoking.ui.theme.primaryColor
 
 @Composable
 fun ScreenContent(name: String, onClick: () -> Unit, navController: NavController, Screen: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary),
+            .background(primaryColor),
         contentAlignment = Alignment.Center
     ) {
 
