@@ -54,7 +54,7 @@ fun SignUpScreen(
 
         var usernameInput by rememberSaveable { mutableStateOf("") }
         var emailInput by rememberSaveable { mutableStateOf("") }
-        var passWordInput by rememberSaveable { mutableStateOf("") }
+        var passwordInput by rememberSaveable { mutableStateOf("") }
         var repeatPasswordInput by rememberSaveable { mutableStateOf("") }
 
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -203,10 +203,10 @@ fun SignUpScreen(
 
                 // Password
                 TextField(
-                    value = passWordInput,
+                    value = passwordInput,
                     onValueChange = {
-                        passWordInput = it
-                        passwordError = passWordInput.length < 8
+                        passwordInput = it
+                        passwordError = passwordInput.length < 8
                     },
                     label = { Text(text = "Contraseña") },
                     placeholder = { Text(text = "••••••••") },
@@ -327,11 +327,11 @@ fun SignUpScreen(
                     onClick = {
                         usernameError = usernameInput.isBlank()
                         emailError = emailInput.isBlank()
-                        passwordError = passWordInput.isBlank() or (passWordInput.length < 8)
+                        passwordError = passwordInput.isBlank() or (passwordInput.length < 8)
                         repeatPasswordError =
                             repeatPasswordInput.isBlank() or (repeatPasswordInput.length < 8)
                         isValidEmail = isValidEmail(emailInput)
-                        isValidPassword = passWordInput == repeatPasswordInput
+                        isValidPassword = passwordInput == repeatPasswordInput
                         if (!isValidPassword) Toast.makeText(
                             context,
                             "La contraseña debe ser la misma",
@@ -340,7 +340,7 @@ fun SignUpScreen(
                         if (!usernameError && !emailError && !passwordError && !repeatPasswordError && isValidEmail && isValidPassword) onClick(
                             usernameInput,
                             emailInput,
-                            passWordInput
+                            passwordInput
                         )
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),

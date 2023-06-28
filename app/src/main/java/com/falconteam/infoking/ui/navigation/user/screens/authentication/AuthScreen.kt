@@ -26,7 +26,7 @@ import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 
 @Composable
-fun LoginContent(
+fun AuthScreen(
     onClick: () -> Unit,
     onSignUpClick: () -> Unit
 ) {
@@ -88,8 +88,8 @@ fun LoginContent(
 
 @Preview
 @Composable
-fun LoginScreenPreview() {
+fun AuthScreenPreview() {
     InfoKingTheme {
-        LoginContent(onClick = {}) {}
+        AuthScreen(onClick = {}) {}
     }
 }

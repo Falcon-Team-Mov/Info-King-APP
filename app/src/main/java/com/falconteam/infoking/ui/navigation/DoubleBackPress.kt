@@ -1,5 +1,6 @@
 package com.falconteam.infoking.ui.navigation
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.falconteam.infoking.ui.navigation.graphs.AuthScreen
 import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import kotlinx.coroutines.delay
 
