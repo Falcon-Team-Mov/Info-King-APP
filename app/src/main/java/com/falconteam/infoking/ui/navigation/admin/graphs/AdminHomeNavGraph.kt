@@ -19,14 +19,16 @@ fun NavGraphBuilder.adminHomeNavGraph(navController: NavController) {
             ScreenContent(
                 name = AdminBottomBar.BanUsers.route,
                 onClick = {},
-                navController = navController
+                navController = navController,
+                {  }
             )
         }
         composable(route = AdminBottomBar.AdminSettings.route) {
             ScreenContent(
                 name = AdminBottomBar.AdminSettings.route,
                 onClick = {},
-                navController = navController
+                navController = navController,
+                {  }
             )
         }
     }

@@ -35,7 +35,6 @@ import com.falconteam.infoking.ui.theme.secondaryBlueColor
 
 @Composable
 fun RankingScreen() {
-    //Agregue el InfoKingTheme que incluye el tama;o de forma dinamica y agregue un fillMaxSize para que se adapte, ademas le agregue un Column
     InfoKingTheme() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
