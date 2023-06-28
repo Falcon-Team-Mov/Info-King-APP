@@ -1,5 +1,8 @@
 package com.falconteam.infoking.ui.navigation.user.screens.authentication
 
+import android.annotation.SuppressLint
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,11 +24,13 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -34,16 +39,26 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.falconteam.infoking.data.network.dto.login.LoginRequest
+import com.falconteam.infoking.data.network.dto.login.LoginResponse
+import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
+import com.falconteam.infoking.ui.theme.primaryColor
+import com.falconteam.infoking.ui.theme.secondaryAquaColor
+import com.falconteam.infoking.ui.theme.secondaryBlueColor
+import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(onClick: () -> Unit) {
+fun LoginScreen(
+    onClick: (data: LoginResponse) -> Unit
+) {
     InfoKingTheme(darkTheme = true) {
-        val secondaryColor = MaterialTheme.colorScheme.secondary
+        val secondaryColor = secondaryBlueColor
         val errorColor = MaterialTheme.colorScheme.error
-        val maxLength = 16
+        val maxLength = 32
 
         // Inputs
         var usernameInput by rememberSaveable { mutableStateOf("") }
@@ -60,153 +75,180 @@ fun LoginScreen(onClick: () -> Unit) {
         val passwordSupportingText = if (passwordError) "Mínimo 8 caracteres" else "*Obligatorio"
         val passwordSupportingColor =
             if (passwordError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+        val loginViewModel: LoginViewModel = viewModel()
+        val errors = loginViewModel.errors.value
+        val data = loginViewModel.data[0]
+        val isLogin = remember {
+            mutableStateOf(false)
+        }
 
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color(0xFF031926))
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        if(!isLogin.value){
             Column(
-                modifier = Modifier,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primaryColor)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "INICIO DE SESIÓN",
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    modifier = Modifier.padding(bottom = 64.dp)
-                )
-            }
-
-            // Username
-            Column(
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                TextField(
-                    modifier = Modifier
-                        .padding(vertical = 32.dp, horizontal = 54.dp)
-                        .fillMaxWidth(),
-                    value = usernameInput,
-                    onValueChange = { validValue ->
-                        if (validValue.length <= maxLength) {
-                            usernameInput = validValue
-                        }
-                        usernameError = false
-                    },
-                    textStyle = Typography.bodySmall,
-                    label = { Text("Usuario") },
-                    placeholder = { Text(text = "e.g. DirtyDan") },
-                    supportingText = {
-                        Text(
-                            text = usernameSupportingText,
-                            color = usernameSupportingColor,
-                            style = Typography.labelSmall,
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                    },
-                    isError = usernameError,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next
-                    ),
-                    singleLine = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = secondaryColor,
-                        containerColor = Color.Transparent,
-                        focusedIndicatorColor = secondaryColor,
-                        focusedLabelColor = secondaryColor,
-                        placeholderColor = secondaryColor.copy(alpha = 0.5f),
-                        unfocusedLabelColor = secondaryColor,
-                        unfocusedIndicatorColor = secondaryColor,
-                        selectionColors = TextSelectionColors(
-                            handleColor = MaterialTheme.colorScheme.tertiary,
-                            backgroundColor = Color.Transparent
-                        )
-                    )
-                )
-
-                // Password
-                TextField(
-                    modifier = Modifier
-                        .padding(vertical = 32.dp, horizontal = 54.dp)
-                        .fillMaxWidth(),
-                    value = passwordInput,
-                    onValueChange = {
-                        passwordInput = it
-                        passwordError = passwordInput.length < 8
-                    },
-                    textStyle = Typography.bodySmall,
-                    label = { Text("Contraseña") },
-                    placeholder = { Text("••••••••") },
-                    supportingText = {
-                        Text(
-                            text = passwordSupportingText,
-                            color = passwordSupportingColor,
-                            style = Typography.labelSmall,
-                            modifier = Modifier.padding(top = 2.dp)
-                        )
-                    },
-                    isError = passwordError,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Send
-                    ),
-                    singleLine = true,
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = if (passwordError) errorColor else secondaryColor,
-                        containerColor = Color.Transparent,
-                        focusedIndicatorColor = secondaryColor,
-                        focusedLabelColor = secondaryColor,
-                        placeholderColor = secondaryColor.copy(alpha = 0.5f),
-                        unfocusedLabelColor = secondaryColor,
-                        unfocusedIndicatorColor = secondaryColor,
-                        cursorColor = MaterialTheme.colorScheme.tertiary,
-                        selectionColors = TextSelectionColors(
-                            handleColor = MaterialTheme.colorScheme.tertiary,
-                            backgroundColor = Color.Transparent
-                        )
-                    )
-                )
-            }
-
-            ClickableText(text = buildAnnotatedString {
-                withStyle(style = SpanStyle(
-                    color = secondaryColor,
-                    fontStyle = Typography.labelSmall.fontStyle,
-                    fontWeight = FontWeight.Bold
-                )) {
-                    append("¿Olvidaste tu contraseña?")
-                }
-            }, onClick = {
-
-            })
-
-            Column {
-                Button(
-                    onClick = {
-                        usernameError = usernameInput.isBlank()
-                        passwordError = passwordInput.isBlank() or (passwordInput.length < 8)
-//                        if (!usernameError && !passwordError) onClick(
-//                            usernameInput,
-//                            passwordInput
-//                        )
-                        // TODO: added onClick() for testing purposes. ** DELETE AFTER **
-                        onClick()
-                    },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 24.dp, horizontal = 54.dp)
+                Column(
+                    modifier = Modifier,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "INICIAR SESIÓN",
-                        style = Typography.headlineSmall,
-                        color = Color.White
+                        text = "INICIO DE SESIÓN",
+                        color = secondaryColor,
+                        modifier = Modifier.padding(bottom = 64.dp)
                     )
                 }
+
+                // Username
+                Column(
+                    modifier = Modifier.padding(bottom = 16.dp)
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .padding(vertical = 32.dp, horizontal = 54.dp)
+                            .fillMaxWidth(),
+                        value = usernameInput,
+                        onValueChange = { validValue ->
+                            if (validValue.length <= maxLength) {
+                                usernameInput = validValue
+                            }
+                            usernameError = false
+                        },
+                        textStyle = Typography.bodySmall,
+                        label = { Text("Usuario") },
+                        placeholder = { Text(text = "e.g. DirtyDan") },
+                        supportingText = {
+                            Text(
+                                text = usernameSupportingText,
+                                color = usernameSupportingColor,
+                                style = Typography.labelSmall,
+                                modifier = Modifier.padding(top = 2.dp)
+                            )
+                        },
+                        isError = usernameError,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = secondaryColor,
+                            containerColor = Color.Transparent,
+                            focusedIndicatorColor = secondaryColor,
+                            focusedLabelColor = secondaryColor,
+                            placeholderColor = secondaryColor.copy(alpha = 0.5f),
+                            unfocusedLabelColor = secondaryColor,
+                            unfocusedIndicatorColor = secondaryColor,
+                            selectionColors = TextSelectionColors(
+                                handleColor = MaterialTheme.colorScheme.tertiary,
+                                backgroundColor = Color.Transparent
+                            )
+                        )
+                    )
+
+                    // Password
+                    TextField(
+                        modifier = Modifier
+                            .padding(vertical = 32.dp, horizontal = 54.dp)
+                            .fillMaxWidth(),
+                        value = passwordInput,
+                        onValueChange = {
+                            passwordInput = it
+                            passwordError = passwordInput.length < 8
+                        },
+                        textStyle = Typography.bodySmall,
+                        label = { Text("Contraseña") },
+                        placeholder = { Text("••••••••") },
+                        supportingText = {
+                            Text(
+                                text = passwordSupportingText,
+                                color = passwordSupportingColor,
+                                style = Typography.labelSmall,
+                                modifier = Modifier.padding(top = 2.dp)
+                            )
+                        },
+                        isError = passwordError,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Send
+                        ),
+                        singleLine = true,
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = if (passwordError) errorColor else secondaryColor,
+                            containerColor = Color.Transparent,
+                            focusedIndicatorColor = secondaryColor,
+                            focusedLabelColor = secondaryColor,
+                            placeholderColor = secondaryColor.copy(alpha = 0.5f),
+                            unfocusedLabelColor = secondaryColor,
+                            unfocusedIndicatorColor = secondaryColor,
+                            cursorColor = MaterialTheme.colorScheme.tertiary,
+                            selectionColors = TextSelectionColors(
+                                handleColor = MaterialTheme.colorScheme.tertiary,
+                                backgroundColor = Color.Transparent
+                            )
+                        )
+                    )
+                }
+
+                ClickableText(text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            color = secondaryColor,
+                            fontStyle = Typography.labelSmall.fontStyle,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append("¿Olvidaste tu contraseña?")
+                    }
+                }, onClick = {
+
+                })
+
+                Column {
+                    Button(
+                        onClick = {
+                            usernameError = usernameInput.isBlank()
+                            passwordError = passwordInput.isBlank() or (passwordInput.length < 8)
+                            if (!usernameError && !passwordError) {
+                                loginViewModel.Login(
+                                    LoginRequest = LoginRequest(
+                                        usernameInput,
+                                        passwordInput
+                                    )
+                                )
+                                isLogin.value = true
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(secondaryAquaColor),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp, horizontal = 54.dp)
+                    ) {
+                        Text(
+                            text = "INICIAR SESIÓN",
+                            style = Typography.headlineSmall,
+                            color = Color.White
+                        )
+                    }
+                }
             }
+        }
+        else{
+            LoadingScreen()
+        }
+        if (isLogin.value) {
+            if (data != null) {
+                isLogin.value = false
+                onClick(data)
+            }
+        }
+        if(errors != "" && isLogin.value){
+            Log.d("Pruebas", "LoginScreen: $errors")
+            Toast.makeText(LocalContext.current, errors, Toast.LENGTH_SHORT).show()
+            loginViewModel.errors.value = ""
+            isLogin.value = false
         }
     }
 }
@@ -215,6 +257,6 @@ fun LoginScreen(onClick: () -> Unit) {
 @Composable
 fun LoginScreenPreview() {
     InfoKingTheme {
-        LoginScreen(onClick = {})
+        LoginScreen(onClick = { })
     }
 }

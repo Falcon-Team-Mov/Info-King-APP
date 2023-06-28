@@ -23,11 +23,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             AuthScreen(
                 onClick = {
                     val isValidUser = true
-                    // TODO: function to verify credentials
 
                     if (isValidUser) {
                         if (userType == "user") {
-                           navController.navigate(AuthScreen.Login.route)
+                            navController.navigate(AuthScreen.Login.route)
                         } else if (userType == "admin") {
                             navController.popBackStack()
                             navController.navigate(Graph.ADMIN_HOME)
@@ -46,7 +45,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             LoginScreen(
                 onClick = {
                     navController.navigate(Graph.BATTLE)
-                    { popUpTo(AuthScreen.Auth.route) {inclusive = true} }
+                    { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
                 }
             )
         }
@@ -70,7 +69,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             )
         }
 
-// Character SignUp
+        // Character SignUp
         composable(route = "${AuthScreen.CharacterSignUp.route}/{username}/{email}/{password}") { backStackEntry ->
             val username = backStackEntry.arguments?.getString("username") ?: ""
             val email = backStackEntry.arguments?.getString("email") ?: ""
