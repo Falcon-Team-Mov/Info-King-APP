@@ -33,7 +33,7 @@ import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.theme.white
 
 @Composable
-fun BattleBackground(modifier: Modifier = Modifier){
+fun Background(modifier: Modifier = Modifier){
     val opacity = 0.2f
     Column(
         verticalArrangement = Arrangement.Center,
@@ -44,7 +44,7 @@ fun BattleBackground(modifier: Modifier = Modifier){
             .fillMaxSize()
             .paint(
                 painterResource(id = R.drawable.texture),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.Crop
             )
     ) {}
 
@@ -52,7 +52,7 @@ fun BattleBackground(modifier: Modifier = Modifier){
 
 @Composable
 fun BattleScreen(modifier: Modifier = Modifier){
-    BattleBackground()
+    Background()
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
