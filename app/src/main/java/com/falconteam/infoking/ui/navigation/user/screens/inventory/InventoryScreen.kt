@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,42 +24,48 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
+import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 
 @Composable
 fun InventoryScreen( modifier: Modifier = Modifier){
+//Agregue el InfoKingTheme que incluye el tama;o de forma dinamica y agregue un fillMaxSize para que se adapte
+    InfoKingTheme() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .background(primaryColor)
+                .fillMaxSize()
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.background(primaryColor)
-    ) {
-        Text(
-            "INVENTARIO",
-            modifier = Modifier.padding(vertical = 55.dp),
-            style = MaterialTheme.typography.bodyLarge,
-            color = secondaryAquaColor,
-        )
-        InventoryCardCafe()
-        InventoryCardFuego()
-        InventoryCardLentes()
-        InventoryCardAtaque()
+        ) {
+            Text(
+                "INVENTARIO",
+                modifier = Modifier.padding(vertical = 55.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = secondaryAquaColor,
+            )
+            InventoryCardCafe()
+            InventoryCardFuego()
+            InventoryCardLentes()
+            InventoryCardAtaque()
 
-        Text(
-            "¿Cómo funcionan los poderes?",
-            modifier = Modifier.padding(top = 25.dp),
-            style = MaterialTheme.typography.bodyLarge,
-            color = buttonOKColor,
-        )
-        Text(
-            "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
-            modifier = Modifier.padding(vertical = 5.dp, horizontal = 40.dp),
-            style = MaterialTheme.typography.bodySmall,
-            color = buttonOKColor,
-            textAlign = TextAlign.Center
-        )
+            Text(
+                "¿Cómo funcionan los poderes?",
+                modifier = Modifier.padding(top = 25.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = buttonOKColor,
+            )
+            Text(
+                "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 40.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = buttonOKColor,
+                textAlign = TextAlign.Center
+            )
 
+        }
     }
 }
 
