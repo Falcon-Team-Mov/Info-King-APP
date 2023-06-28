@@ -52,7 +52,7 @@ fun RankingScreen() {
                 item {
                     Text(
                         "RANKING GLOBAL",
-                        modifier = Modifier.padding(vertical = 25.dp),
+                        modifier = Modifier.padding(top = 60.dp, bottom = 25.dp),
                         style = MaterialTheme.typography.bodyLarge,
                         color = secondaryAquaColor,
                     )
@@ -74,14 +74,15 @@ fun RankingItem(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         shape = RoundedCornerShape(25.dp),
         modifier = Modifier
-            .padding(horizontal = 30.dp, vertical = 5.dp)
-            .size(width = 359.dp, height = 45.dp)
+            .padding(horizontal = 30.dp, vertical = 3.dp)
+            .size(width = 359.dp, height = 55.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
             modifier = modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(6.dp)
         ) {
             RankingDetail(ranking)
         }
@@ -114,7 +115,7 @@ fun RankingDetail(ranking: Ranking, modifier: Modifier = Modifier) {
                         primaryColor, cornerRadius = CornerRadius(5.dp.toPx())
                     )
                 }
-                .padding(5.dp),
+                .padding(8.dp),
             tint = secondaryAquaColor
         )
 
