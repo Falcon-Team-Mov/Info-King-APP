@@ -103,7 +103,9 @@ fun InventoryCardCafe(){
                     )
                 }
 
-                Column() {
+                Column(
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
                     Text(
                         text = "Café:",
                         color = buttonOKColor,
@@ -160,7 +162,9 @@ fun InventoryCardFuego() {
                     )
                 }
 
-                Column() {
+                Column(
+                    modifier = Modifier.padding(start = 8.dp)
+                ) {
                     Text(
                         text = "Corta Fuego: 0/3",
                         color = buttonOKColor,
