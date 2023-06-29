@@ -5,12 +5,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.falconteam.infoking.ui.navigation.PressBackAgainToExit
+import com.falconteam.infoking.ui.components.PressBackAgainToExit
 import com.falconteam.infoking.ui.navigation.graphs.Graph
 import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import com.falconteam.infoking.ui.navigation.user.screens.ScreenContent
 import com.falconteam.infoking.ui.navigation.user.screens.battle.BattleScreen
 import com.falconteam.infoking.ui.navigation.user.screens.inventory.InventoryScreen
+import com.falconteam.infoking.ui.navigation.user.screens.profile.ProfileScreen
 import com.falconteam.infoking.ui.navigation.user.screens.ranking.RankingScreen
 
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
@@ -76,7 +77,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
                 name = UserBottomBar.Profile.route,
                 onClick = {},
                 navController = navController,
-                { BattleScreen() }
+                { ProfileScreen() }
             )
         }
     }

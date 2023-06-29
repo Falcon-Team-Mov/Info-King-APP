@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.falconteam.infoking.ui.navigation.PressBackAgainToExit
+import com.falconteam.infoking.ui.components.PressBackAgainToExit
 import com.falconteam.infoking.ui.navigation.admin.AdminBottomBar
 import com.falconteam.infoking.ui.navigation.graphs.Graph
 import com.falconteam.infoking.ui.navigation.user.screens.ScreenContent
