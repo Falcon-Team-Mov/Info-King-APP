@@ -16,24 +16,12 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         route = Graph.AUTH,
         startDestination = AuthScreen.Auth.route
     ) {
-        val userType = "user"
 
         // Auth
         composable(route = AuthScreen.Auth.route) {
             AuthScreen(
                 onClick = {
-                    val isValidUser = true
-
-                    if (isValidUser) {
-                        if (userType == "user") {
-                            navController.navigate(AuthScreen.Login.route)
-                        } else if (userType == "admin") {
-                            navController.popBackStack()
-                            navController.navigate(Graph.ADMIN_HOME)
-                        }
-                    } else {
-                        // Invalid credentials
-                    }
+                    navController.navigate(AuthScreen.Login.route)
                 }
             ) {
                 navController.navigate(AuthScreen.SignUp.route)
@@ -44,8 +32,15 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         composable(route = AuthScreen.Login.route) {
             LoginScreen(
                 onClick = {
-                    navController.navigate(Graph.BATTLE)
-                    { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
+                    if (it.user.role == "PLAYER_ROLE") {
+                        navController.popBackStack()
+                        navController.navigate(Graph.BATTLE)
+                        { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
+                    } else if (it.user.role == "ADMIN_ROLE") {
+                        navController.popBackStack()
+                        navController.navigate(Graph.ADMIN_HOME)
+                        { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
+                    }
                 }
             )
         }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
+import com.falconteam.infoking.ui.theme.primaryColor
+import com.falconteam.infoking.ui.theme.secondaryAquaColor
 
 @Composable
 fun AuthScreen(
@@ -36,7 +39,7 @@ fun AuthScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.primary),
+                .background(color = primaryColor),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -55,7 +58,7 @@ fun AuthScreen(
                         .fillMaxWidth()
                         .padding(bottom = 30.dp),
                     shape = RoundedCornerShape(30.dp),
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
+                    colors = ButtonDefaults.buttonColors(secondaryAquaColor)
                 ) {
                     Text(
                         modifier = Modifier
@@ -71,7 +74,7 @@ fun AuthScreen(
                         .padding(horizontal = 80.dp)
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(30.dp),
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary)
+                    colors = ButtonDefaults.buttonColors(secondaryAquaColor)
                 ) {
                     Text(
                         modifier = Modifier
