@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.falconteam.infoking.data.models.Ranking
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
+import com.falconteam.infoking.ui.theme.jostSemiBold
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
@@ -41,6 +43,7 @@ fun RankingScreen() {
             modifier = Modifier
                 .background(primaryColor)
                 .fillMaxSize()
+
         ) {
             val viewModel: RankingViewModel = viewModel()
             LazyColumn(
@@ -51,9 +54,10 @@ fun RankingScreen() {
                 item {
                     Text(
                         "RANKING GLOBAL",
-                        modifier = Modifier.padding(top = 60.dp, bottom = 25.dp),
-                        style = MaterialTheme.typography.bodyLarge,
                         color = secondaryAquaColor,
+                        fontFamily = jostSemiBold,
+                        modifier = Modifier
+                            .padding(top = 60.dp, bottom = 25.dp)
                     )
                 }
                 items(viewModel.state.value) { ranking ->
@@ -73,8 +77,10 @@ fun RankingItem(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         shape = RoundedCornerShape(25.dp),
         modifier = Modifier
-            .padding(horizontal = 30.dp, vertical = 3.dp)
-            .size(width = 359.dp, height = 55.dp)
+            .padding(horizontal = 30.dp, vertical = 5.dp)
+            .fillMaxWidth(0.9f)
+            .fillMaxHeight(0.18f)
+
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -101,7 +107,7 @@ fun RankingDetail(ranking: Ranking, modifier: Modifier = Modifier) {
         Text(
             text = ranking.position,
             color = buttonOKColor,
-            style = MaterialTheme.typography.bodySmall
+            fontFamily = jostSemiBold,
 
         )
 
@@ -121,13 +127,14 @@ fun RankingDetail(ranking: Ranking, modifier: Modifier = Modifier) {
         Text(
             text = ranking.name,
             color = buttonOKColor,
-            style = MaterialTheme.typography.bodySmall
+            fontFamily = jostSemiBold,
 
         )
         Text(
             text = ranking.type,
             color = buttonOKColor,
-            style = MaterialTheme.typography.bodySmall
+            fontFamily = jostSemiBold,
+
         )
 
     }

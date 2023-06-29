@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,7 @@ fun InventoryScreen( modifier: Modifier = Modifier){
         ) {
             Text(
                 "INVENTARIO",
-                modifier = Modifier.padding(top = 60.dp, bottom = 50.dp),
+                modifier = Modifier.padding(top = 60.dp, bottom = 40.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryAquaColor,
             )
@@ -74,7 +75,8 @@ fun InventoryCardCafe(){
     Card(colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(top = 25.dp)
-            .size(width = 312.dp, height = 72.dp)
+            .fillMaxWidth(0.8f)
+            .fillMaxHeight(0.14f)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -93,11 +95,10 @@ fun InventoryCardCafe(){
                 ) {
                     Image(painter = painterResource(id = R.drawable.cafe),
                         contentDescription = "Imagen de cafe",
-                        modifier = Modifier.size(width = 50.dp, height = 50.dp))
+                        modifier = Modifier.size(width = 55.dp, height = 55.dp))
                     Text(
                         text = "1%",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
                     )
@@ -109,14 +110,12 @@ fun InventoryCardCafe(){
                     Text(
                         text = "Café:",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyLarge
                     )
 
                     Text(
                         text = "Recupera parte de tu vida      ",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -132,9 +131,9 @@ fun InventoryCardCafe(){
 fun InventoryCardFuego() {
     Card(colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
-            .padding(top= 35.dp)
-            .size(width = 312.dp, height = 72.dp)
-    ) {
+            .padding(top= 25.dp)
+            .fillMaxWidth(0.8f)
+            .fillMaxHeight(0.15f)    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -152,11 +151,10 @@ fun InventoryCardFuego() {
                 ) {
                     Image(painter = painterResource(id = R.drawable.corta_fuego),
                         contentDescription = "Imagen de cafe",
-                        modifier = Modifier.size(width = 50.dp, height = 50.dp))
+                        modifier = Modifier.size(width = 55.dp, height = 55.dp))
                     Text(
                         text = "1%",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
                     )
@@ -168,14 +166,12 @@ fun InventoryCardFuego() {
                     Text(
                         text = "Corta Fuego: 0/3",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyLarge
                     )
 
                     Text(
                         text = "Aumenta la defensa               ",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -191,7 +187,8 @@ fun InventoryCardLentes() {
     Card(colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(top = 35.dp)
-            .size(width = 312.dp, height = 72.dp)
+            .fillMaxWidth(0.8f)
+            .fillMaxHeight(0.2f)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -201,7 +198,7 @@ fun InventoryCardLentes() {
         {
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 6.dp, end = 6.dp),
+                .padding(start = 4.dp, end = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -210,13 +207,13 @@ fun InventoryCardLentes() {
                 ) {
                     Image(painter = painterResource(id = R.drawable.lentes),
                         contentDescription = "Imagen de lentes",
-                        modifier = Modifier.size(width = 50.dp, height = 50.dp))
+                        modifier = Modifier.size(width = 53.dp, height = 53.dp))
                     Text(
                         text = "1%",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 11.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 11.dp)
                     )
                 }
 
@@ -226,14 +223,12 @@ fun InventoryCardLentes() {
                     Text(
                         text = "Lentes: 0/3",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyLarge,
                     )
 
                     Text(
                         text = "Aumenta el ataque                ",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -249,7 +244,8 @@ fun InventoryCardAtaque() {
     Card(colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(top = 35.dp)
-            .size(width = 312.dp, height = 72.dp)
+            .fillMaxWidth(0.8f)
+            .fillMaxHeight(0.25f)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -268,30 +264,27 @@ fun InventoryCardAtaque() {
                 ) {
                     Image(painter = painterResource(id = R.drawable.doble_ataque),
                         contentDescription = "Imagen de cafe",
-                        modifier = Modifier.size(width = 50.dp, height = 50.dp))
+                        modifier = Modifier.size(width = 55.dp, height = 55.dp))
                     Text(
                         text = "1%",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
                     )
                 }
 
                 Column(
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 5.dp)
                 ) {
                     Text(
                         text = "Doble Ataque: 0/3",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodyLarge
                     )
 
                     Text(
                         text = "Posibilidad de atacar dos veces",
                         color = buttonOKColor,
-                        fontSize = 15.sp,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
