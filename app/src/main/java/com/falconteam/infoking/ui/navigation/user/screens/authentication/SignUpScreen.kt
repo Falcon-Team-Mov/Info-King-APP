@@ -40,6 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
+import com.falconteam.infoking.ui.theme.buttonCancelColor
+import com.falconteam.infoking.ui.theme.secondaryAquaColor
+import com.falconteam.infoking.ui.theme.white
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,13 +51,13 @@ fun SignUpScreen(
 ) {
     InfoKingTheme(darkTheme = true) {
         val context = LocalContext.current
-        val secondaryColor = MaterialTheme.colorScheme.secondary
-        val errorColor = MaterialTheme.colorScheme.error
+        val secondaryColor = secondaryAquaColor
+        val errorColor = buttonCancelColor
         val maxLength = 16
 
         var usernameInput by rememberSaveable { mutableStateOf("") }
         var emailInput by rememberSaveable { mutableStateOf("") }
-        var passWordInput by rememberSaveable { mutableStateOf("") }
+        var passwordInput by rememberSaveable { mutableStateOf("") }
         var repeatPasswordInput by rememberSaveable { mutableStateOf("") }
 
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
@@ -82,13 +85,13 @@ fun SignUpScreen(
             if (repeatPasswordError) "Mínimo 8 caracteres" else "*Obligatorio"
 
         val usernameSupportingColor =
-            if (usernameError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+            if (usernameError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
         val emailSupportingColor =
-            if (emailError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+            if (emailError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
         val passwordSupportingColor =
-            if (passwordError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+            if (passwordError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
         val repeatPasswordSupportingColor =
-            if (repeatPasswordError) MaterialTheme.colorScheme.error else secondaryColor.copy(alpha = 0.5f)
+            if (repeatPasswordError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
 
 
         Column(
@@ -106,7 +109,7 @@ fun SignUpScreen(
             ) {
                 Text(
                     text = "REGISTRO",
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color = secondaryAquaColor,
                     modifier = Modifier
                 )
             }
@@ -143,7 +146,7 @@ fun SignUpScreen(
                         imeAction = ImeAction.Next
                     ),
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = secondaryColor,
+                        textColor = white.copy(alpha = 0.5f),
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = secondaryColor,
                         focusedLabelColor = secondaryColor,
@@ -186,7 +189,7 @@ fun SignUpScreen(
                     isError = emailError or !isValidEmail,
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = secondaryColor,
+                        textColor = white.copy(alpha = 0.5f),
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = secondaryColor,
                         focusedLabelColor = secondaryColor,
@@ -203,10 +206,10 @@ fun SignUpScreen(
 
                 // Password
                 TextField(
-                    value = passWordInput,
+                    value = passwordInput,
                     onValueChange = {
-                        passWordInput = it
-                        passwordError = passWordInput.length < 8
+                        passwordInput = it
+                        passwordError = passwordInput.length < 8
                     },
                     label = { Text(text = "Contraseña") },
                     placeholder = { Text(text = "••••••••") },
@@ -246,7 +249,7 @@ fun SignUpScreen(
                         .padding(vertical = 35.dp, horizontal = 54.dp)
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = if (passwordError) errorColor else secondaryColor,
+                        textColor = if (passwordError) errorColor else white.copy(alpha = 0.5f),
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = secondaryColor,
                         focusedLabelColor = secondaryColor,
@@ -306,7 +309,7 @@ fun SignUpScreen(
                         .padding(vertical = 35.dp, horizontal = 54.dp)
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = if (repeatPasswordError) errorColor else secondaryColor,
+                        textColor = if (repeatPasswordError) errorColor else white.copy(alpha = 0.5f),
                         containerColor = Color.Transparent,
                         focusedIndicatorColor = secondaryColor,
                         focusedLabelColor = secondaryColor,
@@ -327,11 +330,11 @@ fun SignUpScreen(
                     onClick = {
                         usernameError = usernameInput.isBlank()
                         emailError = emailInput.isBlank()
-                        passwordError = passWordInput.isBlank() or (passWordInput.length < 8)
+                        passwordError = passwordInput.isBlank() or (passwordInput.length < 8)
                         repeatPasswordError =
                             repeatPasswordInput.isBlank() or (repeatPasswordInput.length < 8)
                         isValidEmail = isValidEmail(emailInput)
-                        isValidPassword = passWordInput == repeatPasswordInput
+                        isValidPassword = passwordInput == repeatPasswordInput
                         if (!isValidPassword) Toast.makeText(
                             context,
                             "La contraseña debe ser la misma",
@@ -340,10 +343,10 @@ fun SignUpScreen(
                         if (!usernameError && !emailError && !passwordError && !repeatPasswordError && isValidEmail && isValidPassword) onClick(
                             usernameInput,
                             emailInput,
-                            passWordInput
+                            passwordInput
                         )
                     },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+                    colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 24.dp, horizontal = 54.dp)

@@ -2,6 +2,8 @@ package com.falconteam.infoking.data.network.retrofit
 
 import com.falconteam.infoking.data.network.service.AuthService
 import com.falconteam.infoking.data.network.service.CharacterService
+import com.falconteam.infoking.data.network.service.ForgotPassService
+import com.falconteam.infoking.data.network.service.LoginService
 import com.falconteam.infoking.data.network.service.SignUpService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -21,14 +23,18 @@ object RetrofitInstance {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    fun getLoginService(): AuthService {
-        return retrofit.create(AuthService::class.java)
-    }
-
     fun getCharacterService(): CharacterService {
         return retrofit.create(CharacterService::class.java)
     }
+
+    fun getLoginService(): LoginService {
+        return retrofit.create(LoginService::class.java)
+    }
+
     fun getSignUpService(): SignUpService {
         return retrofit.create(SignUpService::class.java)
+    }
+    fun getForgotPassService(): ForgotPassService {
+        return retrofit.create(ForgotPassService::class.java)
     }
 }

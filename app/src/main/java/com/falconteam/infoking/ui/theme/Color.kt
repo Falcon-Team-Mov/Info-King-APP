@@ -1,5 +1,7 @@
 package com.falconteam.infoking.ui.theme
 
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
 //val Purple80 = Color(0xFFD0BCFF)
@@ -16,3 +18,4 @@ val secondaryBlueColor = Color(0xFF09486D)
 val secondaryGrayColor = Color(0xFF67757C)
 val buttonCancelColor = Color(0xFFE63946)
 val buttonOKColor = Color(0xFF6B9AA1)
+val white = Color(0xFFFFFFFF)

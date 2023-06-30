@@ -13,7 +13,6 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +28,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.falconteam.infoking.ui.navigation.user.UserBottomBar
 import com.falconteam.infoking.ui.theme.InfoKingTheme
+import com.falconteam.infoking.ui.theme.primaryColor
+import com.falconteam.infoking.ui.theme.secondaryAquaColor
+import com.falconteam.infoking.ui.theme.secondaryBlueColor
 
 @Composable
 fun UserBottomBarComponent(navController: NavHostController) {
@@ -44,15 +46,15 @@ fun UserBottomBarComponent(navController: NavHostController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
-        val bottomBarDestination = screens.any {it.route == currentDestination?.route}
+        val bottomBarDestination = screens.any { it.route == currentDestination?.route }
         if (bottomBarDestination) {
             Surface(
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             ) {
                 BottomNavigation(
-                    backgroundColor = MaterialTheme.colorScheme.tertiary
+                    backgroundColor = secondaryBlueColor
                 ) {
-                    screens.forEach {screen ->
+                    screens.forEach { screen ->
                         AddItem(
                             screen = screen,
                             currentDestination = currentDestination,
@@ -71,36 +73,35 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController,
 ) {
-    val primaryColor = MaterialTheme.colorScheme.primary
+    val primaryColor = primaryColor
 
     val selected = currentDestination?.hierarchy?.any {
         it.route == screen.route
     } == true
 
-    val background = if(selected) primaryColor else Color.Transparent
-
+    val background = if (selected) primaryColor else Color.Transparent
     BottomNavigationItem(
         icon = {
-               Box(
-                   modifier = Modifier
-                       .clip(RoundedCornerShape(10.dp))
-                       .background(background)
-               )
-               {
-                   Row(
-                       modifier = Modifier
-                           .padding(8.dp),
-                       verticalAlignment = Alignment.CenterVertically,
-                       horizontalArrangement = Arrangement.spacedBy(2.dp),
-                   ){
-                       Icon(
-                           modifier = Modifier.size(32.dp),
-                           imageVector = screen.icon,
-                           contentDescription = "Nav Icon",
-                           tint = MaterialTheme.colorScheme.secondary
-                       )
-                   }
-               }
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(background)
+            )
+            {
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        imageVector = screen.icon,
+                        contentDescription = "Nav Icon",
+                        tint = secondaryAquaColor
+                    )
+                }
+            }
 
         },
 
