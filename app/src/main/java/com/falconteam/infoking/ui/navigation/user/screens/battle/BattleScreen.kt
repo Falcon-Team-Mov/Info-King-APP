@@ -3,6 +3,7 @@ package com.falconteam.infoking.ui.navigation.user.screens.battle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -75,7 +76,9 @@ fun BattleCard(modifier: Modifier = Modifier){
         colors = CardDefaults.cardColors(secondaryBlueColor),
         modifier = Modifier
             .padding(horizontal = 30.dp, vertical = 35.dp)
-            .size(width = 312.dp, height = 250.dp)
+            .fillMaxWidth(0.9f)
+            //.size(width = 312.dp, height = 250.dp)
+
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -100,13 +103,13 @@ fun BattleCard(modifier: Modifier = Modifier){
                 colors = ButtonDefaults.buttonColors(buttonCancelColor),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 25.dp, horizontal = 35.dp)
+                    .padding(vertical = 25.dp, horizontal = 40.dp)
             ) {
                 Text(
                     text = "BUSCAR ENEMIGO",
                     fontFamily = jostBold,
-                    fontSize = 15.sp
-                )
+                    color = white
+                    )
             }
         }
 
