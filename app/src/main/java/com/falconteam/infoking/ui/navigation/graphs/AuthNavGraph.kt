@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.falconteam.infoking.data.models.SignUpFormOne
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.AuthScreen
+import com.falconteam.infoking.ui.navigation.user.screens.authentication.ForgotPassScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpCharacterScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpScreen
@@ -41,8 +42,23 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                         navController.navigate(Graph.ADMIN_HOME)
                         { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
                     }
+                },
+                ForgotPassword = {
+                    navController.navigate(AuthScreen.ForgotPass.route)
                 }
             )
+        }
+
+        // Forgot Password
+        composable(route = AuthScreen.ForgotPass.route) {
+            ForgotPassScreen(
+                onCodeSend = {},
+                onChangePass = {
+                    navController.popBackStack(AuthScreen.Auth.route, false)
+                },
+                onVerifyCode = {},
+
+                )
         }
 
         // SignUp

@@ -2,6 +2,7 @@ package com.falconteam.infoking.data.network.retrofit
 
 import com.falconteam.infoking.data.network.service.AuthService
 import com.falconteam.infoking.data.network.service.CharacterService
+import com.falconteam.infoking.data.network.service.ForgotPassService
 import com.falconteam.infoking.data.network.service.LoginService
 import com.falconteam.infoking.data.network.service.SignUpService
 import retrofit2.Retrofit
@@ -32,5 +33,8 @@ object RetrofitInstance {
 
     fun getSignUpService(): SignUpService {
         return retrofit.create(SignUpService::class.java)
+    }
+    fun getForgotPassService(): ForgotPassService {
+        return retrofit.create(ForgotPassService::class.java)
     }
 }

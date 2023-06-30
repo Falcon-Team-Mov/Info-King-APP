@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.laboratorio11.repository.CredentialsRepository
 import com.falconteam.infoking.data.network.repository.CharacterRepository
+import com.falconteam.infoking.data.network.repository.ForgotPassRepository
 import com.falconteam.infoking.data.network.repository.LoginRepository
 import com.falconteam.infoking.data.network.repository.SignUpRepository
 import com.falconteam.infoking.data.network.retrofit.RetrofitInstance
@@ -28,6 +29,10 @@ class RetrofitApplication : Application() {
         getSignUpService()
     }
 
+    private fun getForgotPassService() = with(RetrofitInstance){
+        getForgotPassService()
+    }
+
     val _characterRepository: CharacterRepository by lazy {
         CharacterRepository(getCharacterService())
     }
@@ -38,6 +43,10 @@ class RetrofitApplication : Application() {
 
     val _registerRepository: SignUpRepository by lazy {
         SignUpRepository(getRegisterService())
+    }
+
+    val _forgotPassRepository: ForgotPassRepository by lazy {
+        ForgotPassRepository(getForgotPassService())
     }
 
     companion object {

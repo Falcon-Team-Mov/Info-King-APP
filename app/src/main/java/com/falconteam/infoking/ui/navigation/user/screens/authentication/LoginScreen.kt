@@ -27,7 +27,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -62,7 +61,8 @@ import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onClick: (data: LoginResponse) -> Unit
+    onClick: (data: LoginResponse) -> Unit,
+    ForgotPassword: () -> Unit,
 ) {
     InfoKingTheme(darkTheme = true) {
         val secondaryColor = secondaryBlueColor
@@ -221,19 +221,19 @@ fun LoginScreen(
                     )
                 }
 
-                ClickableText(text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            color = secondaryColor,
-                            fontStyle = Typography.labelSmall.fontStyle,
-                            fontWeight = FontWeight.Bold
-                        )
-                    ) {
-                        append("¿Olvidaste tu contraseña?")
-                    }
-                }, onClick = {
-
-                })
+                ClickableText(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = secondaryColor,
+                                fontStyle = Typography.labelSmall.fontStyle,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append("¿Olvidaste tu contraseña?")
+                        }
+                    }, onClick = { ForgotPassword() }
+                )
 
                 Column {
                     Button(
@@ -286,6 +286,9 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     InfoKingTheme {
-        LoginScreen(onClick = { })
+        LoginScreen(
+            onClick = { },
+            ForgotPassword = { }
+        )
     }
 }
