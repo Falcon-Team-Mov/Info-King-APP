@@ -65,6 +65,9 @@ fun LoginScreen(
     ForgotPassword: () -> Unit,
 ) {
     InfoKingTheme(darkTheme = true) {
+
+        val context = LocalContext.current
+
         val secondaryColor = secondaryBlueColor
         val errorColor = buttonCancelColor
         val maxLength = 32
@@ -242,6 +245,7 @@ fun LoginScreen(
                             passwordError = passwordInput.isBlank() or (passwordInput.length < 8)
                             if (!usernameError && !passwordError) {
                                 loginViewModel.Login(
+                                    context,
                                     LoginRequest = LoginRequest(
                                         usernameInput,
                                         passwordInput

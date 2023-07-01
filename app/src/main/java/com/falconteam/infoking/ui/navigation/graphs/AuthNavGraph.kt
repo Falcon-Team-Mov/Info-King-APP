@@ -1,16 +1,28 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
 import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.falconteam.infoking.data.models.SignUpFormOne
+import com.falconteam.infoking.ui.components.PreferencesKeys
+import com.falconteam.infoking.ui.components.getData
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.AuthScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.ForgotPassScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpCharacterScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.SignUpScreen
+import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
+import kotlinx.coroutines.runBlocking
+import java.util.Timer
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
@@ -20,17 +32,52 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 
         // Auth
         composable(route = AuthScreen.Auth.route) {
-            AuthScreen(
-                onClick = {
-                    navController.navigate(AuthScreen.Login.route)
+            val context = LocalContext.current
+            var token by remember { mutableStateOf<Any?>(null) }
+            var role by remember { mutableStateOf<Any?>(null) }
+            var activation by remember { mutableStateOf(false) }
+
+            runBlocking {
+                Log.d("Pruebas", "authNavGraph Launched: $activation")
+                if (!activation) {
+                    token = getData(context = context, keyString = PreferencesKeys.TOKEN)
+                    role = getData(context = context, keyString = PreferencesKeys.ROLE)
+                    activation = true
                 }
-            ) {
-                navController.navigate(AuthScreen.SignUp.route)
+            }
+
+            if (token == null || role == null || !activation) {
+                LoadingScreen()
+            }
+            Log.d("Pruebas", "authNavGraph: $token $role $activation")
+            if (token == null || token == "" || role == null || role == "" && activation) {
+                AuthScreen(onClick = {
+                    navController.navigate(AuthScreen.Login.route)
+                }) {
+                    navController.navigate(AuthScreen.SignUp.route)
+                }
+            } else {
+                if (role == "PLAYER_ROLE") {
+                    navController.popBackStack()
+                    navController.navigate(Graph.BATTLE)
+                    activation = false
+                } else if (role == "ADMIN_ROLE") {
+                    navController.popBackStack()
+                    navController.navigate(Graph.ADMIN_HOME)
+                    activation = false
+                } else {
+                    AuthScreen(onClick = {
+                        navController.navigate(AuthScreen.Login.route)
+                    }) {
+                        navController.navigate(AuthScreen.SignUp.route)
+                    }
+                }
             }
         }
 
         // Login
         composable(route = AuthScreen.Login.route) {
+
             LoginScreen(
                 onClick = {
                     if (it.user.role == "PLAYER_ROLE") {
@@ -68,12 +115,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                         val routeWithArgs =
                             "${AuthScreen.CharacterSignUp.route}/${"a"}/${"a"}/${"a"}"
-                        Log.d("Pruebas", "authNavGraph: $routeWithArgs")
                         navController.navigate(routeWithArgs)
                     } else {
                         val routeWithArgs =
                             "${AuthScreen.CharacterSignUp.route}/${username}/${email}/${password}"
-                        Log.d("Pruebas", "authNavGraph: $routeWithArgs")
                         navController.navigate(routeWithArgs)
                     }
                 },

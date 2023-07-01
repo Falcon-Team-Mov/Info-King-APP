@@ -2,7 +2,6 @@ package com.falconteam.infoking.ui.navigation.user.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,10 +28,15 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,7 +44,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
+import com.falconteam.infoking.ui.components.ClearData
 import com.falconteam.infoking.ui.theme.InfoKingTheme
+import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.primaryColor
@@ -47,8 +54,14 @@ import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onLogout: () -> Unit
+) {
     InfoKingTheme {
+        val context = LocalContext.current
+        var logout by remember {
+            mutableStateOf(false)
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,7 +98,7 @@ fun ProfileScreen() {
                         .height(80.dp)
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.SpaceEvenly
-                    ) {
+                ) {
                     Row {
                         Column {
                             Text(
@@ -149,6 +162,27 @@ fun ProfileScreen() {
                     }
                 }
             }
+            Column {
+                Button(
+                    onClick = {
+                        logout = true
+                    },
+                    colors = ButtonDefaults.buttonColors(secondaryAquaColor),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp, horizontal = 54.dp)
+                ) {
+                    Text(
+                        text = "CERRAR SESIÓN",
+                        style = Typography.headlineSmall,
+                        color = Color.White
+                    )
+                }
+            }
+        }
+        if (logout) {
+            ClearData(context = context)
+            onLogout()
         }
     }
 }
@@ -394,5 +428,7 @@ fun EnergyStatCard() {
 @Composable
 @Preview
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(
+        onLogout = {},
+    )
 }

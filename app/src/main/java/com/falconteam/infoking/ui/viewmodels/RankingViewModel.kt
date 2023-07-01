@@ -1,4 +1,4 @@
-package com.falconteam.infoking.ui.navigation.user.screens.ranking
+package com.falconteam.infoking.ui.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

@@ -271,7 +271,7 @@ private fun CardCharacter(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ImageCharacter(url = personaje.images._3d)
+                ImageCharacter(url = personaje.images._3d!!)
             }
             Column(
                 modifier = Modifier
