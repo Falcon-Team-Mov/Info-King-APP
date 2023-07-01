@@ -28,14 +28,12 @@ class LoginViewModel() : ViewModel() {
             val value = repository_Login.Login(LoginRequest)
             when (value) {
                 is ApiResponse.Success -> {
-                    Log.d("Pruebas", "Login: ${value.data}")
                     data[0] = value.data
                     setFullData(
                         context = context,
                         data = value.data,
                     )
-                    val token = getData(context, keyString = PreferencesKeys.TOKEN, type = 1)
-                    Log.d("Pruebas", "Login: $token")
+                    getData(context, keyString = PreferencesKeys.TOKEN, type = 1)
                 }
 
                 is ApiResponse.Error -> {
@@ -52,7 +50,6 @@ class LoginViewModel() : ViewModel() {
             }
         }
         if (errors.value == "" && data.isNotEmpty()) {
-            Log.d("Pruebas", "Login: ${data[0]}")
             return data[0]
         } else {
             return errors.value

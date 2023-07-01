@@ -88,7 +88,6 @@ fun setFullData(
         dataInt = data.user.time_playing?: -1, IntKey = PreferencesKeys.TIME_PLAYING,
         type = 2
     )
-    Log.d("Pruebas", "setFullData: ${data}")
     setData(context, data.token?: "", PreferencesKeys.TOKEN)
 
     setData(context, data.stats._id?: "", PreferencesKeys._ID)
@@ -191,6 +190,7 @@ suspend fun getData(
         1 -> preferences[keyString] ?: ""
         2 -> preferences[keyInt] ?: -1
         3 -> preferences[keyDouble] ?: -1.0
+        4 -> preferences[keyDouble]?.toFloat()
         else -> null
     }
 }

@@ -2,7 +2,6 @@ package com.falconteam.infoking.ui.navigation.user.graphs
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -35,7 +34,11 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
                 name = UserBottomBar.Ranking.route,
                 onClick = {},
                 navController = navController,
-                { RankingScreen() }
+                {
+                    RankingScreen(
+                        false
+                    )
+                }
             )
         }
 

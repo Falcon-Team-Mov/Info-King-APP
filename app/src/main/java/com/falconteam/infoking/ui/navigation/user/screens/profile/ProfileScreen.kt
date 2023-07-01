@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,8 +44,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.components.ClearData
+import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
+import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
+import com.falconteam.infoking.ui.components.PreferencesKeys.EXP
+import com.falconteam.infoking.ui.components.PreferencesKeys.IMAGE_3D
+import com.falconteam.infoking.ui.components.PreferencesKeys.NIVEL
+import com.falconteam.infoking.ui.components.PreferencesKeys.USERNAME
+import com.falconteam.infoking.ui.components.PreferencesKeys.VIDA
+import com.falconteam.infoking.ui.components.getData
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.buttonCancelColor
@@ -52,6 +62,7 @@ import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ProfileScreen(
@@ -189,6 +200,7 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileSection() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -202,23 +214,36 @@ fun ProfileSection() {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Nivel 1",
+                text = (runBlocking {
+                    val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
+                    "Nivel $nivel"
+                }),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(bottom = 16.dp),
                 color = Color.White
             )
 
-            Image(
-                painter = painterResource(id = R.drawable.nestor),
-                contentDescription = "Player Character",
+            AsyncImage(
+                model = runBlocking {
+                    getData(
+                        context = context,
+                        keyString = IMAGE_3D,
+                    )
+                },
+                contentDescription = "Foto de perfil",
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .size(164.dp)
+                    .fillMaxHeight(0.3f)
+                    .fillMaxWidth(0.6f)
             )
 
             Text(
-                text = "Marroquin02",
+                text = runBlocking {
+                    getData(
+                        context,
+                        keyString = USERNAME
+                    ).toString()
+                },
                 style = MaterialTheme.typography.headlineSmall,
                 fontSize = 24.sp,
                 modifier = Modifier
@@ -227,7 +252,11 @@ fun ProfileSection() {
             )
 
             LinearProgressIndicator(
-                progress = 0.3f,
+                progress = (runBlocking {
+                    val exp = getData(context, keyInt = EXP, type = 2) as? Float ?: 0f
+                    val nivel = getData(context, keyInt = NIVEL, type = 2) as? Float ?: 1f
+                    exp / (50f * nivel)
+                }),
                 color = buttonCancelColor,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -241,7 +270,11 @@ fun ProfileSection() {
             Text(
                 modifier = Modifier
                     .padding(bottom = 4.dp),
-                text = "EXP 50/100",
+                text = (runBlocking {
+                    val exp = getData(context, keyInt = EXP, type = 2) as? Int ?: 0
+                    val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
+                    "$exp / ${50 * nivel}"
+                }),
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White
             )
@@ -294,6 +327,7 @@ fun StatsSection() {
 // Cards
 @Composable
 fun HealthStatCard() {
+    val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
@@ -301,7 +335,7 @@ fun HealthStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.9f)
                 .height(32.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
@@ -316,7 +350,10 @@ fun HealthStatCard() {
 
             Column {
                 Text(
-                    text = "Vida: 100",
+                    text = (runBlocking {
+                        val vida = getData(context, keyInt = VIDA, type = 2) as? Int ?: 1
+                        "Vida: $vida"
+                    }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -327,6 +364,7 @@ fun HealthStatCard() {
 
 @Composable
 fun DefenseStatCard() {
+    val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
@@ -349,7 +387,10 @@ fun DefenseStatCard() {
 
             Column {
                 Text(
-                    text = "Defensa: 100",
+                    text = (runBlocking {
+                        val defensa = getData(context, keyInt = DEFENSA, type = 2) as? Int ?: 1
+                        "Defensa: $defensa"
+                    }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -360,6 +401,7 @@ fun DefenseStatCard() {
 
 @Composable
 fun AttackStatCard() {
+    val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
@@ -382,7 +424,10 @@ fun AttackStatCard() {
 
             Column {
                 Text(
-                    text = "Ataque: 100",
+                    text = (runBlocking {
+                        val ataque = getData(context, keyInt = ATAQUE, type = 2) as? Int ?: 1
+                        "Ataque: $ataque"
+                    }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -393,6 +438,7 @@ fun AttackStatCard() {
 
 @Composable
 fun EnergyStatCard() {
+    val context = LocalContext.current
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
@@ -416,7 +462,10 @@ fun EnergyStatCard() {
 
             Column {
                 Text(
-                    text = "Energía: 100",
+                    text = (runBlocking {
+                        val energia = getData(context, keyInt = DEFENSA, type = 2) as? Int ?: 1
+                        "Energia: $energia"
+                    }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall
                 )

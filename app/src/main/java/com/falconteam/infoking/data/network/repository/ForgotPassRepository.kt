@@ -14,7 +14,6 @@ class ForgotPassRepository(private val api: ForgotPassService) {
         try {
             return api.ForgotPassCode(ForgotPassCodeRequest(email))
         } catch (e: HttpException) {
-            Log.d("Pruebas", "ForgotPassEmail: $e")
             return ForgotPassCodeResponse("Error con el servidor", false)
         } catch (e: HttpException) {
             if (e.code() == 500)

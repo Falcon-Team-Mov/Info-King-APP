@@ -20,12 +20,10 @@ class ForgotPassViewModel() : ViewModel() {
                 msg[0] = value.msg
                 valid[0] = value.valid
             } catch (e: Exception) {
-                Log.d("Pruebas", "ForgotPassEmail: $e")
                 msg[0] = "Correo no valido"
                 valid[0] = false
             }
         }
-        Log.d("Pruebas", "ForgotPassEmail: ")
     }
 
     fun ForgotPassCode(code: String) {
@@ -34,10 +32,8 @@ class ForgotPassViewModel() : ViewModel() {
                 val value = repository_ForgotPass.ForgotPassCode(code)
                 msg[1] = value.msg
                 valid[1] = value.valid
-                Log.d("Pruebas", "ForgotPassCode: $value")
             }
         } catch (e: Exception) {
-            Log.d("Pruebas", "ForgotPassCode: $e")
             msg[1] = "Codigo invalido"
             valid[1] = false
         }
@@ -50,7 +46,6 @@ class ForgotPassViewModel() : ViewModel() {
                 msg[2] = value.msg
                 valid[2] = value.valid
             } catch (e: Exception) {
-                Log.d("Pruebas", "ForgotPass: $e")
                 msg[2] = "Error con el servidor"
                 valid[2] = false
             }

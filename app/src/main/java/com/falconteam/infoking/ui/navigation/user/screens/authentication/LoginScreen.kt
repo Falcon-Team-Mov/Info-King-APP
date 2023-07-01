@@ -278,7 +278,6 @@ fun LoginScreen(
             }
         }
         if (errors != "" && isLogin.value) {
-            Log.d("Pruebas", "LoginScreen: $errors")
             Toast.makeText(LocalContext.current, errors, Toast.LENGTH_SHORT).show()
             loginViewModel.errors.value = ""
             isLogin.value = false

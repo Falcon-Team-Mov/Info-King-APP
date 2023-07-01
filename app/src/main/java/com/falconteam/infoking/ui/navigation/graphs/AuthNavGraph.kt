@@ -38,7 +38,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             var activation by remember { mutableStateOf(false) }
 
             runBlocking {
-                Log.d("Pruebas", "authNavGraph Launched: $activation")
                 if (!activation) {
                     token = getData(context = context, keyString = PreferencesKeys.TOKEN)
                     role = getData(context = context, keyString = PreferencesKeys.ROLE)
@@ -49,7 +48,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             if (token == null || role == null || !activation) {
                 LoadingScreen()
             }
-            Log.d("Pruebas", "authNavGraph: $token $role $activation")
             if (token == null || token == "" || role == null || role == "" && activation) {
                 AuthScreen(onClick = {
                     navController.navigate(AuthScreen.Login.route)
@@ -135,7 +133,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             SignUpCharacterScreen(
                 onSignUp = {},
                 onBack = { msg ->
-                    Log.d("Pruebas", "Log de msg: $msg")
                     var returnValue: String? = null
                     msg?.let {
                         if (it == "Cuenta creada exitosamente, verifica tu correo electronico") {
