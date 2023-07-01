@@ -194,7 +194,6 @@ fun Fightdetail(modifier: Modifier = Modifier){
             Text(
                 text = "Ataque",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -202,7 +201,6 @@ fun Fightdetail(modifier: Modifier = Modifier){
             Text(
                 text = "Defensa:",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -210,7 +208,6 @@ fun Fightdetail(modifier: Modifier = Modifier){
             Text(
                 text = "Vida:",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -223,7 +220,6 @@ fun Fightdetail(modifier: Modifier = Modifier){
             Text(
                 text = "xxx",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -231,7 +227,6 @@ fun Fightdetail(modifier: Modifier = Modifier){
             Text(
                 text = "xxx",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -239,7 +234,6 @@ fun Fightdetail(modifier: Modifier = Modifier){
             Text(
                 text = "xxx",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -257,7 +251,6 @@ fun Fightdetail2(modifier: Modifier = Modifier){
             Text(
                 text = "Ataque",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -265,7 +258,6 @@ fun Fightdetail2(modifier: Modifier = Modifier){
             Text(
                 text = "Defensa:",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -273,7 +265,6 @@ fun Fightdetail2(modifier: Modifier = Modifier){
             Text(
                 text = "Vida:",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -286,7 +277,6 @@ fun Fightdetail2(modifier: Modifier = Modifier){
             Text(
                 text = "xxx",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -294,7 +284,6 @@ fun Fightdetail2(modifier: Modifier = Modifier){
             Text(
                 text = "xxx",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -302,7 +291,6 @@ fun Fightdetail2(modifier: Modifier = Modifier){
             Text(
                 text = "xxx",
                 fontFamily = jostRegular,
-                fontSize = 14.sp,
                 color = white,
                 modifier = Modifier
                     .padding(top = 10.dp)
