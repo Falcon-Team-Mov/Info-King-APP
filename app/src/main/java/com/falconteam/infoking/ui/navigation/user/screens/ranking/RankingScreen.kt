@@ -19,12 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.Rankings
+import com.falconteam.infoking.ui.components.ElementResponsiveSize
+import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
@@ -106,44 +110,58 @@ fun RankingItem(
 fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp),
-        horizontalArrangement = Arrangement.SpaceAround,
+            .fillMaxWidth(0.8f),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
     ) {
-        Text(
-            text = position.toString(),
-            color = buttonOKColor,
-            fontFamily = jostSemiBold,
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.05f)
+        ) {
+            Text(
+                text = position.toString(),
+                color = buttonOKColor,
+                fontFamily = jostSemiBold,
+                fontSize = TextResponsiveSize(size = 24.sp)
             )
+        }
         AsyncImage(
             model = ranking.icon,
             contentDescription = "Posicion $position",
             modifier = Modifier
                 .drawBehind {
                     drawRoundRect(
-                        primaryColor, cornerRadius = CornerRadius(5.dp.toPx())
+                        Color.Transparent, cornerRadius = CornerRadius(5.dp.toPx())
                     )
                 }
-                .fillMaxHeight(0.05f)
-                .fillMaxWidth(0.1f)
+                .fillMaxHeight(0.1f)
+                .fillMaxWidth(0.15f)
                 .padding(8.dp),
         )
 
-        Text(
-            text = ranking.username,
-            color = buttonOKColor,
-            fontFamily = jostSemiBold,
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+        ) {
+            Text(
+                text = ranking.username,
+                color = buttonOKColor,
+                fontFamily = jostSemiBold,
+                fontSize = TextResponsiveSize(size = 24.sp)
             )
-        Text(
-            text = "${ranking.victorias - ranking.derrotas}",
-            color = buttonOKColor,
-            fontFamily = jostSemiBold,
-        )
-
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.1f)
+        ) {
+            Text(
+                text = "${ranking.victorias - ranking.derrotas}",
+                color = buttonOKColor,
+                fontFamily = jostSemiBold,
+                fontSize = TextResponsiveSize(size = 24.sp)
+            )
+        }
     }
 }
 
