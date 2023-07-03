@@ -4,6 +4,7 @@ import com.falconteam.infoking.data.network.service.AuthService
 import com.falconteam.infoking.data.network.service.CharacterService
 import com.falconteam.infoking.data.network.service.ForgotPassService
 import com.falconteam.infoking.data.network.service.LoginService
+import com.falconteam.infoking.data.network.service.NpcService
 import com.falconteam.infoking.data.network.service.RankingService
 import com.falconteam.infoking.data.network.service.SignUpService
 import retrofit2.Retrofit
@@ -42,5 +43,9 @@ object RetrofitInstance {
 
     fun getRankingService(): RankingService{
         return retrofit.create(RankingService::class.java)
+    }
+
+    fun getNpcService(): NpcService{
+        return retrofit.create(NpcService::class.java)
     }
 }

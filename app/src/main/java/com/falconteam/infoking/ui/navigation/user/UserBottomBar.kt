@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.falconteam.infoking.ui.navigation.graphs.BattleNavGraph
 
 sealed class UserBottomBar (
     val route: String,
@@ -36,8 +37,13 @@ sealed class UserBottomBar (
         route = "PROFILE",
         icon = Icons.Filled.Person
     )
-    object Attack: UserBottomBar(
+    object Attack : UserBottomBar(
         route = "ATTACK",
+        icon = Icons.Default.Send
+    )
+
+    object Fight : UserBottomBar(
+        route = "FIGHT",
         icon = Icons.Default.Send
     )
 }
