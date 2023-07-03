@@ -22,7 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
+import com.falconteam.infoking.ui.components.ElementResponsiveSize
+import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.primaryColor
@@ -44,7 +47,8 @@ fun AuthScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                modifier = Modifier.size(150.dp),
+                modifier = Modifier
+                    .size(ElementResponsiveSize(250.dp)),
                 painter = infoKingLogo,
                 contentDescription = "Info King Logo"
             )
@@ -65,7 +69,8 @@ fun AuthScreen(
                             .padding(vertical = 4.dp),
                         text = "INICIAR SESIÓN",
                         style = Typography.headlineSmall,
-                        color = Color.White
+                        color = Color.White,
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
                 }
                 Button(
@@ -81,7 +86,8 @@ fun AuthScreen(
                             .padding(vertical = 4.dp),
                         text = "REGISTRARSE",
                         style = Typography.headlineSmall,
-                        color = Color.White
+                        color = Color.White,
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
                 }
             }

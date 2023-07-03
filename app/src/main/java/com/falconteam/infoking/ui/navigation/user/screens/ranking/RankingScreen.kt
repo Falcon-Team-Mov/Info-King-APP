@@ -88,7 +88,7 @@ fun RankingItem(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         shape = RoundedCornerShape(25.dp),
         modifier = Modifier
-            .padding(horizontal = 30.dp, vertical = 5.dp)
+            .padding(horizontal = 8.dp, vertical = 5.dp)
             .fillMaxWidth(0.9f)
             .fillMaxHeight(0.18f)
 
@@ -116,11 +116,10 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.05f)
         ) {
             Text(
                 modifier = Modifier
-                    .padding(start = 16.dp),
+                    .padding(start = 12.dp),
                 text = position.toString(),
                 color = buttonOKColor,
                 fontFamily = jostSemiBold,

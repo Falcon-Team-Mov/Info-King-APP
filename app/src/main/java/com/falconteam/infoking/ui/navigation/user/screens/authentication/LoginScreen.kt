@@ -45,9 +45,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.falconteam.infoking.data.network.dto.login.LoginRequest
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
+import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
@@ -113,7 +115,8 @@ fun LoginScreen(
                     Text(
                         text = "INICIO DE SESIÓN",
                         color = secondaryColor,
-                        modifier = Modifier.padding(bottom = 64.dp)
+                        modifier = Modifier.padding(bottom = 64.dp),
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
                 }
 
@@ -133,14 +136,20 @@ fun LoginScreen(
                             usernameError = false
                         },
                         textStyle = Typography.bodySmall,
-                        label = { Text("Usuario") },
+                        label = {
+                            Text(
+                                "Usuario",
+                                fontSize = TextResponsiveSize(size = 20.sp)
+                            )
+                        },
                         placeholder = { Text(text = "e.g. DirtyDan") },
                         supportingText = {
                             Text(
                                 text = usernameSupportingText,
                                 color = usernameSupportingColor,
                                 style = Typography.labelSmall,
-                                modifier = Modifier.padding(top = 2.dp)
+                                modifier = Modifier.padding(top = 2.dp),
+                                fontSize = TextResponsiveSize(size = 12.sp)
                             )
                         },
                         isError = usernameError,
@@ -170,7 +179,12 @@ fun LoginScreen(
                             passwordInput = it
                             passwordError = passwordInput.length < 8
                         },
-                        label = { Text(text = "Contraseña") },
+                        label = {
+                            Text(
+                                text = "Contraseña",
+                                fontSize = TextResponsiveSize(size = 20.sp)
+                            )
+                        },
                         placeholder = { Text(text = "••••••••") },
                         textStyle = Typography.bodyLarge,
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -184,7 +198,8 @@ fun LoginScreen(
                                 text = passwordSupportingText,
                                 color = passwordSupportingColor,
                                 style = Typography.labelSmall,
-                                modifier = Modifier.padding(top = 2.dp)
+                                modifier = Modifier.padding(top = 2.dp),
+                                fontSize = TextResponsiveSize(size = 12.sp)
                             )
                         },
                         isError = passwordError,
@@ -230,7 +245,8 @@ fun LoginScreen(
                             style = SpanStyle(
                                 color = secondaryColor,
                                 fontStyle = Typography.labelSmall.fontStyle,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                fontSize = TextResponsiveSize(size = 20.sp)
                             )
                         ) {
                             append("¿Olvidaste tu contraseña?")
@@ -238,7 +254,9 @@ fun LoginScreen(
                     }, onClick = { ForgotPassword() }
                 )
 
-                Column {
+                Column(
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
                     Button(
                         onClick = {
                             usernameError = usernameInput.isBlank()
@@ -262,7 +280,8 @@ fun LoginScreen(
                         Text(
                             text = "INICIAR SESIÓN",
                             style = Typography.headlineSmall,
-                            color = Color.White
+                            color = Color.White,
+                            fontSize = TextResponsiveSize(size = 20.sp)
                         )
                     }
                 }

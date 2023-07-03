@@ -38,6 +38,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.buttonCancelColor
@@ -110,7 +112,8 @@ fun SignUpScreen(
                 Text(
                     text = "REGISTRO",
                     color = secondaryAquaColor,
-                    modifier = Modifier
+                    modifier = Modifier,
+                    fontSize = TextResponsiveSize(size = 24.sp)
                 )
             }
 
@@ -126,7 +129,12 @@ fun SignUpScreen(
                         }
                         usernameError = false
                     },
-                    label = { Text(text = "Usuario") },
+                    label = {
+                        Text(
+                            text = "Usuario",
+                            fontSize = TextResponsiveSize(size = 20.sp)
+                        )
+                    },
                     placeholder = { Text(text = "e.g. DirtyDan") },
                     textStyle = Typography.bodySmall,
                     singleLine = true,
@@ -138,7 +146,8 @@ fun SignUpScreen(
                             text = usernameSupportingText,
                             color = usernameSupportingColor,
                             style = Typography.labelSmall,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 2.dp),
+                            fontSize = TextResponsiveSize(size = 12.sp)
                         )
                     },
                     isError = usernameError,
@@ -168,7 +177,12 @@ fun SignUpScreen(
                         emailError = false
                         if (isValidEmail(emailInput)) isValidEmail = true
                     },
-                    label = { Text("Correo") },
+                    label = {
+                        Text(
+                            "Correo",
+                            fontSize = TextResponsiveSize(size = 20.sp)
+                        )
+                    },
                     textStyle = Typography.bodySmall,
                     placeholder = { Text(text = "ejemplo@correo.com") },
                     modifier = Modifier
@@ -183,7 +197,8 @@ fun SignUpScreen(
                             text = emailSupportingText,
                             color = emailSupportingColor,
                             style = Typography.labelSmall,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 2.dp),
+                            fontSize = TextResponsiveSize(size = 12.sp)
                         )
                     },
                     isError = emailError or !isValidEmail,
@@ -211,7 +226,12 @@ fun SignUpScreen(
                         passwordInput = it
                         passwordError = passwordInput.length < 8
                     },
-                    label = { Text(text = "Contraseña") },
+                    label = {
+                        Text(
+                            text = "Contraseña",
+                            fontSize = TextResponsiveSize(size = 20.sp)
+                        )
+                    },
                     placeholder = { Text(text = "••••••••") },
                     textStyle = Typography.bodyLarge,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -225,7 +245,8 @@ fun SignUpScreen(
                             text = passwordSupportingText,
                             color = passwordSupportingColor,
                             style = Typography.labelSmall,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 2.dp),
+                            fontSize = TextResponsiveSize(size = 12.sp)
                         )
                     },
                     isError = passwordError,
@@ -271,7 +292,12 @@ fun SignUpScreen(
                         repeatPasswordInput = it
                         repeatPasswordError = repeatPasswordInput.length < 8
                     },
-                    label = { Text(text = "Repetir contraseña") },
+                    label = {
+                        Text(
+                            text = "Repetir contraseña",
+                            fontSize = TextResponsiveSize(size = 20.sp)
+                        )
+                    },
                     placeholder = { Text(text = "••••••••") },
                     textStyle = Typography.bodyLarge,
                     singleLine = true,
@@ -285,7 +311,8 @@ fun SignUpScreen(
                             text = repeatPasswordSupportingText,
                             color = repeatPasswordSupportingColor,
                             style = Typography.labelSmall,
-                            modifier = Modifier.padding(top = 2.dp)
+                            modifier = Modifier.padding(top = 2.dp),
+                            fontSize = TextResponsiveSize(size = 12.sp)
                         )
                     },
                     isError = repeatPasswordError,
@@ -354,7 +381,8 @@ fun SignUpScreen(
                     Text(
                         text = "SIGUIENTE",
                         style = Typography.headlineSmall,
-                        color = Color.White
+                        color = Color.White,
+                        fontSize = TextResponsiveSize(size = 20.sp)
                     )
                 }
             }

@@ -368,13 +368,14 @@ fun HealthStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
+                .fillMaxWidth()
                 .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
+                    modifier = Modifier.padding(end = 6.dp),
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Ícono de Vida",
                     tint = secondaryAquaColor
@@ -389,7 +390,7 @@ fun HealthStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 18.sp)
                 )
             }
         }
@@ -408,11 +409,12 @@ fun DefenseStatCard() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
+                    modifier = Modifier.padding(end = 6.dp),
                     imageVector = Icons.Default.Shield,
                     contentDescription = "Ícono de Defensa",
                     tint = secondaryAquaColor
@@ -427,7 +429,7 @@ fun DefenseStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 18.sp)
                 )
             }
         }
@@ -446,7 +448,7 @@ fun AttackStatCard() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
@@ -454,6 +456,7 @@ fun AttackStatCard() {
                     painter = painterResource(id = R.drawable.swords),
                     contentDescription = "Ícono de Ataque",
                     modifier = Modifier.size(24.dp)
+                        .padding(end = 6.dp)
                 )
             }
 
@@ -465,7 +468,7 @@ fun AttackStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 18.sp)
                 )
             }
         }
@@ -484,7 +487,7 @@ fun EnergyStatCard() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
@@ -493,6 +496,7 @@ fun EnergyStatCard() {
                     contentDescription = "Ícono de Energía",
                     tint = secondaryAquaColor,
                     modifier = Modifier.size(28.dp)
+                        .padding(end = 6.dp),
                 )
             }
 
@@ -500,11 +504,11 @@ fun EnergyStatCard() {
                 Text(
                     text = (runBlocking {
                         val energia = getData(context, keyInt = DEFENSA, type = 2) as? Int ?: 1
-                        "Energia: $energia"
+                        "Energía: $energia"
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 18.sp)
                 )
             }
         }
