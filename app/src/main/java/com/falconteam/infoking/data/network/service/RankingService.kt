@@ -19,10 +19,5 @@ interface RankingService {
     @POST("api/ranking")
     suspend fun postRanking(@Body data: RankingRequest): RankingResponse
 
-    @PUT("api/ranking/victory")
-    suspend fun putVictoryRanking(@Body data: RankingRequest): String
-
-    @PUT("api/ranking/derrot")
-    suspend fun putDerrotRanking(@Body data: RankingRequest): String
 
 }

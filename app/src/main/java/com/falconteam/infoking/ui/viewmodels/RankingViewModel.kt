@@ -18,7 +18,6 @@ class RankingViewModel : ViewModel() {
     fun GetAll(context: Context) {
         viewModelScope.launch {
             val value = repository_ranking.getRankingAll()
-            Log.d("Pruebas", "GetAll: $value")
             val total = value.total
 
             if (total > 0 && value.msg == null) {

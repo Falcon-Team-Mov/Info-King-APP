@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import com.falconteam.infoking.data.network.repository.CharacterRepository
 import com.falconteam.infoking.data.network.repository.ForgotPassRepository
 import com.falconteam.infoking.data.network.repository.LoginRepository
+import com.falconteam.infoking.data.network.repository.NpcRepository
 import com.falconteam.infoking.data.network.repository.RankingRepository
 import com.falconteam.infoking.data.network.repository.SignUpRepository
 import com.falconteam.infoking.data.network.retrofit.RetrofitInstance
@@ -39,6 +40,10 @@ class RetrofitApplication : Application() {
         getRankingService()
     }
 
+    private fun getNpcService() = with(RetrofitInstance) {
+        getNpcService()
+    }
+
     val _characterRepository: CharacterRepository by lazy {
         CharacterRepository(getCharacterService())
     }
@@ -56,6 +61,10 @@ class RetrofitApplication : Application() {
     }
     val _rankingRepository: RankingRepository by lazy {
         RankingRepository(getRankingService())
+    }
+
+    val _npcRepository: NpcRepository by lazy {
+        NpcRepository(getNpcService())
     }
 
     companion object {

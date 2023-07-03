@@ -74,28 +74,4 @@ class RankingRepository(private val api: RankingService) {
         }
     }
 
-    suspend fun putVictory(data: RankingRequest): String {
-        try {
-            return api.putVictoryRanking(data)
-        }catch (e: HttpException) {
-            if (e.code() === 400) {
-                return "E-PV-4"
-            }
-            return "E-PV-1"
-        } catch (e: IOException) {
-            return "E-PV-2"
-        }
-    }
-    suspend fun putDerrot(data: RankingRequest): String {
-        try {
-            return api.putDerrotRanking(data)
-        }catch (e: HttpException) {
-            if (e.code() === 400) {
-                return "E-PD-4"
-            }
-            return "E-PD-1"
-        } catch (e: IOException) {
-            return "E-PD-2"
-        }
-    }
 }
