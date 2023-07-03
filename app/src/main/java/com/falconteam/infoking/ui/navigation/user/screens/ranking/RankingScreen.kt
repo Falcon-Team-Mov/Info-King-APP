@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.Rankings
-import com.falconteam.infoking.ui.components.ElementResponsiveSize
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
@@ -51,7 +50,6 @@ fun RankingScreen(
             modifier = Modifier
                 .background(primaryColor)
                 .fillMaxSize()
-
         ) {
             if (!_finish) {
                 viewModel.GetAll(context)
@@ -67,7 +65,8 @@ fun RankingScreen(
                             "RANKING GLOBAL",
                             color = secondaryAquaColor,
                             fontFamily = jostSemiBold,
-                            modifier = Modifier.padding(top = 60.dp, bottom = 25.dp)
+                            modifier = Modifier.padding(top = 60.dp, bottom = 25.dp),
+                            fontSize = TextResponsiveSize(size = 40.sp)
                         )
                     }
                     itemsIndexed(viewModel.data.entries.toList()) { index, item ->
@@ -110,7 +109,7 @@ fun RankingItem(
 fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .fillMaxWidth(0.8f),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
@@ -120,6 +119,8 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
                 .fillMaxWidth(0.05f)
         ) {
             Text(
+                modifier = Modifier
+                    .padding(start = 16.dp),
                 text = position.toString(),
                 color = buttonOKColor,
                 fontFamily = jostSemiBold,
@@ -142,7 +143,7 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
 
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
+                .fillMaxWidth(0.6f)
         ) {
             Text(
                 text = ranking.username,
@@ -153,7 +154,7 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
         }
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.1f)
+                .fillMaxWidth(0.4f)
         ) {
             Text(
                 text = "${ranking.victorias - ranking.derrotas}",
@@ -169,4 +170,10 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
 @Composable
 fun PreviewRankingScreen() {
     RankingScreen(false)
+}
+
+@Preview
+@Composable
+fun RankingDetailPreview() {
+    RankingDetail(position = 0, ranking = Rankings("", "", "", 999, 0))
 }

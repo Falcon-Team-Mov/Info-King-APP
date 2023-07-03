@@ -47,7 +47,7 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
         ) {
             Text(
                 "INVENTARIO",
-                modifier = Modifier.padding(top = 60.dp, bottom = 40.dp),
+                modifier = Modifier.padding(top = 52.dp, bottom = 40.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 40.sp)
@@ -66,7 +66,7 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
             )
             Text(
                 "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 40.dp),
+                modifier = Modifier.padding(vertical = 5.dp, horizontal = 44.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = buttonOKColor,
                 textAlign = TextAlign.Center,
@@ -111,7 +111,7 @@ fun InventoryCardCafe() {
                     )
 
                     Text(
-                        text = "1%",
+                        text = "1/%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
@@ -127,13 +127,15 @@ fun InventoryCardCafe() {
                     Text(
                         text = "Café: 0/3",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
 
                     Text(
                         text = "Recupera parte de tu vida",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = TextResponsiveSize(size = 20.sp)
                     )
                 }
                 Icon(
@@ -181,7 +183,7 @@ fun InventoryCardFuego() {
                     )
 
                     Text(
-                        text = "1%",
+                        text = "1/%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
@@ -199,13 +201,15 @@ fun InventoryCardFuego() {
                     Text(
                         text = "Corta Fuego: 0/3",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
 
                     Text(
                         text = "Aumenta la defensa",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = TextResponsiveSize(size = 20.sp)
                     )
                 }
                 Icon(
@@ -253,11 +257,12 @@ fun InventoryCardLentes() {
                     )
 
                     Text(
-                        text = "1%",
+                        text = "1/%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
-                            .padding(horizontal = 11.dp)
+                            .padding(horizontal = 11.dp),
+                        fontSize = TextResponsiveSize(size = 22.sp)
                     )
                 }
 
@@ -271,12 +276,14 @@ fun InventoryCardLentes() {
                         text = "Lentes: 0/3",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyLarge,
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
 
                     Text(
                         text = "Aumenta el ataque",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = TextResponsiveSize(size = 20.sp)
                     )
                 }
                 Icon(
@@ -323,10 +330,11 @@ fun InventoryCardAtaque() {
                         modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
                     )
                     Text(
-                        text = "1%",
+                        text = "1/%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
+                        fontSize = TextResponsiveSize(size = 22.sp)
                     )
                 }
 
@@ -339,13 +347,15 @@ fun InventoryCardAtaque() {
                     Text(
                         text = "Doble Ataque: 0/3",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = TextResponsiveSize(size = 24.sp)
                     )
 
                     Text(
                         text = "Posibilidad de atacar dos veces",
                         color = buttonOKColor,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = TextResponsiveSize(size = 20.sp)
                     )
                 }
                 Icon(

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.components.Background
+import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.jostBold
 import com.falconteam.infoking.ui.theme.jostRegular
@@ -37,53 +38,52 @@ import com.falconteam.infoking.ui.theme.white
 @Composable
 fun BattleScreen(
     onClick: () -> Unit
-){
+) {
     Background()
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-            Text(
-                text = "TE ENCUENTRAS EN:",
-                style = MaterialTheme.typography.bodyLarge,
-                color = white,
-                fontSize = 16.sp
-            )
+        Text(
+            text = "TE ENCUENTRAS EN:",
+            style = MaterialTheme.typography.bodyLarge,
+            color = white,
+            fontSize = TextResponsiveSize(size = 22.sp)
+        )
         BattleCard(onClick = onClick)
     }
 
 }
 
 @Composable
-fun BattleCard(onClick: () -> Unit){
+fun BattleCard(onClick: () -> Unit) {
     Card(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         modifier = Modifier
             .padding(horizontal = 30.dp, vertical = 35.dp)
             .fillMaxWidth(0.9f)
-            //.size(width = 312.dp, height = 250.dp)
-
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(vertical = 20.dp)
         ) {
             Text(
                 text = "HOLA, MUNDO",
                 color = white,
-                fontSize = 22.sp,
+                fontSize = TextResponsiveSize(size = 24.sp),
                 fontFamily = jostSemiBold,
                 modifier = Modifier.padding(top = 45.dp)
             )
             Text(
                 text = "Donde todo comenzó...",
                 color = white,
-                fontSize = 15.sp,
+                fontSize = TextResponsiveSize(size = 20.sp),
                 fontFamily = jostRegular,
                 modifier = Modifier.padding(top = 25.dp)
-
             )
-            Button(onClick = {onClick()},
+            Button(
+                onClick = { onClick() },
                 colors = ButtonDefaults.buttonColors(buttonCancelColor),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -92,8 +92,9 @@ fun BattleCard(onClick: () -> Unit){
                 Text(
                     text = "BUSCAR ENEMIGO",
                     fontFamily = jostBold,
-                    color = white
-                    )
+                    color = white,
+                    fontSize = TextResponsiveSize(size = 20.sp)
+                )
             }
         }
 
@@ -103,7 +104,7 @@ fun BattleCard(onClick: () -> Unit){
 
 @Preview
 @Composable
-fun PreviewBattleScreen(){
+fun PreviewBattleScreen() {
     BattleScreen(
         onClick = {}
     )

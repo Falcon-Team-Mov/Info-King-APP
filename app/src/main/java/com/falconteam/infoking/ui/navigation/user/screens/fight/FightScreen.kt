@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,8 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,18 +25,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
-import com.falconteam.infoking.ui.navigation.user.screens.attack.AttackCard
-import com.falconteam.infoking.ui.navigation.user.screens.battle.Background
+import com.falconteam.infoking.ui.components.Background
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.jostBold
 import com.falconteam.infoking.ui.theme.jostRegular
 import com.falconteam.infoking.ui.theme.jostSemiBold
-import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.theme.white
-import java.time.format.TextStyle
 
 @Composable
 fun FightScreen( modifier: Modifier = Modifier ) {
