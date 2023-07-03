@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
+import com.falconteam.infoking.ui.components.Background
 import com.falconteam.infoking.ui.navigation.user.screens.attack.AttackCard
-import com.falconteam.infoking.ui.navigation.user.screens.battle.Background
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.jostBold
