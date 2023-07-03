@@ -74,63 +74,73 @@ fun setFullData(
     context: Context,
     data: LoginResponse,
 ) {
-    setData(context, data.user.id?: "", PreferencesKeys.ID)
-    setData(context, data.user.username?: "", PreferencesKeys.USERNAME)
-    setData(context, data.user.email?: "", PreferencesKeys.EMAIL)
-    setData(context, data.user.role?: "", PreferencesKeys.ROLE)
-    setData(context, dataInt = data.user.exp?: -1, IntKey = PreferencesKeys.EXP, type = 2)
-    setData(context, dataInt = data.user.nivel?: -1, IntKey = PreferencesKeys.NIVEL, type = 2)
-    setData(context, data.user.last_conection?: "", PreferencesKeys.LAST_CONECTION)
-    setData(context, data.user.created_at?: "", PreferencesKeys.CREATED_AT)
+    setData(context, data.user.id ?: "", PreferencesKeys.ID)
+    setData(context, data.user.username ?: "", PreferencesKeys.USERNAME)
+    setData(context, data.user.email ?: "", PreferencesKeys.EMAIL)
+    setData(context, data.user.role ?: "", PreferencesKeys.ROLE)
+    setData(context, dataInt = data.user.exp ?: -1, IntKey = PreferencesKeys.EXP, type = 2)
+    setData(context, dataInt = data.user.nivel ?: -1, IntKey = PreferencesKeys.NIVEL, type = 2)
+    setData(context, data.user.last_conection ?: "", PreferencesKeys.LAST_CONECTION)
+    setData(context, data.user.created_at ?: "", PreferencesKeys.CREATED_AT)
     setData(
         context,
-        dataInt = data.user.time_playing?: -1, IntKey = PreferencesKeys.TIME_PLAYING,
+        dataInt = data.user.time_playing ?: -1, IntKey = PreferencesKeys.TIME_PLAYING,
         type = 2
     )
-    setData(context, data.token?: "", PreferencesKeys.TOKEN)
+    setData(context, data.token ?: "", PreferencesKeys.TOKEN)
 
-    setData(context, data.stats._id?: "", PreferencesKeys._ID)
-    setData(context, data.stats.personaje_id?: "", PreferencesKeys.PERSONAJE_ID)
-    setData(context, dataInt = data.stats.vida?: -1, IntKey = PreferencesKeys.VIDA, type = 2)
-    setData(context, dataInt = data.stats.ataque?: -1, IntKey = PreferencesKeys.ATAQUE, type = 2)
-    setData(context, dataInt = data.stats.defensa?: -1, IntKey = PreferencesKeys.DEFENSA, type = 2)
-    setData(context, dataInt = data.stats.energia?: -1, IntKey = PreferencesKeys.ENERGIA, type = 2)
+    setData(context, data.stats._id ?: "", PreferencesKeys._ID)
+    setData(context, data.stats.personaje_id ?: "", PreferencesKeys.PERSONAJE_ID)
+    setData(context, dataInt = data.stats.vida ?: -1, IntKey = PreferencesKeys.VIDA, type = 2)
+    setData(context, dataInt = data.stats.ataque ?: -1, IntKey = PreferencesKeys.ATAQUE, type = 2)
+    setData(context, dataInt = data.stats.defensa ?: -1, IntKey = PreferencesKeys.DEFENSA, type = 2)
+    setData(context, dataInt = data.stats.energia ?: -1, IntKey = PreferencesKeys.ENERGIA, type = 2)
 
-    setData(context, data.personaje.nombre?: "", PreferencesKeys.NOMBRE)
-    setData(context, dataDouble = data.personaje.buff?: -1.0, DoubleKey = PreferencesKeys.BUFF, type = 3)
-    setData(context, dataDouble = data.personaje.nerf?: -1.0, DoubleKey = PreferencesKeys.NERF, type = 3)
-    setData(context, data.personaje.image._2d?:"", PreferencesKeys.IMAGE_2D)
-    setData(context, data.personaje.image._3d?:"", PreferencesKeys.IMAGE_3D)
-
-    setData(context, data.poderes[0]._id?: "", PreferencesKeys._ID_1)
-    setData(context, data.poderes[0].nombre?: "", PreferencesKeys.NOMBRE_1)
+    setData(context, data.personaje.nombre ?: "", PreferencesKeys.NOMBRE)
     setData(
         context,
-        dataInt = data.poderes[0].cantidad?: -1, IntKey = PreferencesKeys.CANTIDAD_1,
-        type = 2
+        dataDouble = data.personaje.buff ?: -1.0,
+        DoubleKey = PreferencesKeys.BUFF,
+        type = 3
     )
-
-    setData(context, data.poderes[1]._id?: "", PreferencesKeys._ID_2)
-    setData(context, data.poderes[1].nombre?: "", PreferencesKeys.NOMBRE_2)
     setData(
         context,
-        dataInt = data.poderes[1].cantidad?: -1, IntKey = PreferencesKeys.CANTIDAD_2,
-        type = 2
+        dataDouble = data.personaje.nerf ?: -1.0,
+        DoubleKey = PreferencesKeys.NERF,
+        type = 3
     )
+    setData(context, data.personaje.image._2d ?: "", PreferencesKeys.IMAGE_2D)
+    setData(context, data.personaje.image._3d ?: "", PreferencesKeys.IMAGE_3D)
 
-    setData(context, data.poderes[2]._id?: "", PreferencesKeys._ID_3)
-    setData(context, data.poderes[2].nombre?: "", PreferencesKeys.NOMBRE_3)
+    setData(context, data.poderes[0]._id ?: "", PreferencesKeys._ID_1)
+    setData(context, data.poderes[0].nombre ?: "", PreferencesKeys.NOMBRE_1)
     setData(
         context,
-        dataInt = data.poderes[2].cantidad?: -1, IntKey = PreferencesKeys.CANTIDAD_3,
+        dataInt = data.poderes[0].cantidad ?: -1, IntKey = PreferencesKeys.CANTIDAD_1,
         type = 2
     )
 
-    setData(context, data.poderes[3]._id?: "", PreferencesKeys._ID_4)
-    setData(context, data.poderes[3].nombre?: "", PreferencesKeys.NOMBRE_4)
+    setData(context, data.poderes[1]._id ?: "", PreferencesKeys._ID_2)
+    setData(context, data.poderes[1].nombre ?: "", PreferencesKeys.NOMBRE_2)
     setData(
         context,
-        dataInt = data.poderes[3].cantidad?: -1, IntKey = PreferencesKeys.CANTIDAD_4,
+        dataInt = data.poderes[1].cantidad ?: -1, IntKey = PreferencesKeys.CANTIDAD_2,
+        type = 2
+    )
+
+    setData(context, data.poderes[2]._id ?: "", PreferencesKeys._ID_3)
+    setData(context, data.poderes[2].nombre ?: "", PreferencesKeys.NOMBRE_3)
+    setData(
+        context,
+        dataInt = data.poderes[2].cantidad ?: -1, IntKey = PreferencesKeys.CANTIDAD_3,
+        type = 2
+    )
+
+    setData(context, data.poderes[3]._id ?: "", PreferencesKeys._ID_4)
+    setData(context, data.poderes[3].nombre ?: "", PreferencesKeys.NOMBRE_4)
+    setData(
+        context,
+        dataInt = data.poderes[3].cantidad ?: -1, IntKey = PreferencesKeys.CANTIDAD_4,
         type = 2
     )
 }
