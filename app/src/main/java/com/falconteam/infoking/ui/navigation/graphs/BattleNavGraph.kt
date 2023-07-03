@@ -40,6 +40,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
                 0,
                 ""
             ),
+            onBack = {}
         )
     }
 }

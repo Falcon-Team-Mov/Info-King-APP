@@ -51,7 +51,7 @@ suspend fun attackgenerator(attack: Int, defensa: Int): Float {
         return 0f
     }
     else{
-        val _attack = (attack * generateRandomNumber(defensa) - defensa) / 100
+        val _attack = (attack * generateRandomNumber(defensa) - (defensa/2)) / 100
         return _attack.toFloat()
     }
 }

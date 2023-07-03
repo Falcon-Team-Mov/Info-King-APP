@@ -49,7 +49,8 @@ fun RankingScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(primaryColor)
-                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
         ) {
             if (!_finish) {
                 viewModel.GetAll(context)
