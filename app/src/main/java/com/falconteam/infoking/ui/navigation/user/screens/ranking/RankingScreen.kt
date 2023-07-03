@@ -110,7 +110,7 @@ fun RankingItem(
 fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
-            .fillMaxWidth(0.8f),
+            .fillMaxWidth(0.9f),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
@@ -142,7 +142,7 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
 
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
+                .fillMaxWidth(0.45f)
         ) {
             Text(
                 text = ranking.username,
@@ -153,7 +153,7 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
         }
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.1f)
+                .fillMaxWidth(0.4f)
         ) {
             Text(
                 text = "${ranking.victorias - ranking.derrotas}",

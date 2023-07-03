@@ -90,6 +90,7 @@ fun FightScreen(
     var finished by remember { mutableStateOf(false) }
     val current = LocalContext.current
     val last_conection = getCurrentDateTime()
+    var enviado by remember { mutableStateOf(false) }
 
     var vida by remember {
         mutableStateOf(runBlocking {
@@ -115,6 +116,20 @@ fun FightScreen(
                     vida -= 1
                 } else {
                     progress -= 0f
+                }
+                if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress <= 0f) {
+                    finished = true
+                    if (activated && progress >= 1f) Toast.makeText(
+                        current,
+                        "GANASTE",
+                        Toast.LENGTH_SHORT
+                    ).show() else if (activated && progress <= 0f) Toast.makeText(
+                        current,
+                        "PERDISTE",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    activated = false
+
                 }
             }
 
@@ -204,102 +219,6 @@ fun FightScreen(
                     activated = false
 
                 }
-                if (finished) {
-                    if (progress >= 1f) {
-                        val exp = runBlocking {
-                            getData(current, keyInt = EXP, type = 2).toString().toInt() + 1
-                        }
-                        val nivel = runBlocking {
-                            getData(current, keyInt = NIVEL, type = 2).toString().toInt()
-                        }
-                        if (exp > (50 * nivel)) {
-                            setData(current, IntKey = EXP, dataInt = 0, type = 2)
-                            setData(current, IntKey = NIVEL, dataInt = nivel + 1, type = 2)
-                        } else {
-                            setData(current, IntKey = EXP, dataInt = exp + 1, type = 2)
-                        }
-                        viewModel.putVictoryRanking(
-                            RankingRequest(
-                                runBlocking {
-                                    getData(current, keyString = ID, type = 1).toString()
-                                },
-                                runBlocking {
-                                    getData(current, keyString = PERSONAJE_ID, type = 1).toString()
-                                },
-                            )
-                        )
-                    } else {
-                        viewModel.putDerrotRanking(
-                            RankingRequest(
-                                runBlocking {
-                                    getData(current, keyString = ID, type = 1).toString()
-                                },
-                                runBlocking {
-                                    getData(current, keyString = PERSONAJE_ID, type = 1).toString()
-                                },
-                            )
-                        )
-                    }
-                    val user = SessionUserData(
-                        runBlocking {
-                            getData(current, keyString = ID, type = 1).toString()
-                        },
-                        runBlocking {
-                            getData(current, keyString = USERNAME, type = 1).toString()
-                        },
-                        runBlocking {
-                            getData(current, keyString = EMAIL, type = 1).toString()
-                        },
-                        runBlocking {
-                            getData(current, keyString = ROLE, type = 1).toString()
-                        },
-                        runBlocking {
-                            getData(current, keyInt = EXP, type = 2).toString().toInt()
-                        },
-                        runBlocking {
-                            getData(current, keyInt = NIVEL, type = 2).toString().toInt()
-                        },
-                        last_conection,
-                        runBlocking {
-                            getData(current, keyString = CREATED_AT, type = 1).toString()
-                                .toString()
-                        },
-                        runBlocking {
-                            getData(current, keyInt = TIME_PLAYING, type = 2).toString().toInt()
-                        },
-                    )
-                    Log.d("Prueba", "$user")
-                    viewModel.putUser(
-                        runBlocking {
-                            getData(current, keyString = ID, type = 1).toString()
-                        },
-                        user
-                    )
-                    viewModel.putStats(
-                        runBlocking {
-                            getData(current, keyString = _ID, type = 1).toString()
-                        },
-                        StatsUpdate(
-                            runBlocking {
-                                getData(current, keyString = PERSONAJE_ID, type = 1).toString()
-                            },
-                            runBlocking {
-                                getData(current, keyInt = VIDA, type = 2).toString().toInt()
-                            },
-                            runBlocking {
-                                getData(current, keyInt = ATAQUE, type = 2).toString().toInt()
-                            },
-                            runBlocking {
-                                getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
-                            },
-                            runBlocking {
-                                getData(current, keyInt = ENERGIA, type = 2).toString().toInt()
-                            },
-                        )
-                    )
-
-                }
-
             },
             colors = ButtonDefaults.buttonColors(secondaryAquaColor),
             modifier = Modifier
@@ -313,6 +232,101 @@ fun FightScreen(
                 fontSize = 16.sp
             )
         }
+    }
+    if (finished && !enviado) {
+        if (progress >= 1f) {
+            val exp = runBlocking {
+                getData(current, keyInt = EXP, type = 2).toString().toInt() + 1
+            }
+            val nivel = runBlocking {
+                getData(current, keyInt = NIVEL, type = 2).toString().toInt()
+            }
+            if (exp > (50 * nivel)) {
+                setData(current, IntKey = EXP, dataInt = 0, type = 2)
+                setData(current, IntKey = NIVEL, dataInt = nivel + 1, type = 2)
+            } else {
+                setData(current, IntKey = EXP, dataInt = exp + 1, type = 2)
+            }
+            viewModel.putVictoryRanking(
+                RankingRequest(
+                    runBlocking {
+                        getData(current, keyString = ID, type = 1).toString()
+                    },
+                    runBlocking {
+                        getData(current, keyString = PERSONAJE_ID, type = 1).toString()
+                    },
+                )
+            )
+        } else {
+            viewModel.putDerrotRanking(
+                RankingRequest(
+                    runBlocking {
+                        getData(current, keyString = ID, type = 1).toString()
+                    },
+                    runBlocking {
+                        getData(current, keyString = PERSONAJE_ID, type = 1).toString()
+                    },
+                )
+            )
+        }
+        val user = SessionUserData(
+            runBlocking {
+                getData(current, keyString = ID, type = 1).toString()
+            },
+            runBlocking {
+                getData(current, keyString = USERNAME, type = 1).toString()
+            },
+            runBlocking {
+                getData(current, keyString = EMAIL, type = 1).toString()
+            },
+            runBlocking {
+                getData(current, keyString = ROLE, type = 1).toString()
+            },
+            runBlocking {
+                getData(current, keyInt = EXP, type = 2).toString().toInt()
+            },
+            runBlocking {
+                getData(current, keyInt = NIVEL, type = 2).toString().toInt()
+            },
+            last_conection,
+            runBlocking {
+                getData(current, keyString = CREATED_AT, type = 1).toString()
+                    .toString()
+            },
+            runBlocking {
+                getData(current, keyInt = TIME_PLAYING, type = 2).toString().toInt()
+            },
+        )
+        Log.d("Prueba", "$user")
+        viewModel.putUser(
+            runBlocking {
+                getData(current, keyString = ID, type = 1).toString()
+            },
+            user
+        )
+        viewModel.putStats(
+            runBlocking {
+                getData(current, keyString = _ID, type = 1).toString()
+            },
+            StatsUpdate(
+                runBlocking {
+                    getData(current, keyString = PERSONAJE_ID, type = 1).toString()
+                },
+                runBlocking {
+                    getData(current, keyInt = VIDA, type = 2).toString().toInt()
+                },
+                runBlocking {
+                    getData(current, keyInt = ATAQUE, type = 2).toString().toInt()
+                },
+                runBlocking {
+                    getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
+                },
+                runBlocking {
+                    getData(current, keyInt = ENERGIA, type = 2).toString().toInt()
+                },
+            )
+        )
+        enviado = true
     }
 }
 
