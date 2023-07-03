@@ -27,6 +27,7 @@ import com.falconteam.infoking.ui.navigation.user.screens.attack.AttackScreen
 import com.falconteam.infoking.ui.navigation.user.screens.battle.BattleScreen
 import com.falconteam.infoking.ui.navigation.user.screens.fight.FightScreen
 import com.falconteam.infoking.ui.navigation.user.screens.inventory.InventoryScreen
+import com.falconteam.infoking.ui.navigation.user.screens.map.MapScreen
 import com.falconteam.infoking.ui.navigation.user.screens.profile.ProfileScreen
 import com.falconteam.infoking.ui.navigation.user.screens.ranking.RankingScreen
 import kotlinx.coroutines.runBlocking
@@ -89,18 +90,19 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
                 enabled = true,
                 onBack = { navController.navigate(UserBottomBar.Battle.route) }
             )
-            ScreenContent(
-                name = UserBottomBar.Map.route,
-                onClick = {},
-                navController = navController,
-                {
-                    BattleScreen(
-                        onClick = {
-                            navController.navigate(UserBottomBar.Attack.route)
-                        }
-                    )
-                }
-            )
+//            ScreenContent(
+//                name = UserBottomBar.Map.route,
+//                onClick = {},
+//                navController = navController,
+//                {
+//                    BattleScreen(
+//                        onClick = {
+//                            navController.navigate(UserBottomBar.Attack.route)
+//                        }
+//                    )
+//                }
+//            )
+            MapScreen()
         }
 
 
