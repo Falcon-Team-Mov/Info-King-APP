@@ -122,10 +122,6 @@ fun SignUpCharacterScreen(
                         Button(
                             onClick = {
                                 onSignUp()
-                                Log.d(
-                                    "Pruebas",
-                                    "SignUpCharacterScreen: $infoRegister + id: ${id[selectedCardIndex.value]}"
-                                )
                                 if (id[selectedCardIndex.value] != null) {
                                     signUpViewModel.AddAccount(
                                         SignUpFormOne(
@@ -271,7 +267,7 @@ private fun CardCharacter(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ImageCharacter(url = personaje.images._3d)
+                ImageCharacter(url = personaje.images._3d!!)
             }
             Column(
                 modifier = Modifier
@@ -289,7 +285,6 @@ private fun CardCharacter(
 
 @Composable
 private fun Message(msg: String) {
-    Log.d("Pruebas", "SignUpCharacterScreen: $msg")
     Toast.makeText(
         LocalContext.current,
         msg,

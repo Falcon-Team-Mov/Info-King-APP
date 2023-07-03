@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
+import com.falconteam.infoking.ui.components.Background
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.jostBold
 import com.falconteam.infoking.ui.theme.jostRegular
@@ -34,25 +35,9 @@ import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.theme.white
 
 @Composable
-fun Background(modifier: Modifier = Modifier){
-    val opacity = 0.2f
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .background(primaryColor)
-            .graphicsLayer(alpha = opacity)
-            .fillMaxSize()
-            .paint(
-                painterResource(id = R.drawable.texture),
-                contentScale = ContentScale.Crop
-            )
-    ) {}
-
-}
-
-@Composable
-fun BattleScreen(modifier: Modifier = Modifier){
+fun BattleScreen(
+    onClick: () -> Unit
+){
     Background()
     Column(
         verticalArrangement = Arrangement.Center,
@@ -65,13 +50,13 @@ fun BattleScreen(modifier: Modifier = Modifier){
                 color = white,
                 fontSize = 16.sp
             )
-        BattleCard()
+        BattleCard(onClick = onClick)
     }
 
 }
 
 @Composable
-fun BattleCard(modifier: Modifier = Modifier){
+fun BattleCard(onClick: () -> Unit){
     Card(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         modifier = Modifier
@@ -98,8 +83,7 @@ fun BattleCard(modifier: Modifier = Modifier){
                 modifier = Modifier.padding(top = 25.dp)
 
             )
-            Button(onClick = { /*TODO*/
-            },
+            Button(onClick = {onClick()},
                 colors = ButtonDefaults.buttonColors(buttonCancelColor),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,5 +104,7 @@ fun BattleCard(modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun PreviewBattleScreen(){
-    BattleScreen()
+    BattleScreen(
+        onClick = {}
+    )
 }

@@ -65,6 +65,9 @@ fun LoginScreen(
     ForgotPassword: () -> Unit,
 ) {
     InfoKingTheme(darkTheme = true) {
+
+        val context = LocalContext.current
+
         val secondaryColor = secondaryBlueColor
         val errorColor = buttonCancelColor
         val maxLength = 32
@@ -242,6 +245,7 @@ fun LoginScreen(
                             passwordError = passwordInput.isBlank() or (passwordInput.length < 8)
                             if (!usernameError && !passwordError) {
                                 loginViewModel.Login(
+                                    context,
                                     LoginRequest = LoginRequest(
                                         usernameInput,
                                         passwordInput
@@ -274,7 +278,6 @@ fun LoginScreen(
             }
         }
         if (errors != "" && isLogin.value) {
-            Log.d("Pruebas", "LoginScreen: $errors")
             Toast.makeText(LocalContext.current, errors, Toast.LENGTH_SHORT).show()
             loginViewModel.errors.value = ""
             isLogin.value = false

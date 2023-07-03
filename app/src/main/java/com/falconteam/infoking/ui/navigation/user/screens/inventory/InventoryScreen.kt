@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,14 +28,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
+import com.falconteam.infoking.ui.components.ElementResponsiveSize
+import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 
 @Composable
-fun InventoryScreen( modifier: Modifier = Modifier){
-//Agregue el InfoKingTheme que incluye el tama;o de forma dinamica y agregue un fillMaxSize para que se adapte
+fun InventoryScreen(modifier: Modifier = Modifier) {
     InfoKingTheme() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,6 +50,7 @@ fun InventoryScreen( modifier: Modifier = Modifier){
                 modifier = Modifier.padding(top = 60.dp, bottom = 40.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryAquaColor,
+                fontSize = TextResponsiveSize(size = 40.sp)
             )
             InventoryCardCafe()
             InventoryCardFuego()
@@ -57,13 +62,15 @@ fun InventoryScreen( modifier: Modifier = Modifier){
                 modifier = Modifier.padding(top = 50.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 color = buttonOKColor,
+                fontSize = TextResponsiveSize(size = 32.sp)
             )
             Text(
                 "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
                 modifier = Modifier.padding(vertical = 5.dp, horizontal = 40.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = buttonOKColor,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = TextResponsiveSize(size = 21.sp)
             )
 
         }
@@ -71,8 +78,10 @@ fun InventoryScreen( modifier: Modifier = Modifier){
 }
 
 @Composable
-fun InventoryCardCafe(){
-    Card(colors = CardDefaults.cardColors(Color.Transparent),
+fun InventoryCardCafe() {
+    val sizeIcon = ElementResponsiveSize(size = 64.dp)
+    Card(
+        colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(top = 25.dp)
             .fillMaxWidth(0.8f)
@@ -84,84 +93,108 @@ fun InventoryCardCafe(){
                 .fillMaxWidth()
         )
         {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 6.dp, end = 6.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 6.dp, end = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
+
                 ) {
-                    Image(painter = painterResource(id = R.drawable.cafe),
-                        contentDescription = "Imagen de cafe",
-                        modifier = Modifier.size(width = 55.dp, height = 55.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.cup),
+                        contentDescription = "Cafe",
+                        modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
+                    )
+
                     Text(
                         text = "1%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
+                        fontSize = TextResponsiveSize(size = 22.sp)
                     )
                 }
 
                 Column(
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .fillMaxWidth(0.7f)
                 ) {
                     Text(
-                        text = "Café:",
+                        text = "Café: 0/3",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyLarge
                     )
 
                     Text(
-                        text = "Recupera parte de tu vida      ",
+                        text = "Recupera parte de tu vida",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                Image(painter = painterResource(id = R.drawable.plus),
-                    contentDescription = "Imagen de cafe",
-                    modifier = Modifier.size(width = 28.dp, height = 28.dp),
-                    colorFilter = ColorFilter.tint(buttonOKColor) )
-            } }
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    "Agregar",
+                    tint = buttonOKColor,
+                    modifier = Modifier
+                        .size(width = sizeIcon, height = sizeIcon)
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun InventoryCardFuego() {
-    Card(colors = CardDefaults.cardColors(Color.Transparent),
+    val sizeIcon = ElementResponsiveSize(size = 64.dp)
+    Card(
+        colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
-            .padding(top= 25.dp)
+            .padding(top = 25.dp)
             .fillMaxWidth(0.8f)
-            .fillMaxHeight(0.15f)    ) {
+            .fillMaxHeight(0.15f)
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
         )
         {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 6.dp, end = 6.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 6.dp, end = 6.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(painter = painterResource(id = R.drawable.corta_fuego),
-                        contentDescription = "Imagen de cafe",
-                        modifier = Modifier.size(width = 55.dp, height = 55.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.firewall),
+                        contentDescription = "Corta Fuego",
+                        modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
+                    )
+
                     Text(
                         text = "1%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(horizontal = 11.dp),
+                        fontSize = TextResponsiveSize(size = 22.sp)
                     )
                 }
 
                 Column(
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .fillMaxWidth(0.7f),
+                    horizontalAlignment = Alignment.Start
+
                 ) {
                     Text(
                         text = "Corta Fuego: 0/3",
@@ -170,21 +203,28 @@ fun InventoryCardFuego() {
                     )
 
                     Text(
-                        text = "Aumenta la defensa               ",
+                        text = "Aumenta la defensa",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                Image(painter = painterResource(id = R.drawable.plus),
-                    contentDescription = "Imagen de cafe",
-                    modifier = Modifier.size(width = 28.dp, height = 28.dp),
-                    colorFilter = ColorFilter.tint(buttonOKColor) )
-            }        }
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    "Agregar",
+                    tint = buttonOKColor,
+                    modifier = Modifier
+                        .size(width = sizeIcon, height = sizeIcon)
+                )
+            }
+        }
     }
 }
+
 @Composable
 fun InventoryCardLentes() {
-    Card(colors = CardDefaults.cardColors(Color.Transparent),
+    val sizeIcon = ElementResponsiveSize(size = 64.dp)
+    Card(
+        colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(top = 35.dp)
             .fillMaxWidth(0.8f)
@@ -196,18 +236,22 @@ fun InventoryCardLentes() {
                 .fillMaxWidth()
         )
         {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 4.dp, end = 4.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(painter = painterResource(id = R.drawable.lentes),
+                    Image(
+                        painter = painterResource(id = R.drawable.lentes),
                         contentDescription = "Imagen de lentes",
-                        modifier = Modifier.size(width = 53.dp, height = 53.dp))
+                        modifier = Modifier.size(sizeIcon),
+                    )
+
                     Text(
                         text = "1%",
                         color = buttonOKColor,
@@ -218,7 +262,10 @@ fun InventoryCardLentes() {
                 }
 
                 Column(
-                    modifier = Modifier.padding(start = 5.dp)
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .fillMaxWidth(0.7f),
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "Lentes: 0/3",
@@ -227,21 +274,28 @@ fun InventoryCardLentes() {
                     )
 
                     Text(
-                        text = "Aumenta el ataque                ",
+                        text = "Aumenta el ataque",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                Image(painter = painterResource(id = R.drawable.plus),
-                    contentDescription = "Imagen de cafe",
-                    modifier = Modifier.size(width = 28.dp, height = 28.dp),
-                    colorFilter = ColorFilter.tint(buttonOKColor) )
-            }        }
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    "Agregar",
+                    tint = buttonOKColor,
+                    modifier = Modifier
+                        .size(width = sizeIcon, height = sizeIcon)
+                )
+            }
+        }
     }
 }
+
 @Composable
 fun InventoryCardAtaque() {
-    Card(colors = CardDefaults.cardColors(Color.Transparent),
+    val sizeIcon = ElementResponsiveSize(size = 64.dp)
+    Card(
+        colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(top = 35.dp)
             .fillMaxWidth(0.8f)
@@ -253,18 +307,21 @@ fun InventoryCardAtaque() {
                 .fillMaxWidth()
         )
         {
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 4.dp, end = 4.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 4.dp, end = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(painter = painterResource(id = R.drawable.doble_ataque),
-                        contentDescription = "Imagen de cafe",
-                        modifier = Modifier.size(width = 55.dp, height = 55.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.atttack),
+                        contentDescription = "Imagen de ataque",
+                        modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
+                    )
                     Text(
                         text = "1%",
                         color = buttonOKColor,
@@ -274,7 +331,10 @@ fun InventoryCardAtaque() {
                 }
 
                 Column(
-                    modifier = Modifier.padding(start = 5.dp)
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .fillMaxWidth(0.7f),
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "Doble Ataque: 0/3",
@@ -288,13 +348,18 @@ fun InventoryCardAtaque() {
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                Image(painter = painterResource(id = R.drawable.plus),
-                    contentDescription = "Imagen de cafe",
-                    modifier = Modifier.size(width = 28.dp, height = 28.dp),
-                    colorFilter = ColorFilter.tint(buttonOKColor) )
-            }        }
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    "Agregar",
+                    tint = buttonOKColor,
+                    modifier = Modifier
+                        .size(width = sizeIcon, height = sizeIcon)
+                )
+            }
+        }
     }
 }
+
 @Preview
 @Composable
 fun PreviewRankingScreen() {

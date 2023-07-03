@@ -36,4 +36,8 @@ sealed class UserBottomBar (
         route = "PROFILE",
         icon = Icons.Filled.Person
     )
+    object Attack: UserBottomBar(
+        route = "ATTACK",
+        icon = Icons.Default.Send
+    )
 }
