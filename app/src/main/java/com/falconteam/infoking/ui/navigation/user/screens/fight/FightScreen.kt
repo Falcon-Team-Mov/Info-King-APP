@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -72,6 +73,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import com.falconteam.infoking.ui.components.generateRandomNumber
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -186,41 +188,43 @@ fun FightScreen(
         }
         Button(
             onClick = {
-                Log.d("Prueba", "$progress")
-                if (progress > 0.1f) {
-                    activated = true
-                }
-                player = runBlocking {
-                    attackgenerator(
-                        runBlocking {
-                            getData(current, keyInt = ATAQUE, type = 2).toString().toInt()
-                        },
-                        data.defensa
-                    )
-                }
-                if (player > 0f) {
-                    progress += player / 100f
-                    data.vida -= 1
-                } else {
-                    progress += 0f
+                if (!finished) {
+                    Log.d("Prueba", "$progress")
+                    if (progress > 0.1f) {
+                        activated = true
+                    }
+                    player = runBlocking {
+                        attackgenerator(
+                            runBlocking {
+                                getData(current, keyInt = ATAQUE, type = 2).toString().toInt()
+                            },
+                            data.defensa
+                        )
+                    }
+                    if (player > 0f) {
+                        progress += player / 100f
+                        data.vida -= 1
+                    } else {
+                        progress += 0f
 
-                }
-                if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress <= 0f) {
-                    finished = true
-                    if (activated && progress >= 1f) Toast.makeText(
-                        current,
-                        "GANASTE",
-                        Toast.LENGTH_SHORT
-                    ).show() else if (activated && progress <= 0f) Toast.makeText(
-                        current,
-                        "PERDISTE",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    activated = false
+                    }
+                    if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress <= 0f) {
+                        finished = true
+                        if (activated && progress >= 1f) Toast.makeText(
+                            current,
+                            "GANASTE",
+                            Toast.LENGTH_SHORT
+                        ).show() else if (activated && progress <= 0f) Toast.makeText(
+                            current,
+                            "PERDISTE",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        activated = false
 
+                    }
                 }
             },
-            colors = ButtonDefaults.buttonColors(secondaryAquaColor),
+            colors= ButtonDefaults.buttonColors(secondaryAquaColor),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 45.dp, horizontal = 45.dp)
@@ -229,7 +233,8 @@ fun FightScreen(
             Text(
                 text = "ATACAR",
                 fontFamily = jostBold,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = white
             )
         }
     }
@@ -241,9 +246,22 @@ fun FightScreen(
             val nivel = runBlocking {
                 getData(current, keyInt = NIVEL, type = 2).toString().toInt()
             }
+            val vida = runBlocking {
+                getData(current, keyInt = VIDA, type = 2).toString().toInt()
+            }
+            val ataque = runBlocking {
+                getData(current, keyInt = ATAQUE, type = 2).toString().toInt()
+            }
+            val defensa = runBlocking {
+                getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
+            }
+            android.util.Log.d("Pruebas", "FightScreen: ${exp > (50 * nivel)}")
             if (exp > (50 * nivel)) {
                 setData(current, IntKey = EXP, dataInt = 0, type = 2)
                 setData(current, IntKey = NIVEL, dataInt = nivel + 1, type = 2)
+                setData(current, IntKey = VIDA, dataInt = vida + runBlocking { generateRandomNumber(vida/4) }, type = 2)
+                setData(current, IntKey = ATAQUE, dataInt = ataque + runBlocking { generateRandomNumber(ataque/4) }, type = 2)
+                setData(current, IntKey = DEFENSA, dataInt = defensa + runBlocking { generateRandomNumber(defensa/4) }, type = 2)
             } else {
                 setData(current, IntKey = EXP, dataInt = exp + 1, type = 2)
             }
