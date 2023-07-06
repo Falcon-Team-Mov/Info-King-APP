@@ -76,6 +76,28 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
                 fontSize = TextResponsiveSize(size = 21.sp)
             )
 
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        "¿Cómo funcionan los poderes?",
+                        modifier = Modifier.padding(top = 50.dp),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = buttonOKColor,
+                        fontSize = TextResponsiveSize(size = 32.sp),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
+                        modifier = Modifier.padding(vertical = 5.dp, horizontal = 44.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = buttonOKColor,
+                        textAlign = TextAlign.Center,
+                        fontSize = TextResponsiveSize(size = 21.sp)
+                    )
+                }
+            }
         }
     }
 }

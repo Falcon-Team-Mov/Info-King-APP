@@ -35,11 +35,13 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         FightScreen(
             data = it.arguments?.getString("data") as? npc ?: npc(
                 "",
+                "",
                 0,
                 0,
                 0,
                 ""
             ),
+            onBack = {}
         )
     }
 }

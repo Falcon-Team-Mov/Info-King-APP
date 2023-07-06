@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.components.ClearData
@@ -61,6 +62,7 @@ import com.falconteam.infoking.ui.components.PreferencesKeys.USERNAME
 import com.falconteam.infoking.ui.components.PreferencesKeys.VIDA
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.buttonCancelColor
@@ -68,18 +70,19 @@ import com.falconteam.infoking.ui.theme.buttonOKColor
 import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
+import com.falconteam.infoking.ui.viewmodels.RankingViewModel
 import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ProfileScreen(
     onLogout: () -> Unit
 ) {
+    val viewModel: RankingViewModel = viewModel()
     InfoKingTheme {
         val context = LocalContext.current
         var logout by remember {
             mutableStateOf(false)
         }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,15 +97,39 @@ fun ProfileScreen(
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 40.sp)
             )
+        viewModel.getPosition(context)
+        if (viewModel.finished_profile.value && viewModel.dataRankingProfile.values != null) {
+            var logout by remember {
+                mutableStateOf(false)
+            }
 
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primaryColor)
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Column {
+                    Text(
+                        text = "PERFIL",
+                        modifier = Modifier.padding(top = 52.dp, bottom = 12.dp),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = secondaryAquaColor,
+                        fontSize = TextResponsiveSize(size = 40.sp)
+                    )
+                }
+
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .padding(horizontal = 28.dp)
+
                 ) {
                     // Player's info
                     ProfileSection()
@@ -111,6 +138,7 @@ fun ProfileScreen(
                     // Stats
                     StatsSection()
                     Spacer(modifier = Modifier.height(20.dp))
+
 
                     // Bonus
                     Column(
@@ -122,7 +150,7 @@ fun ProfileScreen(
                         Row {
                             Column {
                                 Text(
-                                    text = "Bonus por ranking:",
+                                    text = "Total de victorias:",
                                     color = buttonOKColor,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Bold,
@@ -133,7 +161,7 @@ fun ProfileScreen(
                             Column {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
-                                    text = "{%%}",
+                                    text = "${viewModel.dataRankingProfile[0]?.victorias}",
                                     color = buttonOKColor,
                                     style = MaterialTheme.typography.bodySmall,
                                     textAlign = TextAlign.End,
@@ -144,7 +172,7 @@ fun ProfileScreen(
                         Row {
                             Column {
                                 Text(
-                                    text = "Bonus por personaje:",
+                                    text = "Total de derrotas:",
                                     color = buttonOKColor,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Bold,
@@ -155,7 +183,7 @@ fun ProfileScreen(
                             Column {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
-                                    text = "{%%} de {habilidad}",
+                                    text = "${viewModel.dataRankingProfile[0]?.derrotas}",
                                     color = buttonOKColor,
                                     style = MaterialTheme.typography.bodySmall,
                                     textAlign = TextAlign.End,
@@ -167,7 +195,7 @@ fun ProfileScreen(
                         Row {
                             Column {
                                 Text(
-                                    text = "Bonus por poder:",
+                                    text = "Puntos totales:",
                                     color = buttonOKColor,
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.Bold,
@@ -178,7 +206,30 @@ fun ProfileScreen(
                             Column {
                                 Text(
                                     modifier = Modifier.fillMaxWidth(),
-                                    text = "{%%} de {habilidad}",
+                                    text = "${viewModel.dataRankingProfile[0]?.score}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+                        }
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Posicion del ranking:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${viewModel.dataRankingProfile[0]?.position}",
                                     color = buttonOKColor,
                                     style = MaterialTheme.typography.bodySmall,
                                     textAlign = TextAlign.End,
@@ -209,10 +260,13 @@ fun ProfileScreen(
                     }
                 }
             }
+            if (logout) {
+                ClearData(context = context)
+                onLogout()
+            }
         }
-        if (logout) {
-            ClearData(context = context)
-            onLogout()
+        else{
+            LoadingScreen()
         }
     }
 }

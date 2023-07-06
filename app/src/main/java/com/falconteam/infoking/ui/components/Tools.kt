@@ -1,5 +1,9 @@
 package com.falconteam.infoking.ui.components
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -36,10 +40,22 @@ fun ElementResponsiveSize(size: Dp): Dp {
 
 suspend fun generateRandomNumber(max: Int): Int {
     return withContext(Dispatchers.Default) {
-        val randomNumber = Random.nextInt(1, max)
+        val randomNumber = Random.nextInt(1, max-1  )
         randomNumber
     }
 }
+
+fun openPlayStore(context: Context) {
+    val packageName = context.packageName
+    val playStoreUri = Uri.parse("market://details?id=$packageName")
+    val intent = Intent(Intent.ACTION_VIEW, playStoreUri)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+    }
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun getCurrentDateTime(): String {
@@ -53,7 +69,8 @@ suspend fun attackgenerator(attack: Int, defensa: Int): Float {
         return 0f
     }
     else{
-        val _attack = (attack * generateRandomNumber(defensa) - defensa) / 100
+        val _attack = (attack - generateRandomNumber(defensa))
+        Log.d("Prueba", "attackgenerator: $_attack")
         return _attack.toFloat()
     }
 }

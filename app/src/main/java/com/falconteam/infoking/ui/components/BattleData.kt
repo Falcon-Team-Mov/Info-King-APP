@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.components
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -11,15 +10,15 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.falconteam.infoking.data.models.npc
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlin.math.log
 
 
 object PreferencesKeysBattle {
-    val NOMBRE_NPC = stringPreferencesKey("nombre")
-    val VIDA_NPC = intPreferencesKey("vida")
-    val DEFENSA_NPC = intPreferencesKey("defensa")
-    val ATAQUE_NPC = intPreferencesKey("ataque")
-    val IMAGEN_NPC = stringPreferencesKey("imagen")
+    val ID_NPC = stringPreferencesKey("npc_id")
+    val NOMBRE_NPC = stringPreferencesKey("npc_nombre")
+    val VIDA_NPC = intPreferencesKey("npc_vida")
+    val DEFENSA_NPC = intPreferencesKey("npc_defensa")
+    val ATAQUE_NPC = intPreferencesKey("npc_ataque")
+    val IMAGEN_NPC = stringPreferencesKey("npc_imagen")
 }
 
 val Context.dataStoreBattle: DataStore<Preferences> by preferencesDataStore(name = "IKG_BATTLE")
@@ -36,10 +35,26 @@ fun setFullDataBattle(
     context: Context,
     data: npc,
 ) {
+    setDataBattle(context, data.id ?: "", PreferencesKeysBattle.ID_NPC)
     setDataBattle(context, data.nombre ?: "", PreferencesKeysBattle.NOMBRE_NPC)
-    setDataBattle(context, dataInt = data.vida ?: -1, IntKey = PreferencesKeysBattle.VIDA_NPC, type = 2)
-    setDataBattle(context, dataInt = data.defensa ?: -1, IntKey = PreferencesKeysBattle.DEFENSA_NPC, type = 2)
-    setDataBattle(context, dataInt = data.ataque ?: -1, IntKey = PreferencesKeysBattle.ATAQUE_NPC, type = 2)
+    setDataBattle(
+        context,
+        dataInt = data.vida ?: -1,
+        IntKey = PreferencesKeysBattle.VIDA_NPC,
+        type = 2
+    )
+    setDataBattle(
+        context,
+        dataInt = data.defensa ?: -1,
+        IntKey = PreferencesKeysBattle.DEFENSA_NPC,
+        type = 2
+    )
+    setDataBattle(
+        context,
+        dataInt = data.ataque ?: -1,
+        IntKey = PreferencesKeysBattle.ATAQUE_NPC,
+        type = 2
+    )
     setDataBattle(context, dataString = data.imagen ?: "", PreferencesKeysBattle.IMAGEN_NPC)
 }
 

@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.falconteam.infoking.data.models.LoginDataResponse
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -143,6 +144,27 @@ fun setFullData(
         dataInt = data.poderes[3].cantidad ?: -1, IntKey = PreferencesKeys.CANTIDAD_4,
         type = 2
     )
+}
+
+fun setFullDataUser(
+    context: Context,
+    data: LoginDataResponse,
+) {
+    setData(context, data.id ?: "", PreferencesKeys.ID)
+    setData(context, data.name ?: "", PreferencesKeys.USERNAME)
+    setData(context, data.email ?: "", PreferencesKeys.EMAIL)
+    setData(context, dataInt = data.exp ?: -1, IntKey = PreferencesKeys.EXP, type = 2)
+    setData(context, dataInt = data.nivel ?: -1, IntKey = PreferencesKeys.NIVEL, type = 2)
+    setData(context, data.last_conection ?: "", PreferencesKeys.LAST_CONECTION)
+    setData(
+        context,
+        dataInt = data.time_playing ?: -1, IntKey = PreferencesKeys.TIME_PLAYING,
+        type = 2
+    )
+    setData(context, dataInt = data.stats.vida,  IntKey = PreferencesKeys.VIDA, type = 2)
+    setData(context, dataInt = data.stats.ataque,  IntKey = PreferencesKeys.ATAQUE, type = 2)
+    setData(context, dataInt = data.stats.defensa,  IntKey = PreferencesKeys.DEFENSA, type = 2)
+    setData(context, dataInt = data.stats.energia,  IntKey = PreferencesKeys.ENERGIA, type = 2)
 }
 
 fun setData(

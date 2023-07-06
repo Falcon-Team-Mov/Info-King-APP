@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 
 private val DarkColorScheme = darkColorScheme(
     primary = primaryColor,

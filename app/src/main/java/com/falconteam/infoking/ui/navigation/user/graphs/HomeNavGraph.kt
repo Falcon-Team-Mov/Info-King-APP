@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.graphs
 
 import android.app.Activity
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat.recreate
@@ -10,9 +9,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.falconteam.infoking.data.models.npc
-import com.falconteam.infoking.ui.components.ClearDataBattle
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.ATAQUE_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.DEFENSA_NPC
+import com.falconteam.infoking.ui.components.PreferencesKeysBattle.ID_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.IMAGEN_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.NOMBRE_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.VIDA_NPC
@@ -146,6 +145,9 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
         composable(route = "${UserBottomBar.Fight.route}") { BackStackEntry ->
             val context = LocalContext.current
             val data = npc(
+                id = runBlocking {
+                    getDataBattle(context, ID_NPC, type = 1).toString()
+                },
                 nombre = runBlocking {
                     getDataBattle(context, NOMBRE_NPC).toString()
                 },
@@ -166,6 +168,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
             )
             FightScreen(
                 data = data,
+                onBack = {
+                    navController.popBackStack(Graph.BATTLE, false)
+                    navController.navigate(Graph.BATTLE)
+                }
             )
         }
     }

@@ -1,18 +1,23 @@
 package com.falconteam.infoking.ui.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.falconteam.infoking.RetrofitApplication
+import com.falconteam.infoking.data.models.ProfileRankingData
 import com.falconteam.infoking.data.models.Rankings
+import com.falconteam.infoking.ui.components.PreferencesKeys.ID
+import com.falconteam.infoking.ui.components.getData
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class RankingViewModel : ViewModel() {
     val data = mutableStateMapOf<Int, Rankings>()
+    val dataRankingProfile = mutableStateMapOf<Int, ProfileRankingData>()
     val finished = mutableStateOf<Boolean>(false)
+    val finished_profile = mutableStateOf(false)
     val repository_ranking = RetrofitApplication()._rankingRepository
 
     fun GetAll(context: Context) {
@@ -33,6 +38,18 @@ class RankingViewModel : ViewModel() {
                 )
                 finished.value = true
             }
+        }
+    }
+
+    fun getPosition(context: Context) {
+        viewModelScope.launch {
+            val value = repository_ranking.getPositionRanking(
+                runBlocking {
+                    getData(context, ID).toString()
+                }
+            )
+            dataRankingProfile[0] = value
+            finished_profile.value = true
         }
     }
 }
