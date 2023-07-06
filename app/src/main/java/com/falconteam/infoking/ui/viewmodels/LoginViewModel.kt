@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,14 @@ class LoginViewModel() : ViewModel() {
     val errors: MutableState<String> = mutableStateOf("")
 
     val repository_Login = RetrofitApplication()._loginRepository
+
+    fun getVersion(): String {
+        var version = ""
+        viewModelScope.launch {
+            version = repository_Login.getVersion()
+        }
+        return version
+    }
 
     fun Login(context: Context, LoginRequest: LoginRequest): Any? {
         viewModelScope.launch {

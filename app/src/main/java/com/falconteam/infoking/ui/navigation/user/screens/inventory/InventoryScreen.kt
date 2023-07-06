@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -42,37 +44,51 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(primaryColor)
-                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
+                .verticalScroll(rememberScrollState()),
 
         ) {
-            Text(
-                "INVENTARIO",
-                modifier = Modifier.padding(top = 52.dp, bottom = 40.dp),
-                style = MaterialTheme.typography.bodyLarge,
-                color = secondaryAquaColor,
-                fontSize = TextResponsiveSize(size = 40.sp)
-            )
-            InventoryCardCafe()
-            InventoryCardFuego()
-            InventoryCardLentes()
-            InventoryCardAtaque()
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(0.7f)
+                    .padding(top = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "INVENTARIO",
+                    modifier = Modifier.padding(top = 52.dp, bottom = 40.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = secondaryAquaColor,
+                    fontSize = TextResponsiveSize(size = 40.sp)
+                )
+                InventoryCardCafe()
+                InventoryCardFuego()
+                InventoryCardLentes()
+                InventoryCardAtaque()
 
-            Text(
-                "¿Cómo funcionan los poderes?",
-                modifier = Modifier.padding(top = 50.dp),
-                style = MaterialTheme.typography.bodyLarge,
-                color = buttonOKColor,
-                fontSize = TextResponsiveSize(size = 32.sp)
-            )
-            Text(
-                "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
-                modifier = Modifier.padding(vertical = 5.dp, horizontal = 44.dp),
-                style = MaterialTheme.typography.bodySmall,
-                color = buttonOKColor,
-                textAlign = TextAlign.Center,
-                fontSize = TextResponsiveSize(size = 21.sp)
-            )
-
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        "¿Cómo funcionan los poderes?",
+                        modifier = Modifier.padding(top = 50.dp),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = buttonOKColor,
+                        fontSize = TextResponsiveSize(size = 32.sp),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
+                        modifier = Modifier.padding(vertical = 5.dp, horizontal = 44.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = buttonOKColor,
+                        textAlign = TextAlign.Center,
+                        fontSize = TextResponsiveSize(size = 21.sp)
+                    )
+                }
+            }
         }
     }
 }

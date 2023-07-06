@@ -3,7 +3,6 @@ package com.falconteam.infoking.ui.navigation.user.screens.fight
 import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
-import androidx.compose.foundation.rememberScrollState
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -36,8 +36,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.falconteam.infoking.R
-import com.falconteam.infoking.ui.components.Background
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.SessionUserData
@@ -60,9 +58,12 @@ import com.falconteam.infoking.ui.components.PreferencesKeys.TIME_PLAYING
 import com.falconteam.infoking.ui.components.PreferencesKeys.USERNAME
 import com.falconteam.infoking.ui.components.PreferencesKeys.VIDA
 import com.falconteam.infoking.ui.components.PreferencesKeys._ID
+import com.falconteam.infoking.ui.components.PreferencesKeysBattle.ID_NPC
 import com.falconteam.infoking.ui.components.attackgenerator
+import com.falconteam.infoking.ui.components.generateRandomNumber
 import com.falconteam.infoking.ui.components.getCurrentDateTime
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.getDataBattle
 import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.buttonOKColor
@@ -77,14 +78,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import com.falconteam.infoking.ui.components.generateRandomNumber
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun FightScreen(
     data: npc,
-    onBack: ()->Unit
+    onBack: () -> Unit
 ) {
     com.falconteam.infoking.ui.theme.InfoKingTheme() {
         Background()
@@ -154,7 +154,6 @@ fun FightScreen(
         ) {
 
 
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -221,7 +220,8 @@ fun FightScreen(
                             player = runBlocking {
                                 attackgenerator(
                                     runBlocking {
-                                        getData(current, keyInt = ATAQUE, type = 2).toString().toInt()
+                                        getData(current, keyInt = ATAQUE, type = 2).toString()
+                                            .toInt()
                                     },
                                     data.defensa
                                 )
@@ -249,7 +249,7 @@ fun FightScreen(
                             }
                         }
                     },
-                    colors= ButtonDefaults.buttonColors(secondaryAquaColor),
+                    colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 45.dp, horizontal = 45.dp)
@@ -284,9 +284,24 @@ fun FightScreen(
                     if (exp > (50 * nivel)) {
                         setData(current, IntKey = EXP, dataInt = 0, type = 2)
                         setData(current, IntKey = NIVEL, dataInt = nivel + 1, type = 2)
-                        setData(current, IntKey = VIDA, dataInt = vida + runBlocking { generateRandomNumber(vida/4) }, type = 2)
-                        setData(current, IntKey = ATAQUE, dataInt = ataque + runBlocking { generateRandomNumber(ataque/4) }, type = 2)
-                        setData(current, IntKey = DEFENSA, dataInt = defensa + runBlocking { generateRandomNumber(defensa/4) }, type = 2)
+                        setData(
+                            current,
+                            IntKey = VIDA,
+                            dataInt = vida + runBlocking { generateRandomNumber(vida / 4) },
+                            type = 2
+                        )
+                        setData(
+                            current,
+                            IntKey = ATAQUE,
+                            dataInt = ataque + runBlocking { generateRandomNumber(ataque / 4) },
+                            type = 2
+                        )
+                        setData(
+                            current,
+                            IntKey = DEFENSA,
+                            dataInt = defensa + runBlocking { generateRandomNumber(defensa / 4) },
+                            type = 2
+                        )
                     } else {
                         setData(current, IntKey = EXP, dataInt = exp + 1, type = 2)
                     }
@@ -298,8 +313,16 @@ fun FightScreen(
                             runBlocking {
                                 getData(current, keyString = PERSONAJE_ID, type = 1).toString()
                             },
+                            runBlocking {
+                                getDataBattle(current, keyString = ID_NPC, type = 1).toString()
+                            },
                         )
                     )
+                    Log.d("Prueba", "${
+                        runBlocking {
+                            getDataBattle(current, keyString = ID_NPC, type = 1).toString()
+                        }
+                    }")
                 } else {
                     viewModel.putDerrotRanking(
                         RankingRequest(
@@ -400,7 +423,7 @@ fun FightItemCharacter(vida: Int) {
                     .fillMaxHeight()
                     .fillMaxWidth(0.8f),
 
-            )
+                )
         }
         Column(
             modifier = Modifier
@@ -462,7 +485,7 @@ fun FightItemEnemy(data: npc) {
                 .fillMaxHeight(0.4f)
                 .fillMaxWidth(1f),
 
-        ) {
+            ) {
             Text(
                 text = data.nombre,
                 color = white,
@@ -624,6 +647,7 @@ fun Fightdetail2(data: npc) {
 fun PreviewFightScreen() {
     FightScreen(
         data = npc(
+            "",
             "",
             0,
             0,

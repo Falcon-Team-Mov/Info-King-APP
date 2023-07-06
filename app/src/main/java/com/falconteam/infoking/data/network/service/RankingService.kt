@@ -1,5 +1,6 @@
 package com.falconteam.infoking.data.network.service
 
+import com.falconteam.infoking.data.models.ProfileRankingData
 import com.falconteam.infoking.data.network.dto.ranking.RankingAllResponse
 import com.falconteam.infoking.data.network.dto.ranking.RankingRequest
 import com.falconteam.infoking.data.network.dto.ranking.RankingResponse
@@ -19,5 +20,6 @@ interface RankingService {
     @POST("api/ranking")
     suspend fun postRanking(@Body data: RankingRequest): RankingResponse
 
-
+    @GET("api/ranking/position/{id}")
+    suspend fun getPositionRanking(@Path("id") id: String): ProfileRankingData
 }

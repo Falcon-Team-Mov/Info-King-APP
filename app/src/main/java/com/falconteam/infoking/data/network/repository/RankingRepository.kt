@@ -1,8 +1,8 @@
 package com.falconteam.infoking.data.network.repository
 
+import com.falconteam.infoking.data.models.ProfileRankingData
 import com.falconteam.infoking.data.models.Rankings
 import com.falconteam.infoking.data.network.dto.ranking.RankingAllResponse
-import com.falconteam.infoking.data.network.dto.ranking.RankingRequest
 import com.falconteam.infoking.data.network.dto.ranking.RankingResponse
 import com.falconteam.infoking.data.network.service.RankingService
 import retrofit2.HttpException
@@ -29,6 +29,37 @@ class RankingRepository(private val api: RankingService) {
             return RankingAllResponse(
                 total = 0,
                 rankings = listOf<Rankings>(),
+                msg = "E-RO-D-2"
+            )
+        }
+    }
+
+    suspend fun getPositionRanking(id: String): ProfileRankingData {
+        try {
+            return api.getPositionRanking(id)
+        } catch (e: HttpException) {
+            if (e.code() === 400) {
+                return ProfileRankingData(
+                    position = -1,
+                    0,
+                    0,
+                    0,
+                    msg = "E-RO"
+                )
+            }
+            return ProfileRankingData(
+                position = -1,
+                0,
+                0,
+                0,
+                msg = "E-RO-D-1"
+            )
+        } catch (e: IOException) {
+            return ProfileRankingData(
+                position = -1,
+                0,
+                0,
+                0,
                 msg = "E-RO-D-2"
             )
         }

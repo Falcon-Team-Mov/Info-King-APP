@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.screens.attack
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -102,6 +102,7 @@ fun AttackScreen(
                         AsyncImage(
                             model = viewModel.data[0]?.imagen,
                             contentDescription = "NPC",
+                            contentScale = ContentScale.FillBounds,
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .fillMaxWidth(0.6f)
@@ -181,7 +182,7 @@ fun AttackCard(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "Te has encontrado con un NPC con ${data?.vida ?: 0} de vida, \n" +
+                text = "Te has encontrado con ${data?.nombre} que tiene ${data?.vida ?: 0} de vida, \n" +
                         "${data?.ataque} de ataque y ${data?.defensa} de defensa. \n" +
                         "¿Deseas atacarlo?",
                 color = white,

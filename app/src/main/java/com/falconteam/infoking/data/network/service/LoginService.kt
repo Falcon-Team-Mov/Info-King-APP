@@ -14,4 +14,7 @@ interface LoginService {
 
     @GET("api/users/{id}")
     suspend fun getUserData(@Path("id") id: String): LoginDataResponse
+
+    @GET("api/version")
+    suspend fun getVersion(): String
 }
