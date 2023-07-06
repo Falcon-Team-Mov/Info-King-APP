@@ -1,5 +1,8 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -20,6 +23,7 @@ sealed class BattleNavGraph(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
     composable(route = BattleNavGraph.Attack.route) {
         AttackScreen(
@@ -28,10 +32,12 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
             },
             onAttack = {
                 navController.navigate(UserBottomBar.Battle.route)
-            }
+            },
+            finished = false
         )
     }
     composable(route = "BattleNavGraph.Battle.route/{data}") {
+        Log.d("Pruebas", "homeNavGraph: ${it.arguments?.getString("data")}")
         FightScreen(
             data = it.arguments?.getString("data") as? npc ?: npc(
                 "",

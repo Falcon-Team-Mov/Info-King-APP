@@ -1,5 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.screens.attack
 
+import android.app.PendingIntent.OnFinished
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,12 +56,11 @@ import com.falconteam.infoking.ui.theme.white
 import com.falconteam.infoking.ui.viewmodels.AttackViewModel
 import kotlinx.coroutines.runBlocking
 
-var finished = false
-
 @Composable
 fun AttackScreen(
     onBack: () -> Unit,
     onAttack: (data: npc) -> Unit,
+    finished: Boolean,
 ) {
     InfoKingTheme {
         val viewModel: AttackViewModel = viewModel()
@@ -149,7 +153,8 @@ fun AttackScreen(
                         data = viewModel.data[0],
                         viewModel = viewModel,
                         context = context,
-                        onAttack = onAttack
+                        onAttack = onAttack,
+                        finished = finished
                     )
                 }
             }
@@ -164,9 +169,11 @@ fun AttackCard(
     viewModel: AttackViewModel,
     context: Context,
     onAttack: (data: npc) -> Unit,
+    finished: Boolean
 ) {
     val opacity = 0.7f
     val sizeFont = TextResponsiveSize(16.sp)
+    var finish by remember { mutableStateOf(finished) }
     Card(
         colors = CardDefaults.cardColors(primaryColor.copy(alpha = opacity)),
         modifier = Modifier
@@ -200,7 +207,7 @@ fun AttackCard(
                 onClick = {
                     if (!finished) {
                         onAttack(data!!)
-                        finished = true
+                        finish = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(secondaryAquaColor),
@@ -255,6 +262,7 @@ fun AttackCard(
 fun PreviewAttackScreen() {
     AttackScreen(
         onBack = {},
-        onAttack = {}
+        onAttack = {},
+        finished = false
     )
 }

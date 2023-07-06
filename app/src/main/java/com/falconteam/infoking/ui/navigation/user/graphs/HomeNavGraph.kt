@@ -1,7 +1,9 @@
 package com.falconteam.infoking.ui.navigation.user.graphs
 
 import android.app.Activity
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
@@ -32,6 +34,7 @@ import com.falconteam.infoking.ui.navigation.user.screens.ranking.RankingScreen
 import kotlinx.coroutines.runBlocking
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.homeNavGraph(navController: NavController) {
 
     navigation(
@@ -137,9 +140,11 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
                         navController.navigate(UserBottomBar.Battle.route)
                     } else {
                         setFullDataBattle(context, it)
+                        navController.popBackStack()
                         navController.navigate("${UserBottomBar.Fight.route}")
                     }
-                }
+                },
+                finished = false
             )
         }
         composable(route = "${UserBottomBar.Fight.route}") { BackStackEntry ->
@@ -169,7 +174,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
             FightScreen(
                 data = data,
                 onBack = {
-                    navController.popBackStack(Graph.BATTLE, false)
+                    navController.popBackStack()
                     navController.navigate(Graph.BATTLE)
                 }
             )

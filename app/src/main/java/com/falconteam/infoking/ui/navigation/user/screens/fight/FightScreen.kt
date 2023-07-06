@@ -407,6 +407,7 @@ fun FightScreen(
                     )
                 )
                 enviado = true
+
                 onBack()
             }
         }
