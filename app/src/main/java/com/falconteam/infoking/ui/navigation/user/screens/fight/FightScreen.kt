@@ -278,7 +278,7 @@ fun FightScreen(
                 }
             }
             if (finished && !enviado) {
-                if (ataque >= 1f) {
+                if (progress >= 1f) {
                     val exp = runBlocking {
                         getData(current, keyInt = EXP, type = 2).toString().toInt() + 1
                     }
