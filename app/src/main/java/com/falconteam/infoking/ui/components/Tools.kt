@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
@@ -22,7 +23,7 @@ fun TextResponsiveSize(size: TextUnit): TextUnit {
 
     val configuration = LocalConfiguration.current
 
-    val scaleFactor = if (configuration.smallestScreenWidthDp >= 600) 1.2f else 0.7f
+    val scaleFactor = if (configuration.smallestScreenWidthDp >= 600) 1.2f else 0.6f
 
     return (size * scaleFactor)
 }
@@ -72,4 +73,18 @@ suspend fun attackgenerator(attack: Int, defensa: Int): Float {
         Log.d("Prueba", "attackgenerator: $_attack")
         return _attack.toFloat()
     }
+}
+
+@Composable
+fun FormatNumber(number: Int): String {
+    val formattedNumber = when {
+        number >= 1_000_000 -> {
+            val decimalFormat = DecimalFormat("#.#")
+            "${decimalFormat.format(number / 1_000_000.0)} M"
+        }
+
+        else -> number.toString()
+    }
+    Log.d("debug", formattedNumber)
+    return formattedNumber
 }

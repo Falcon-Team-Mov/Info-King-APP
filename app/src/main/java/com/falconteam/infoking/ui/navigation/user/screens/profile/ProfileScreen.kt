@@ -13,11 +13,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.ElectricBolt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Button
@@ -76,14 +80,32 @@ fun ProfileScreen(
     val viewModel: RankingViewModel = viewModel()
     InfoKingTheme {
         val context = LocalContext.current
+        var logout by remember {
+            mutableStateOf(false)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(primaryColor)
+                .padding(bottom = 64.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "PERFIL",
+                modifier = Modifier.padding(top = 40.dp, bottom = 12.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = secondaryAquaColor,
+                fontSize = TextResponsiveSize(size = 40.sp)
+            )
         viewModel.getPosition(context)
         if (viewModel.finished_profile.value && viewModel.dataRankingProfile.values != null) {
             var logout by remember {
                 mutableStateOf(false)
             }
 
-
             Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(primaryColor)
@@ -106,7 +128,8 @@ fun ProfileScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(horizontal = 40.dp)
+                        .padding(horizontal = 28.dp)
+
                 ) {
                     // Player's info
                     ProfileSection()
@@ -115,6 +138,7 @@ fun ProfileScreen(
                     // Stats
                     StatsSection()
                     Spacer(modifier = Modifier.height(20.dp))
+
 
                     // Bonus
                     Column(
@@ -200,6 +224,7 @@ fun ProfileScreen(
                                     fontSize = TextResponsiveSize(size = 20.sp)
                                 )
                             }
+
 
                             Column {
                                 Text(
@@ -348,12 +373,15 @@ fun StatsSection() {
     ) {
         Column(
             modifier = Modifier
-                .background(secondaryBlueColor.copy(alpha = 0.8f)),
+                .background(secondaryBlueColor.copy(alpha = 0.8f))
+                .padding(vertical = ElementResponsiveSize(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier
@@ -370,7 +398,9 @@ fun StatsSection() {
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier
@@ -397,16 +427,19 @@ fun HealthStatCard() {
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(16.dp)
+            .fillMaxSize()
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
+                    modifier = Modifier
+                        .padding(end = 6.dp)
+                        .size(ElementResponsiveSize(size = 40.dp)),
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Ícono de Vida",
                     tint = secondaryAquaColor
@@ -434,17 +467,18 @@ fun DefenseStatCard() {
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
-            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
+                    modifier = Modifier
+                        .size(ElementResponsiveSize(size = 40.dp))
+                        .padding(end = 6.dp),
                     imageVector = Icons.Default.Shield,
                     contentDescription = "Ícono de Defensa",
                     tint = secondaryAquaColor
@@ -476,16 +510,17 @@ fun AttackStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Image(
                     painter = painterResource(id = R.drawable.swords),
                     contentDescription = "Ícono de Ataque",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier
+                        .size(ElementResponsiveSize(size = 40.dp))
+                        .padding(end = 8.dp)
                 )
             }
 
@@ -514,17 +549,18 @@ fun EnergyStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
+                    modifier = Modifier
+                        .padding(end = 6.dp)
+                        .size(ElementResponsiveSize(size = 40.dp)),
                     imageVector = Icons.Default.Bolt,
                     contentDescription = "Ícono de Energía",
-                    tint = secondaryAquaColor,
-                    modifier = Modifier.size(28.dp)
+                    tint = secondaryAquaColor
                 )
             }
 
@@ -532,7 +568,7 @@ fun EnergyStatCard() {
                 Text(
                     text = (runBlocking {
                         val energia = getData(context, keyInt = DEFENSA, type = 2) as? Int ?: 1
-                        "Energia: $energia"
+                        "Energía: $energia"
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
