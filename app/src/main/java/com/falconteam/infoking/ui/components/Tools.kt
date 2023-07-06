@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.round
 import kotlin.random.Random
 
 @Composable
@@ -38,9 +39,9 @@ fun ElementResponsiveSize(size: Dp): Dp {
     return (size * scaleFactor)
 }
 
-suspend fun generateRandomNumber(max: Int): Int {
+suspend fun generateRandomNumber(max: Int, min: Int = 1): Int {
     return withContext(Dispatchers.Default) {
-        val randomNumber = Random.nextInt(1, max-1  )
+        val randomNumber = Random.nextInt(min, max - 1)
         randomNumber
     }
 }
@@ -65,13 +66,17 @@ fun getCurrentDateTime(): String {
 }
 
 suspend fun attackgenerator(attack: Int, defensa: Int): Float {
-    if(attack <= 0 || defensa <= 0){
+    if (attack <= 0 || defensa <= 0) {
         return 0f
-    }
-    else{
-        val _attack = (attack - generateRandomNumber(defensa))
-        Log.d("Prueba", "attackgenerator: $_attack")
-        return _attack.toFloat()
+    } else {
+        val random = (generateRandomNumber(defensa, defensa/2))
+        val _attack = (attack * random / (defensa * 1f))
+        Log.d("Prueba", "attackgenerator: $_attack, random: $random, defensa: $defensa")
+        return if (_attack <= 0) {
+            0f
+        } else {
+            _attack.toFloat()
+        }
     }
 }
 

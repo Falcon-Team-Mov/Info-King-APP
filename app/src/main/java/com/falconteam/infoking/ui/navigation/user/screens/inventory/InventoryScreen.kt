@@ -308,7 +308,7 @@ fun InventoryCardAtaque() {
         modifier = Modifier
             .padding(top = 35.dp)
             .fillMaxWidth(0.8f)
-            .fillMaxHeight(0.25f)
+            .fillMaxHeight(0.5f)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

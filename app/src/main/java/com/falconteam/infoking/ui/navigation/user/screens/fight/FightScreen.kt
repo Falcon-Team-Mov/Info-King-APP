@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -76,6 +77,7 @@ import com.falconteam.infoking.ui.theme.white
 import com.falconteam.infoking.ui.viewmodels.AttackViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -92,6 +94,7 @@ fun FightScreen(
 
         var player by remember { mutableStateOf(0f) }
         var enemy by remember { mutableStateOf(0f) }
+        var ataque by remember { mutableStateOf(0f) }
         var progress by remember { mutableStateOf(0f) }
         var activated by remember { mutableStateOf(false) }
         var finished by remember { mutableStateOf(false) }
@@ -118,29 +121,34 @@ fun FightScreen(
                         )
                     }
                     if (enemy > 0) {
-                        progress -= enemy / 100f
+                        ataque = enemy
                         setData(current, IntKey = VIDA, dataInt = vida - 1, type = 2)
                         vida -= 1
                     } else {
-                        progress -= 0f
-                    }
-                    if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress <= 0f) {
-                        finished = true
-                        if (activated && progress >= 1f) Toast.makeText(
-                            current,
-                            "GANASTE",
-                            Toast.LENGTH_SHORT
-                        ).show() else if (activated && progress <= 0f) Toast.makeText(
-                            current,
-                            "PERDISTE",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        activated = false
-
+                        ataque = 0f
                     }
                 }
+                val totalvida = ((runBlocking {
+                    getData(current, keyInt = VIDA, type = 2).toString().toInt()
+                } + data.vida).toFloat()) * 6f
+                Log.d("Prueba", "totalvida: $ataque")
+                progress -= (ataque / totalvida)
 
-                kotlinx.coroutines.delay(400)
+                if (progress >= 1f || data.vida < 0 || vida < 0 || progress < 0f) {
+                    finished = true
+                    if (activated && progress >= 1f) Toast.makeText(
+                        current,
+                        "GANASTE",
+                        Toast.LENGTH_SHORT
+                    ).show() else if (activated && progress <= 0f) Toast.makeText(
+                        current,
+                        "PERDISTE",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    activated = false
+
+                }
+                delay(400)
             }
         }
         Column(
@@ -179,7 +187,6 @@ fun FightScreen(
                         verticalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxSize()
-
                     ) {
 
                         Row(
@@ -188,7 +195,6 @@ fun FightScreen(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-
                             Column {
                                 FightItemCharacter(vida)
                             }
@@ -212,9 +218,9 @@ fun FightScreen(
                 }
                 Button(
                     onClick = {
+
                         if (!finished) {
-                            Log.d("Prueba", "$progress")
-                            if (progress > 0.1f) {
+                            if (progress > 0.15f) {
                                 activated = true
                             }
                             player = runBlocking {
@@ -227,13 +233,20 @@ fun FightScreen(
                                 )
                             }
                             if (player > 0f) {
-                                progress += player / 100f
+                                ataque = player
                                 data.vida -= 1
                             } else {
-                                progress += 0f
+                                ataque = 0f
 
                             }
-                            if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress <= 0f) {
+                            val totalvida = ((runBlocking {
+                                getData(current, keyInt = VIDA, type = 2).toString().toInt()
+                            } + data.vida).toFloat()) * 4f
+
+                            progress += (ataque / totalvida)
+
+                            Log.d("Prueba", "Enemy: $progress")
+                            if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
                                 finished = true
                                 if (activated && progress >= 1f) Toast.makeText(
                                     current,
@@ -394,6 +407,7 @@ fun FightScreen(
                     )
                 )
                 enviado = true
+
                 onBack()
             }
         }
@@ -424,7 +438,7 @@ fun FightItemCharacter(vida: Int) {
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.8f),
-                )
+            )
         }
         Column(
             modifier = Modifier
@@ -443,7 +457,9 @@ fun FightItemCharacter(vida: Int) {
 
             )
             LinearProgressIndicator(
-                progress = vida / 100f,
+                progress = vida / runBlocking {
+                    getData(context, keyInt = VIDA, type = 2).toString().toInt()
+                }.toFloat(),
                 color = buttonCancelColor,
                 trackColor = buttonOKColor,
                 modifier = Modifier
@@ -497,7 +513,7 @@ fun FightItemEnemy(data: npc) {
                     .padding(top = 12.dp)
             )
             LinearProgressIndicator(
-                progress = data.vida.toFloat() / 100f,
+                progress = data.vida.toFloat(),
                 color = buttonCancelColor,
                 trackColor = buttonOKColor,
                 modifier = Modifier
@@ -623,7 +639,8 @@ fun Fightdetail2(data: npc) {
                 text = data.vida.toString(),
                 fontFamily = jostRegular,
                 color = white,
-                modifier = Modifier)
+                modifier = Modifier
+            )
         }
     }
 }
