@@ -89,12 +89,12 @@ fun AttackScreen(
                             fontFamily = jostSemiBold,
                             fontSize = TextResponsiveSize(32.sp),
                             modifier = Modifier
-                                .padding(vertical = 65.dp)
+                                .padding(top = 40.dp, bottom = 16.dp)
                         )
                     }
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(0.6f)
+                            .fillMaxWidth(0.3f)
                             .fillMaxHeight(0.4f),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
@@ -104,9 +104,8 @@ fun AttackScreen(
                             contentDescription = "NPC",
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier
-                                .padding(top = 10.dp)
-                                .fillMaxWidth(0.6f)
-                                .fillMaxHeight(0.4f)
+                                .fillMaxWidth()
+                                .fillMaxHeight()
                         )
                     }
                     Column(
@@ -164,7 +163,7 @@ fun AttackCard(
     onAttack: (data: npc) -> Unit
 ) {
     val opacity = 0.7f
-    val sizeFont = TextResponsiveSize(16.sp)
+    val sizeFont = TextResponsiveSize(20.sp)
     Card(
         colors = CardDefaults.cardColors(primaryColor.copy(alpha = opacity)),
         modifier = Modifier
@@ -176,14 +175,14 @@ fun AttackCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
+                .padding(vertical = 16.dp),
 
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "Te has encontrado con ${data?.nombre} que tiene ${data?.vida ?: 0} de vida, \n" +
-                        "${data?.ataque} de ataque y ${data?.defensa} de defensa. \n" +
+                text = "Te has encontrado con ${data?.nombre} que tiene ${data?.ataque} de ataque " +
+                        "y ${data?.defensa} de defensa.\n" +
                         "¿Deseas atacarlo?",
                 color = white,
                 fontSize = sizeFont,

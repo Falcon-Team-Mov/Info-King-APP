@@ -1,6 +1,5 @@
 package com.falconteam.infoking.ui.navigation.user.screens.ranking
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +38,6 @@ import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.viewmodels.RankingViewModel
-import java.text.DecimalFormat
 
 @Composable
 fun RankingScreen(
@@ -50,31 +48,38 @@ fun RankingScreen(
     var _finish = finish
     InfoKingTheme() {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(primaryColor)
-                .fillMaxWidth()
-                .fillMaxHeight(0.8f)
+                .fillMaxSize()
+                .padding(bottom = 64.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+
         ) {
+            Text(
+                modifier = Modifier.padding(top = 40.dp),
+                text = "RANKING GLOBAL",
+                color = secondaryAquaColor,
+                fontFamily = jostSemiBold,
+                fontSize = TextResponsiveSize(size = 40.sp)
+            )
             if (!_finish) {
                 viewModel.GetAll(context)
                 LoadingScreen()
                 _finish = !viewModel.finished.value
             } else {
-                Text(
-                    "RANKING GLOBAL",
-                    color = secondaryAquaColor,
-                    fontFamily = jostSemiBold,
-                    modifier = Modifier.padding(top = 40.dp, bottom = 25.dp),
-                    fontSize = TextResponsiveSize(size = 40.sp)
-                )
-
-                LazyColumn(
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.background(primaryColor)
+                    modifier = Modifier
+                        .background(primaryColor)
+                        .padding(top = 16.dp)
                 ) {
-                    itemsIndexed(viewModel.data.entries.toList()) { index, item ->
-                        RankingItem(ranking = item.value, position = index + 1)
+                    LazyColumn(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.background(primaryColor)
+                    ) {
+                        itemsIndexed(viewModel.data.entries.toList()) { index, item ->
+                            RankingItem(ranking = item.value, position = index + 1)
+                        }
                     }
                 }
             }
@@ -115,14 +120,14 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
         modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(0.1f)
+            modifier = Modifier.fillMaxWidth(0.2f)
         ) {
             Text(
                 modifier = Modifier.padding(start = 12.dp),
                 text = position.toString(),
                 color = buttonOKColor,
                 fontFamily = jostSemiBold,
-                fontSize = TextResponsiveSize(size = 24.sp)
+                fontSize = TextResponsiveSize(size = 28.sp)
             )
         }
 
@@ -174,11 +179,11 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
     }
 }
 
-@Preview
-@Composable
-fun PreviewRankingScreen() {
-    RankingScreen(false)
-}
+//@Preview
+//@Composable
+//fun PreviewRankingScreen() {
+//    RankingScreen(false)
+//}
 
 @Preview
 @Composable

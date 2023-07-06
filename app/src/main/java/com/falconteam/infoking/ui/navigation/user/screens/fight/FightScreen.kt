@@ -143,7 +143,7 @@ fun FightScreen(
                 kotlinx.coroutines.delay(400)
             }
         }
-        androidx.compose.foundation.layout.Column(
+        Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .background(androidx.compose.ui.graphics.Color.Transparent)
@@ -167,12 +167,12 @@ fun FightScreen(
                     color = buttonOKColor,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(top = 75.dp, bottom = 45.dp)
+                        .padding(top = 75.dp, bottom = 24.dp)
                 )
                 Card(
                     colors = CardDefaults.cardColors(secondaryBlueColor),
                     modifier = Modifier
-                        .fillMaxSize(0.8f)
+                        .padding(horizontal = 20.dp)
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -189,10 +189,10 @@ fun FightScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
 
-                            androidx.compose.foundation.layout.Column() {
+                            Column {
                                 FightItemCharacter(vida)
                             }
-                            androidx.compose.foundation.layout.Column() {
+                            Column {
                                 FightItemEnemy(data = data)
                             }
                         }
@@ -204,7 +204,7 @@ fun FightScreen(
                             modifier = Modifier
                                 .fillMaxHeight(0.1f)
                                 .fillMaxWidth(0.8f)
-                                .padding(bottom = 32.dp)
+                                .padding(top = 16.dp, bottom = 28.dp)
                                 .clip(RoundedCornerShape(10.dp))
 
                         )
@@ -252,7 +252,8 @@ fun FightScreen(
                     colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 45.dp, horizontal = 45.dp)
+                        .padding(top = 32.dp)
+                        .padding(horizontal = 45.dp)
                         .size(width = 221.dp, height = 40.dp)
                 ) {
                     Text(
@@ -407,12 +408,13 @@ fun FightItemCharacter(vida: Int) {
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .fillMaxHeight(0.9f)
+            .padding(top = 16.dp)
     ) {
         val context = LocalContext.current
         Column(
             modifier = Modifier
                 .fillMaxHeight(0.6f)
-                .fillMaxWidth(0.8f),
+                .fillMaxWidth(0.8f)
         ) {
             AsyncImage(
                 model = runBlocking {
@@ -422,7 +424,6 @@ fun FightItemCharacter(vida: Int) {
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth(0.8f),
-
                 )
         }
         Column(
@@ -466,6 +467,7 @@ fun FightItemEnemy(data: npc) {
         modifier = Modifier
             .fillMaxWidth(1f)
             .fillMaxHeight(0.9f)
+            .padding(top = 18.dp)
     ) {
         Column(
             modifier = Modifier
@@ -518,37 +520,17 @@ fun Fightdetail(vida: Int) {
             .fillMaxWidth(0.7f)
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
         ) {
-            Text(
-                text = "Ataque",
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-            )
-            Text(
-                text = "Defensa:",
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-            )
-            Text(
-                text = "Vida:",
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.End,
-            modifier = Modifier
-        ) {
             val context = LocalContext.current
+            Text(
+                text = "Ataque:",
+                fontFamily = jostSemiBold,
+                color = white,
+                modifier = Modifier
+                    .padding(top = 10.dp)
+            )
             Text(
                 text = runBlocking {
                     getData(context, keyInt = ATAQUE, type = 2).toString()
@@ -556,7 +538,14 @@ fun Fightdetail(vida: Int) {
                 fontFamily = jostRegular,
                 color = white,
                 modifier = Modifier
-                    .padding(top = 10.dp)
+            )
+
+            Text(
+                text = "Defensa:",
+                fontFamily = jostSemiBold,
+                color = white,
+                modifier = Modifier
+                    .padding(top = 16.dp)
             )
             Text(
                 text = runBlocking {
@@ -565,14 +554,20 @@ fun Fightdetail(vida: Int) {
                 fontFamily = jostRegular,
                 color = white,
                 modifier = Modifier
-                    .padding(top = 10.dp)
+            )
+
+            Text(
+                text = "Vida:",
+                fontFamily = jostSemiBold,
+                color = white,
+                modifier = Modifier
+                    .padding(top = 16.dp)
             )
             Text(
                 text = vida.toString(),
                 fontFamily = jostRegular,
                 color = white,
                 modifier = Modifier
-                    .padding(top = 10.dp)
             )
         }
     }
@@ -586,57 +581,49 @@ fun Fightdetail2(data: npc) {
             .fillMaxWidth(0.7f)
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
         ) {
             Text(
-                text = "Ataque",
-                fontFamily = jostRegular,
+                text = "Ataque:",
+                fontFamily = jostSemiBold,
                 color = white,
                 modifier = Modifier
-                    .padding(top = 10.dp)
+                    .padding(top = 16.dp)
             )
-            Text(
-                text = "Defensa:",
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-            )
-            Text(
-                text = "Vida:",
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.End,
-            modifier = Modifier
-        ) {
             Text(
                 text = data.ataque.toString(),
                 fontFamily = jostRegular,
                 color = white,
                 modifier = Modifier
-                    .padding(top = 10.dp)
+            )
+
+            Text(
+                text = "Defensa:",
+                fontFamily = jostSemiBold,
+                color = white,
+                modifier = Modifier
+                    .padding(top = 16.dp)
             )
             Text(
                 text = data.defensa.toString(),
                 fontFamily = jostRegular,
                 color = white,
                 modifier = Modifier
-                    .padding(top = 10.dp)
+            )
+
+            Text(
+                text = "Vida:",
+                fontFamily = jostSemiBold,
+                color = white,
+                modifier = Modifier
+                    .padding(top = 16.dp)
             )
             Text(
                 text = data.vida.toString(),
                 fontFamily = jostRegular,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
-            )
+                modifier = Modifier)
         }
     }
 }

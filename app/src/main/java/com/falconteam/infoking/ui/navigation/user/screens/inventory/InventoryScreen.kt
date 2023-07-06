@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +38,7 @@ import com.falconteam.infoking.ui.theme.secondaryAquaColor
 
 @Composable
 fun InventoryScreen(modifier: Modifier = Modifier) {
-    InfoKingTheme() {
+    InfoKingTheme {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -75,32 +74,10 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center,
                 fontSize = TextResponsiveSize(size = 21.sp)
             )
-
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        "¿Cómo funcionan los poderes?",
-                        modifier = Modifier.padding(top = 50.dp),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = buttonOKColor,
-                        fontSize = TextResponsiveSize(size = 32.sp),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        "Al dar click en el ícono de cada poder, este se activará por una cantidad aleatoria de batallas (de 1 a 3)",
-                        modifier = Modifier.padding(vertical = 5.dp, horizontal = 44.dp),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = buttonOKColor,
-                        textAlign = TextAlign.Center,
-                        fontSize = TextResponsiveSize(size = 21.sp)
-                    )
-                }
-            }
         }
     }
 }
+
 
 @Composable
 fun InventoryCardCafe() {

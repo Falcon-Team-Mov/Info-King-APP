@@ -4,9 +4,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-
-    }
     namespace 'com.falconteam.infoking'
     compileSdk 33
 
