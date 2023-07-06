@@ -51,7 +51,7 @@ fun MapScreen() {
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 52.dp),
+                            .padding(top = 40.dp),
                         text = "MAPA",
                         textAlign = TextAlign.Center,
                         color = buttonOKColor,

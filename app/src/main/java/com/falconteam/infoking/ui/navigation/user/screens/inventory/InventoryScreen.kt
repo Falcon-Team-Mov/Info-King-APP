@@ -50,7 +50,7 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
         ) {
             Text(
                 "INVENTARIO",
-                modifier = Modifier.padding(top = 52.dp, bottom = 40.dp),
+                modifier = Modifier.padding(top = 52.dp, bottom = 28.dp),
                 style = MaterialTheme.typography.bodyLarge,
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 40.sp)

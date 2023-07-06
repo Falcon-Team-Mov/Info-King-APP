@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.ElectricBolt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Button
@@ -77,132 +79,133 @@ fun ProfileScreen(
         var logout by remember {
             mutableStateOf(false)
         }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(primaryColor)
-                .verticalScroll(rememberScrollState())
                 .padding(bottom = 64.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Column {
-                Text(
-                    text = "PERFIL",
-                    modifier = Modifier.padding(top = 52.dp, bottom = 12.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = secondaryAquaColor,
-                    fontSize = TextResponsiveSize(size = 40.sp)
-                )
-            }
+            Text(
+                text = "PERFIL",
+                modifier = Modifier.padding(top = 40.dp, bottom = 12.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = secondaryAquaColor,
+                fontSize = TextResponsiveSize(size = 40.sp)
+            )
 
             Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(horizontal = 40.dp)
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                // Player's info
-                ProfileSection()
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Stats
-                StatsSection()
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Bonus
                 Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    verticalArrangement = Arrangement.SpaceEvenly
+                        .padding(horizontal = 28.dp)
                 ) {
-                    Row {
-                        Column {
-                            Text(
-                                text = "Bonus por ranking:",
-                                color = buttonOKColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = TextResponsiveSize(size = 20.sp)
-                            )
-                        }
+                    // Player's info
+                    ProfileSection()
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                        Column {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = "{%%}",
-                                color = buttonOKColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.End,
-                                fontSize = TextResponsiveSize(size = 20.sp)
-                            )
-                        }
-                    }
-                    Row {
-                        Column {
-                            Text(
-                                text = "Bonus por personaje:",
-                                color = buttonOKColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = TextResponsiveSize(size = 20.sp)
-                            )
-                        }
+                    // Stats
+                    StatsSection()
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                        Column {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = "{%%} de {habilidad}",
-                                color = buttonOKColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.End,
-                                fontSize = TextResponsiveSize(size = 20.sp)
-                            )
-                        }
-                    }
-
-                    Row {
-                        Column {
-                            Text(
-                                text = "Bonus por poder:",
-                                color = buttonOKColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = TextResponsiveSize(size = 20.sp)
-                            )
-                        }
-
-                        Column {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = "{%%} de {habilidad}",
-                                color = buttonOKColor,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.End,
-                                fontSize = TextResponsiveSize(size = 20.sp)
-                            )
-                        }
-                    }
-                }
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Button(
-                        onClick = {
-                            logout = true
-                        },
-                        colors = ButtonDefaults.buttonColors(secondaryAquaColor),
+                    // Bonus
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 24.dp)
+                            .padding(bottom = 16.dp),
+                        verticalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Text(
-                            text = "CERRAR SESIÓN",
-                            style = Typography.headlineSmall,
-                            color = Color.White,
-                            fontSize = TextResponsiveSize(size = 24.sp)
-                        )
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Bonus por ranking:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "{%%}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+                        }
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Bonus por personaje:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "{%%} de {habilidad}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+                        }
+
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Bonus por poder:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "{%%} de {habilidad}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+                        }
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+                                logout = true
+                            },
+                            colors = ButtonDefaults.buttonColors(secondaryAquaColor),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp)
+                        ) {
+                            Text(
+                                text = "CERRAR SESIÓN",
+                                style = Typography.headlineSmall,
+                                color = Color.White,
+                                fontSize = TextResponsiveSize(size = 24.sp)
+                            )
+                        }
                     }
                 }
             }
@@ -316,12 +319,15 @@ fun StatsSection() {
     ) {
         Column(
             modifier = Modifier
-                .background(secondaryBlueColor.copy(alpha = 0.8f)),
+                .background(secondaryBlueColor.copy(alpha = 0.8f))
+                .padding(vertical = ElementResponsiveSize(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier
@@ -338,7 +344,9 @@ fun StatsSection() {
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier
@@ -365,17 +373,19 @@ fun HealthStatCard() {
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
             .padding(16.dp)
+            .fillMaxSize()
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
+                .fillMaxSize(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
-                    modifier = Modifier.padding(end = 6.dp),
+                    modifier = Modifier
+                        .padding(end = 6.dp)
+                        .size(ElementResponsiveSize(size = 40.dp)),
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Ícono de Vida",
                     tint = secondaryAquaColor
@@ -390,7 +400,7 @@ fun HealthStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 18.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp)
                 )
             }
         }
@@ -403,18 +413,18 @@ fun DefenseStatCard() {
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
-            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
-                    modifier = Modifier.padding(end = 6.dp),
+                    modifier = Modifier
+                        .size(ElementResponsiveSize(size = 40.dp))
+                        .padding(end = 6.dp),
                     imageVector = Icons.Default.Shield,
                     contentDescription = "Ícono de Defensa",
                     tint = secondaryAquaColor
@@ -429,7 +439,7 @@ fun DefenseStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 18.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp)
                 )
             }
         }
@@ -446,8 +456,7 @@ fun AttackStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -455,8 +464,9 @@ fun AttackStatCard() {
                 Image(
                     painter = painterResource(id = R.drawable.swords),
                     contentDescription = "Ícono de Ataque",
-                    modifier = Modifier.size(24.dp)
-                        .padding(end = 6.dp)
+                    modifier = Modifier
+                        .size(ElementResponsiveSize(size = 40.dp))
+                        .padding(end = 8.dp)
                 )
             }
 
@@ -468,7 +478,7 @@ fun AttackStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 18.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp)
                 )
             }
         }
@@ -485,18 +495,18 @@ fun EnergyStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Icon(
+                    modifier = Modifier
+                        .padding(end = 6.dp)
+                        .size(ElementResponsiveSize(size = 40.dp)),
                     imageVector = Icons.Default.Bolt,
                     contentDescription = "Ícono de Energía",
-                    tint = secondaryAquaColor,
-                    modifier = Modifier.size(28.dp)
-                        .padding(end = 6.dp),
+                    tint = secondaryAquaColor
                 )
             }
 
@@ -508,7 +518,7 @@ fun EnergyStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 18.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp)
                 )
             }
         }

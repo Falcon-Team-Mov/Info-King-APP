@@ -1,5 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.screens.ranking
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,12 +22,14 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.Rankings
+import com.falconteam.infoking.ui.components.FormatNumber
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
@@ -36,6 +39,7 @@ import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.viewmodels.RankingViewModel
+import java.text.DecimalFormat
 
 @Composable
 fun RankingScreen(
@@ -50,25 +54,25 @@ fun RankingScreen(
             modifier = Modifier
                 .background(primaryColor)
                 .fillMaxSize()
+                .padding(bottom = 64.dp)
         ) {
             if (!_finish) {
                 viewModel.GetAll(context)
                 LoadingScreen()
                 _finish = !viewModel.finished.value
             } else {
+                Text(
+                    "RANKING GLOBAL",
+                    color = secondaryAquaColor,
+                    fontFamily = jostSemiBold,
+                    modifier = Modifier.padding(top = 40.dp, bottom = 25.dp),
+                    fontSize = TextResponsiveSize(size = 40.sp)
+                )
+
                 LazyColumn(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.background(primaryColor)
                 ) {
-                    item {
-                        Text(
-                            "RANKING GLOBAL",
-                            color = secondaryAquaColor,
-                            fontFamily = jostSemiBold,
-                            modifier = Modifier.padding(top = 60.dp, bottom = 25.dp),
-                            fontSize = TextResponsiveSize(size = 40.sp)
-                        )
-                    }
                     itemsIndexed(viewModel.data.entries.toList()) { index, item ->
                         RankingItem(ranking = item.value, position = index + 1)
                     }
@@ -88,7 +92,7 @@ fun RankingItem(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         shape = RoundedCornerShape(25.dp),
         modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 5.dp)
+            .padding(horizontal = 4.dp, vertical = 5.dp)
             .fillMaxWidth(0.9f)
             .fillMaxHeight(0.18f)
 
@@ -108,55 +112,60 @@ fun RankingItem(
 @Composable
 fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-
+        modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth(0.1f)
         ) {
             Text(
-                modifier = Modifier
-                    .padding(start = 12.dp),
+                modifier = Modifier.padding(start = 12.dp),
                 text = position.toString(),
                 color = buttonOKColor,
                 fontFamily = jostSemiBold,
                 fontSize = TextResponsiveSize(size = 24.sp)
             )
         }
-        AsyncImage(
-            model = ranking.icon,
-            contentDescription = "Posicion $position",
-            modifier = Modifier
-                .drawBehind {
-                    drawRoundRect(
-                        Color.Transparent, cornerRadius = CornerRadius(5.dp.toPx())
-                    )
-                }
-                .fillMaxHeight(0.1f)
-                .fillMaxWidth(0.15f)
-                .padding(8.dp),
-        )
+
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
+            modifier = Modifier.fillMaxWidth(0.7f)
         ) {
-            Text(
-                text = ranking.username,
-                color = buttonOKColor,
-                fontFamily = jostSemiBold,
-                fontSize = TextResponsiveSize(size = 24.sp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AsyncImage(
+                    model = ranking.icon,
+                    contentDescription = "Posicion $position",
+                    modifier = Modifier
+                        .drawBehind {
+                            drawRoundRect(
+                                Color.Transparent, cornerRadius = CornerRadius(5.dp.toPx())
+                            )
+                        }
+                        .fillMaxHeight(0.3f)
+                        .fillMaxWidth(0.3f)
+                        .padding(8.dp)
+                        .padding(end = 8.dp),
+                )
+                Text(
+                    text = ranking.username,
+                    textAlign = TextAlign.Start,
+                    color = buttonOKColor,
+                    fontFamily = jostSemiBold,
+                    fontSize = TextResponsiveSize(size = 24.sp)
+                )
+            }
         }
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.4f)
+                .fillMaxWidth()
+                .padding(end = 16.dp)
         ) {
             Text(
-                text = "${ranking.victorias - ranking.derrotas}",
+                modifier = Modifier.fillMaxWidth(),
+                text = FormatNumber(ranking.victorias - ranking.derrotas),
+                textAlign = TextAlign.End,
                 color = buttonOKColor,
                 fontFamily = jostSemiBold,
                 fontSize = TextResponsiveSize(size = 24.sp)
@@ -174,5 +183,5 @@ fun PreviewRankingScreen() {
 @Preview
 @Composable
 fun RankingDetailPreview() {
-    RankingDetail(position = 0, ranking = Rankings("", "", "", 999, 0))
+    RankingDetail(position = 1, ranking = Rankings("", "Francisco.1999999", "", 2340000, 0))
 }
