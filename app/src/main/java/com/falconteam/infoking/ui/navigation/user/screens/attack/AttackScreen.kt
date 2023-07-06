@@ -51,6 +51,8 @@ import com.falconteam.infoking.ui.theme.white
 import com.falconteam.infoking.ui.viewmodels.AttackViewModel
 import kotlinx.coroutines.runBlocking
 
+var finished = false
+
 @Composable
 fun AttackScreen(
     onBack: () -> Unit,
@@ -161,7 +163,7 @@ fun AttackCard(
     data: npc? = null,
     viewModel: AttackViewModel,
     context: Context,
-    onAttack: (data: npc) -> Unit
+    onAttack: (data: npc) -> Unit,
 ) {
     val opacity = 0.7f
     val sizeFont = TextResponsiveSize(16.sp)
@@ -196,7 +198,10 @@ fun AttackCard(
             )
             Button(
                 onClick = {
-                    onAttack(data!!)
+                    if (!finished) {
+                        onAttack(data!!)
+                        finished = true
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                 modifier = Modifier
