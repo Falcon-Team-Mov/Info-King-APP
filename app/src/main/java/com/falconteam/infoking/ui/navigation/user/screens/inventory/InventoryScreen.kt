@@ -2,6 +2,7 @@ package com.falconteam.infoking.ui.navigation.user.screens.inventory
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.components.ElementResponsiveSize
+import com.falconteam.infoking.ui.components.PopUpOneButtonDescription
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
@@ -37,7 +43,7 @@ import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 
 @Composable
-fun InventoryScreen(modifier: Modifier = Modifier) {
+fun InventoryScreen() {
     InfoKingTheme {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +78,8 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodySmall,
                 color = buttonOKColor,
                 textAlign = TextAlign.Center,
-                fontSize = TextResponsiveSize(size = 21.sp)
+                fontSize = TextResponsiveSize(size = 21.sp),
+                lineHeight = TextResponsiveSize(size = 36.sp)
             )
         }
     }
@@ -81,6 +88,7 @@ fun InventoryScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun InventoryCardCafe() {
+    var showDialog by remember { mutableStateOf(false) }
     val sizeIcon = ElementResponsiveSize(size = 64.dp)
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
@@ -109,7 +117,12 @@ fun InventoryCardCafe() {
                     Image(
                         painter = painterResource(id = R.drawable.cup),
                         contentDescription = "Cafe",
-                        modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
+                        modifier = Modifier
+                            .size(width = sizeIcon, height = sizeIcon)
+                            .clickable(onClick = {
+                                showDialog = true
+                            })
+                            .padding(start = 8.dp),
                     )
 
                     Text(
@@ -146,7 +159,19 @@ fun InventoryCardCafe() {
                     tint = buttonOKColor,
                     modifier = Modifier
                         .size(width = sizeIcon, height = sizeIcon)
+                        .clickable(onClick = {
+                            showDialog = true
+                        })
                 )
+                if (showDialog) {
+                    PopUpOneButtonDescription(
+                        onDismiss = { showDialog = false },
+                        onBack = {},
+                        titleText = "PRÓXIMAMENTE...",
+                        descriptionText = "Esta funcionalidad se encuentra en desarrollo. ¡Gracias por tu paciencia!",
+                        buttonText = "CERRAR"
+                    )
+                }
             }
         }
     }
@@ -154,6 +179,7 @@ fun InventoryCardCafe() {
 
 @Composable
 fun InventoryCardFuego() {
+    var showDialog by remember { mutableStateOf(false) }
     val sizeIcon = ElementResponsiveSize(size = 64.dp)
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
@@ -181,14 +207,20 @@ fun InventoryCardFuego() {
                     Image(
                         painter = painterResource(id = R.drawable.firewall),
                         contentDescription = "Corta Fuego",
-                        modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
+                        modifier = Modifier
+                            .size(width = sizeIcon, height = sizeIcon)
+                            .clickable(onClick = {
+                                showDialog = true
+                            })
                     )
 
                     Text(
                         text = "1/%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 11.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 11.dp)
+                            .padding(top = 4.dp),
                         fontSize = TextResponsiveSize(size = 22.sp)
                     )
                 }
@@ -220,7 +252,19 @@ fun InventoryCardFuego() {
                     tint = buttonOKColor,
                     modifier = Modifier
                         .size(width = sizeIcon, height = sizeIcon)
+                        .clickable(onClick = {
+                            showDialog = true
+                        })
                 )
+                if (showDialog) {
+                    PopUpOneButtonDescription(
+                        onDismiss = { showDialog = false },
+                        onBack = {},
+                        titleText = "PRÓXIMAMENTE...",
+                        descriptionText = "Esta funcionalidad se encuentra en desarrollo. ¡Gracias por tu paciencia!",
+                        buttonText = "CERRAR"
+                    )
+                }
             }
         }
     }
@@ -228,6 +272,7 @@ fun InventoryCardFuego() {
 
 @Composable
 fun InventoryCardLentes() {
+    var showDialog by remember { mutableStateOf(false) }
     val sizeIcon = ElementResponsiveSize(size = 64.dp)
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
@@ -255,7 +300,11 @@ fun InventoryCardLentes() {
                     Image(
                         painter = painterResource(id = R.drawable.lentes),
                         contentDescription = "Imagen de lentes",
-                        modifier = Modifier.size(sizeIcon),
+                        modifier = Modifier
+                            .size(sizeIcon)
+                            .clickable(onClick = {
+                                showDialog = true
+                            })
                     )
 
                     Text(
@@ -294,7 +343,19 @@ fun InventoryCardLentes() {
                     tint = buttonOKColor,
                     modifier = Modifier
                         .size(width = sizeIcon, height = sizeIcon)
+                        .clickable(onClick = {
+                            showDialog = true
+                        })
                 )
+                if (showDialog) {
+                    PopUpOneButtonDescription(
+                        onDismiss = { showDialog = false },
+                        onBack = {},
+                        titleText = "PRÓXIMAMENTE...",
+                        descriptionText = "Esta funcionalidad se encuentra en desarrollo. ¡Gracias por tu paciencia!",
+                        buttonText = "CERRAR"
+                    )
+                }
             }
         }
     }
@@ -302,6 +363,7 @@ fun InventoryCardLentes() {
 
 @Composable
 fun InventoryCardAtaque() {
+    var showDialog by remember { mutableStateOf(false) }
     val sizeIcon = ElementResponsiveSize(size = 64.dp)
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
@@ -329,13 +391,19 @@ fun InventoryCardAtaque() {
                     Image(
                         painter = painterResource(id = R.drawable.atttack),
                         contentDescription = "Imagen de ataque",
-                        modifier = Modifier.size(width = sizeIcon, height = sizeIcon),
+                        modifier = Modifier
+                            .size(width = sizeIcon, height = sizeIcon)
+                            .clickable(onClick = {
+                                showDialog = true
+                            })
                     )
                     Text(
                         text = "1/%",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 11.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 11.dp)
+                            .padding(top = 4.dp),
                         fontSize = TextResponsiveSize(size = 22.sp)
                     )
                 }
@@ -357,7 +425,8 @@ fun InventoryCardAtaque() {
                         text = "Posibilidad de atacar dos veces",
                         color = buttonOKColor,
                         style = MaterialTheme.typography.bodySmall,
-                        fontSize = TextResponsiveSize(size = 20.sp)
+                        fontSize = TextResponsiveSize(size = 20.sp),
+                        lineHeight = TextResponsiveSize(size = 20.sp)
                     )
                 }
                 Icon(
@@ -366,7 +435,19 @@ fun InventoryCardAtaque() {
                     tint = buttonOKColor,
                     modifier = Modifier
                         .size(width = sizeIcon, height = sizeIcon)
+                        .clickable(onClick = {
+                            showDialog = true
+                        })
                 )
+                if (showDialog) {
+                    PopUpOneButtonDescription(
+                        onDismiss = { showDialog = false },
+                        onBack = {},
+                        titleText = "PRÓXIMAMENTE...",
+                        descriptionText = "Esta funcionalidad se encuentra en desarrollo. ¡Gracias por tu paciencia!",
+                        buttonText = "CERRAR"
+                    )
+                }
             }
         }
     }
