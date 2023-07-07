@@ -2,6 +2,7 @@ package com.falconteam.infoking.data.network.service
 
 import com.falconteam.infoking.data.models.ConnectionData
 import com.falconteam.infoking.data.models.LoginDataResponse
+import com.falconteam.infoking.data.models.ServerData
 import com.falconteam.infoking.data.models.StatsProfileData
 import com.falconteam.infoking.data.network.dto.login.LoginRequest
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
@@ -18,8 +19,8 @@ interface LoginService {
     @GET("api/users/{id}")
     suspend fun getUserData(@Path("id") id: String): LoginDataResponse
 
-    @GET("api/version")
-    suspend fun getVersion(): String
+    @GET("api/server")
+    suspend fun getVersion(): ServerData
 
     @PUT("api/users/connection/{id}")
     suspend fun setConnection(@Path("id") id: String, @Body data: ConnectionData)

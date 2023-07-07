@@ -2,16 +2,15 @@ package com.falconteam.infoking.ui.viewmodels
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.falconteam.infoking.RetrofitApplication
 import com.falconteam.infoking.data.models.LoginDataResponse
-import com.falconteam.infoking.data.models.StatsProfileData
 import com.falconteam.infoking.data.network.ApiResponse
 import com.falconteam.infoking.data.network.dto.login.LoginRequest
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
@@ -24,7 +23,6 @@ import com.falconteam.infoking.ui.components.setFullDataUser
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlin.math.log
 
 class LoginViewModel() : ViewModel() {
     val data = mutableStateMapOf<Int, LoginResponse>()
@@ -32,16 +30,17 @@ class LoginViewModel() : ViewModel() {
     val finished = mutableStateOf(false)
     val startcount = mutableStateOf(false)
     val errors: MutableState<String> = mutableStateOf("")
-    val timepo_juego: MutableState<Int> = mutableStateOf(0)
+    var version = MutableLiveData<String>()
 
     val repository_Login = RetrofitApplication()._loginRepository
 
-    fun getVersion(): String {
-        var version = ""
-        viewModelScope.launch {
-            version = repository_Login.getVersion()
+    fun getVersion() {
+        runBlocking {
+            viewModelScope.launch {
+                version.value = repository_Login.getVersion()
+            }
         }
-        return version
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -107,7 +106,7 @@ class LoginViewModel() : ViewModel() {
                         type = 2
                     ).toString().toInt()
 
-                    Log.d("Tiempos", "startCount: $previousTimePlaying")
+                    //Log.d("Tiempos", "startCount: $previousTimePlaying")
 
                     setData(
                         context,

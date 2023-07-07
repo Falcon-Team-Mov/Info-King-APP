@@ -2,6 +2,7 @@ package com.falconteam.infoking.data.network.repository
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.falconteam.infoking.data.models.ConnectionData
 import com.falconteam.infoking.data.models.LoginDataResponse
@@ -37,7 +38,8 @@ class LoginRepository(private val api: LoginService) {
     suspend fun getVersion(): String {
         try {
             val response = api.getVersion()
-            return response
+            Log.d("AppVer", "getVersion: ${response.version}")
+            return response.version
         } catch (e: HttpException) {
             return "0.0.0"
         } catch (e: IOException) {

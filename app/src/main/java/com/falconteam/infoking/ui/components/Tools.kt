@@ -4,19 +4,24 @@ import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import androidx.activity.viewModels
+import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
+import com.falconteam.infoking.ui.navigation.graphs.RootNavGraph
+import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
@@ -80,16 +85,8 @@ fun setLastTime(context: Context, value: Boolean) {
         getCurrentDateTime()
     ).toInt()
 
-    Log.d("Tiempos", "setLastTime: $playing, $time, ${time + playing}")
-
     HealtTimer(context, time + playing)
-    Log.d(
-        "Tiempos", "setLastTime: ${
-            runBlocking {
-                getData(context, keyInt = PreferencesKeys.TIME_PLAYING, type = 2).toString().toInt()
-            }
-        }"
-    )
+
     setData(
         context,
         dataBoolean = value,
@@ -98,9 +95,12 @@ fun setLastTime(context: Context, value: Boolean) {
     )
 }
 
-fun HealtTimer(context: Context, seconds: Int) {
-    val viewLogin = ViewModelProvider.AndroidViewModelFactory.getInstance(context.applicationContext as Application).create(LoginViewModel::class.java)
-    if (seconds > 10 * 60) {
+fun HealtTimer(context: Context, seconds: Int, popup: Boolean = false): Boolean {
+    var update = false
+    val viewLogin =
+        ViewModelProvider.AndroidViewModelFactory.getInstance(context.applicationContext as Application)
+            .create(LoginViewModel::class.java)
+    if (seconds >= 10 * 60) {
         val vida = runBlocking {
             getData(context, keyInt = PreferencesKeys.VIDA, type = 2).toString().toInt()
         }
@@ -111,7 +111,7 @@ fun HealtTimer(context: Context, seconds: Int) {
         val vidaFinal = if (vida + ((seconds) / (10 * 60)) * 10 > vidaMax) {
             vidaMax
         } else {
-            vida + ((seconds) / (10 * 60)) * 10
+            vida + ((seconds) / (10 * 60)) * 30
         }
         val energia = runBlocking {
             getData(context, keyInt = PreferencesKeys.ENERGIA, type = 2).toString().toInt()
@@ -126,6 +126,10 @@ fun HealtTimer(context: Context, seconds: Int) {
         setData(context, dataInt = energiaFinal, IntKey = PreferencesKeys.ENERGIA, type = 2)
 
         viewLogin.setStatsProfile(context)
+        update = true
+        if (popup) {
+
+        }
     }
     setData(
         context,
@@ -133,6 +137,19 @@ fun HealtTimer(context: Context, seconds: Int) {
         dataInt = seconds % (10 * 60),
         type = 2
     )
+    return update
+}
+
+fun NestedUpdate(context: Context, viewModel: LoginViewModel){
+    val packageName = context.packageName
+
+    val uri = Uri.parse("market://details?id=$packageName")
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+    }
 }
 
 @Composable
@@ -174,7 +191,7 @@ fun calculateTime(fechaInicioString: String, fechaFinString: String): Long {
 
         return segundosTranscurridos
     } catch (e: Exception) {
-        Log.d("Prueba", "calcularMinutosTranscurridos: $e")
+        //Log.d("Prueba", "calcularMinutosTranscurridos: $e")
         return 0
     }
 }
@@ -186,7 +203,7 @@ suspend fun attackgenerator(attack: Int, defensa: Int): Float {
     } else {
         val random = (generateRandomNumber(defensa, defensa / 2))
         val _attack = (attack * random / (defensa * 1f))
-        Log.d("Prueba", "attackgenerator: $_attack, random: $random, defensa: $defensa")
+        //Log.d("Prueba", "attackgenerator: $_attack, random: $random, defensa: $defensa")
         return if (_attack <= 0) {
             0f
         } else {
@@ -205,6 +222,6 @@ fun FormatNumber(number: Int): String {
 
         else -> number.toString()
     }
-    Log.d("debug", formattedNumber)
+    //Log.d("debug", formattedNumber)
     return formattedNumber
 }

@@ -2,7 +2,6 @@ package com.falconteam.infoking.ui.navigation.user.screens.fight
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -74,6 +73,7 @@ import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.theme.white
 import com.falconteam.infoking.ui.viewmodels.AttackViewModel
+import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -131,7 +131,7 @@ fun FightScreen(
                     val totalvida = ((runBlocking {
                         getData(current, keyInt = VIDA, type = 2).toString().toInt()
                     } + data.vida).toFloat()) * 6f
-                    Log.d("Prueba", "totalvida: $ataque")
+                    //Log.d("Prueba", "totalvida: $ataque")
                     progress -= (ataque / totalvida)
 
                     if (progress >= 1f || data.vida < 0 || vida < 0 || progress < 0f) {
@@ -148,7 +148,7 @@ fun FightScreen(
                     }
                 }
 
-                delay(400)
+                delay(200)
             }
         }
         Column(
@@ -245,7 +245,7 @@ fun FightScreen(
 
                             progress += (ataque / totalvida)
 
-                            Log.d("Prueba", "Enemy: $progress")
+                            //Log.d("Prueba", "Enemy: $progress")
                             if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
                                 finished = true
                                 if (activated && progress >= 1f) {
@@ -291,8 +291,7 @@ fun FightScreen(
                     val defensa = runBlocking {
                         getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
                     }
-                    android.util.Log.d("Pruebas", "FightScreen: ${exp > (50 * nivel)}")
-                    if (exp > (50 * nivel)) {
+                    if (exp >= (50 * nivel)) {
                         setData(current, IntKey = EXP, dataInt = 0, type = 2)
                         setData(current, IntKey = NIVEL, dataInt = nivel + 1, type = 2)
                         setData(
@@ -329,11 +328,7 @@ fun FightScreen(
                             },
                         )
                     )
-                    Log.d("Prueba", "${
-                        runBlocking {
-                            getDataBattle(current, keyString = ID_NPC, type = 1).toString()
-                        }
-                    }")
+
                 } else {
                     viewModel.putDerrotRanking(
                         RankingRequest(
@@ -373,7 +368,7 @@ fun FightScreen(
                         getData(current, keyInt = TIME_PLAYING, type = 2).toString().toInt()
                     },
                 )
-                Log.d("Prueba", "$user")
+                //Log.d("Prueba", "$user")
                 viewModel.putUser(
                     runBlocking {
                         getData(current, keyString = ID, type = 1).toString()
@@ -404,10 +399,9 @@ fun FightScreen(
                 )
                 enviado = true
             } else if (finished) {
-                Log.d("Prueba", "FightScreen: $win, $showDialog")
+                //Log.d("Prueba", "FightScreen: $win, $showDialog")
                 if (showDialog) {
                     if (win) {
-                        Log.d("uwu", win.toString())
                         MessagePopUp(
                             { showDialog = false },
                             { onBack() },
@@ -417,7 +411,6 @@ fun FightScreen(
                             ""
                         )
                     } else if (!win) {
-                        Log.d("uwu", win.toString())
                         MessagePopUp(
                             { showDialog = false },
                             { onBack() },
@@ -428,6 +421,9 @@ fun FightScreen(
                         )
                     }
                 }
+                val viewLogin: LoginViewModel = viewModel()
+                val context = LocalContext.current
+                viewLogin.setStatsProfile(context)
             }
         }
     }
