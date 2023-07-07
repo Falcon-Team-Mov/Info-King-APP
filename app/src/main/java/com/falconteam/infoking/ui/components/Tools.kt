@@ -1,22 +1,28 @@
 package com.falconteam.infoking.ui.components
 
+import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.math.round
 import kotlin.random.Random
 
 @Composable
@@ -58,18 +64,127 @@ fun openPlayStore(context: Context) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Composable
 fun getCurrentDateTime(): String {
     val currentDateTime = LocalDateTime.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     return currentDateTime.format(formatter)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun setLastTime(context: Context, value: Boolean) {
+    val playing = runBlocking {
+        getData(context, keyInt = PreferencesKeys.TIME_PLAYING, type = 2).toString().toInt()
+    }
+    val time = calculateTime(
+        runBlocking { getData(context, PreferencesKeys.LAST_CONECTION).toString() },
+        getCurrentDateTime()
+    ).toInt()
+
+    Log.d("Tiempos", "setLastTime: $playing, $time, ${time + playing}")
+
+    HealtTimer(context, time + playing)
+    Log.d(
+        "Tiempos", "setLastTime: ${
+            runBlocking {
+                getData(context, keyInt = PreferencesKeys.TIME_PLAYING, type = 2).toString().toInt()
+            }
+        }"
+    )
+    setData(
+        context,
+        dataBoolean = value,
+        BooleanKey = PreferencesKeys.OPEN_GAME,
+        type = 4
+    )
+}
+
+fun HealtTimer(context: Context, seconds: Int) {
+    val viewLogin = ViewModelProvider.AndroidViewModelFactory.getInstance(context.applicationContext as Application).create(LoginViewModel::class.java)
+    if (seconds > 10 * 60) {
+        val vida = runBlocking {
+            getData(context, keyInt = PreferencesKeys.VIDA, type = 2).toString().toInt()
+        }
+        val nivel = runBlocking {
+            getData(context, keyInt = PreferencesKeys.NIVEL, type = 2).toString().toInt()
+        }
+        val vidaMax = nivel * 100
+        val vidaFinal = if (vida + ((seconds) / (10 * 60)) * 10 > vidaMax) {
+            vidaMax
+        } else {
+            vida + ((seconds) / (10 * 60)) * 10
+        }
+        val energia = runBlocking {
+            getData(context, keyInt = PreferencesKeys.ENERGIA, type = 2).toString().toInt()
+        }
+        val energiaMax = nivel * 20
+        val energiaFinal = if (energia + ((seconds) / (10 * 60)) > energiaMax) {
+            energiaMax
+        } else {
+            energia + ((seconds) / (10 * 60))
+        }
+        setData(context, dataInt = vidaFinal, IntKey = PreferencesKeys.VIDA, type = 2)
+        setData(context, dataInt = energiaFinal, IntKey = PreferencesKeys.ENERGIA, type = 2)
+
+        viewLogin.setStatsProfile(context)
+    }
+    setData(
+        context,
+        IntKey = PreferencesKeys.TIME_PLAYING,
+        dataInt = seconds % (10 * 60),
+        type = 2
+    )
+}
+
+@Composable
+fun FormatTime(totalSeconds: Int): String {
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+
+    if (minutes > 0) return "%02d:%02ds".format(
+        minutes,
+        seconds
+    ) else if (hours > 0) return "%02d:%02d:%02ds".format(
+        hours,
+        minutes,
+        seconds
+    ) else return "%02ds".format(seconds)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun calculateTime(fechaInicioString: String, fechaFinString: String): Long {
+    try {
+        val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        val fechaInicio: LocalDateTime = try {
+            LocalDateTime.parse(fechaInicioString, formatter1)
+        } catch (e: Exception) {
+            LocalDateTime.parse(fechaInicioString, formatter2)
+        }
+
+        val fechaFin: LocalDateTime = try {
+            LocalDateTime.parse(fechaFinString, formatter1)
+        } catch (e: Exception) {
+            LocalDateTime.parse(fechaFinString, formatter2)
+        }
+
+        val diferencia = Duration.between(fechaInicio, fechaFin)
+        val segundosTranscurridos = diferencia.toMillis() / 1000
+
+        return segundosTranscurridos
+    } catch (e: Exception) {
+        Log.d("Prueba", "calcularMinutosTranscurridos: $e")
+        return 0
+    }
+}
+
+
 suspend fun attackgenerator(attack: Int, defensa: Int): Float {
     if (attack <= 0 || defensa <= 0) {
         return 0f
     } else {
-        val random = (generateRandomNumber(defensa, defensa/2))
+        val random = (generateRandomNumber(defensa, defensa / 2))
         val _attack = (attack * random / (defensa * 1f))
         Log.d("Prueba", "attackgenerator: $_attack, random: $random, defensa: $defensa")
         return if (_attack <= 0) {

@@ -16,7 +16,7 @@ class ForgotPassViewModel() : ViewModel() {
     fun ForgotPassEmail(email: String) {
         viewModelScope.launch {
             try {
-                val value = repository_ForgotPass.ForgotPassEmail(email)
+                val value = repository_ForgotPass.ForgotPassEmail(email.trim())
                 msg[0] = value.msg
                 valid[0] = value.valid
             } catch (e: Exception) {

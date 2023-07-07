@@ -1,6 +1,5 @@
 package com.falconteam.infoking.ui.navigation.user.screens.attack
 
-import android.app.PendingIntent.OnFinished
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ import com.falconteam.infoking.ui.components.Background
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonCancelColor
@@ -54,6 +54,7 @@ import com.falconteam.infoking.ui.theme.primaryColor
 import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.white
 import com.falconteam.infoking.ui.viewmodels.AttackViewModel
+import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.runBlocking
 
 @Composable
@@ -173,6 +174,7 @@ fun AttackCard(
     val opacity = 0.7f
     val sizeFont = TextResponsiveSize(16.sp)
     var finish by remember { mutableStateOf(finished) }
+    val viewLogin: LoginViewModel = viewModel()
     Card(
         colors = CardDefaults.cardColors(primaryColor.copy(alpha = opacity)),
         modifier = Modifier
@@ -223,9 +225,30 @@ fun AttackCard(
             }
             Button(
                 onClick = {
-                    viewModel.getNPCAll((runBlocking {
-                        getData(context = context, keyString = PreferencesKeys.ID)
-                    } as String))
+                    val energia = runBlocking {
+                        getData(
+                            context,
+                            keyInt = PreferencesKeys.ENERGIA,
+                            type = 2
+                        ).toString().toInt()
+                    }
+                    if (energia > 0) {
+                        runBlocking {
+                            setData(
+                                context,
+                                IntKey = PreferencesKeys.ENERGIA,
+                                dataInt = energia - 1,
+                                type = 2
+                            )
+                        }
+                        viewLogin.setStatsProfile(context)
+                        viewModel.getNPCAll((runBlocking {
+                            getData(context = context, keyString = PreferencesKeys.ID)
+                        } as String))
+                    } else {
+                        //Agregar POPUP de que ya no puede pasar
+                        TODO()
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                 modifier = Modifier

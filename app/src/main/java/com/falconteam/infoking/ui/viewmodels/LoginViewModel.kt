@@ -1,6 +1,9 @@
 package com.falconteam.infoking.ui.viewmodels
 
 import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -8,20 +11,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.falconteam.infoking.RetrofitApplication
 import com.falconteam.infoking.data.models.LoginDataResponse
+import com.falconteam.infoking.data.models.StatsProfileData
 import com.falconteam.infoking.data.network.ApiResponse
 import com.falconteam.infoking.data.network.dto.login.LoginRequest
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
 import com.falconteam.infoking.ui.components.PreferencesKeys
+import com.falconteam.infoking.ui.components.PreferencesKeys.TIME_PLAYING
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.components.setFullData
 import com.falconteam.infoking.ui.components.setFullDataUser
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.math.log
 
 class LoginViewModel() : ViewModel() {
     val data = mutableStateMapOf<Int, LoginResponse>()
     val predata = mutableStateMapOf<Int, LoginDataResponse>()
     val finished = mutableStateOf(false)
+    val startcount = mutableStateOf(false)
     val errors: MutableState<String> = mutableStateOf("")
+    val timepo_juego: MutableState<Int> = mutableStateOf(0)
 
     val repository_Login = RetrofitApplication()._loginRepository
 
@@ -31,6 +42,19 @@ class LoginViewModel() : ViewModel() {
             version = repository_Login.getVersion()
         }
         return version
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateLastConnection(context: Context) {
+        viewModelScope.launch {
+            repository_Login.updateLastConnection(context)
+        }
+    }
+
+    fun setStatsProfile(context: Context) {
+        viewModelScope.launch {
+            repository_Login.setStatsProfile(context)
+        }
     }
 
     fun Login(context: Context, LoginRequest: LoginRequest): Any? {
@@ -66,9 +90,40 @@ class LoginViewModel() : ViewModel() {
         }
     }
 
+    fun startCount(context: Context) {
+        viewModelScope.launch {
+            while (true) {
+
+                delay(1000)
+                if (getData(
+                        context,
+                        keyBoolean = PreferencesKeys.OPEN_GAME,
+                        type = 5
+                    ) === true
+                ) {
+                    val previousTimePlaying = getData(
+                        context,
+                        keyInt = TIME_PLAYING,
+                        type = 2
+                    ).toString().toInt()
+
+                    Log.d("Tiempos", "startCount: $previousTimePlaying")
+
+                    setData(
+                        context,
+                        IntKey = TIME_PLAYING,
+                        dataInt = previousTimePlaying + 1,
+                        type = 2
+                    )
+                }
+            }
+        }
+    }
+
+
     fun getUserData(context: Context, id: String) {
         viewModelScope.launch {
-            if (!finished.value) {
+            if (!finished.value && !startcount.value) {
                 val value = repository_Login.getUserData(id)
                 when (value) {
                     is ApiResponse.Success -> {
@@ -78,6 +133,7 @@ class LoginViewModel() : ViewModel() {
                             data = value.data,
                         )
                         finished.value = true
+                        startcount.value = true
                     }
 
                     is ApiResponse.Error -> {

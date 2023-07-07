@@ -1,6 +1,8 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,6 +16,7 @@ import androidx.navigation.navigation
 import com.falconteam.infoking.data.models.SignUpFormOne
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.setLastTime
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.AuthScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.ForgotPassScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.LoginScreen
@@ -23,6 +26,7 @@ import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.runBlocking
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
         route = Graph.AUTH,
@@ -54,9 +58,9 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             } else viewModel.finished.value = true
             Log.d(
                 "Prueba",
-                "${activation} $role $token ${viewModel.predata[0]} ${viewModel.finished.value}"
+                "${activation} $role $token ${viewModel.finished.value}"
             )
-            if (token == null || role == null || viewModel.predata[0] == null && !viewModel.finished.value) {
+            if (token == null || role == null && !viewModel.finished.value) {
                 LoadingScreen()
 
             } else if (!activation) {
@@ -67,16 +71,19 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                         navController.navigate(AuthScreen.SignUp.route)
                     }
                 } else if (viewModel.finished.value) {
-
+                    setLastTime(context, true)
                     if (role == "PLAYER_ROLE") {
+                        Log.d("Prueba", "Entro aca")
                         navController.popBackStack()
                         navController.navigate(Graph.BATTLE)
                         viewModel.finished.value = false
+                        viewModel.startcount.value = true
                         activation = true
                     } else if (role == "ADMIN_ROLE") {
                         navController.popBackStack()
                         navController.navigate(Graph.ADMIN_HOME)
                         viewModel.finished.value = false
+                        viewModel.startcount.value = true
                         activation = true
                     }
                 }
