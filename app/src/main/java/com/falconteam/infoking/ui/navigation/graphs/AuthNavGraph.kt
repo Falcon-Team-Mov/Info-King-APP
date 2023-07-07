@@ -3,6 +3,7 @@ package com.falconteam.infoking.ui.navigation.graphs
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.runBlocking
 
+
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
@@ -38,55 +40,51 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         composable(route = AuthScreen.Auth.route) {
             val viewModel: LoginViewModel = viewModel()
             val context = LocalContext.current
-            runBlocking { viewModel.getVersion() }
-            var id by remember { mutableStateOf<Any?>(null) }
-
-            var token by remember { mutableStateOf<Any?>(null) }
-            var role by remember { mutableStateOf<Any?>(null) }
+            viewModel.getVersion()
+            var id by remember { mutableStateOf<String?>(null) }
+            var token by remember { mutableStateOf<String?>(null) }
+            var role by remember { mutableStateOf<String?>(null) }
             var activation by remember { mutableStateOf(false) }
             var showDialog by remember { mutableStateOf(false) }
 
             runBlocking {
-                id = getData(context = context, keyString = PreferencesKeys.ID) as String
+                id = getData(context = context, keyString = PreferencesKeys.ID) as? String
                 if (!activation) {
-                    token = getData(context = context, keyString = PreferencesKeys.TOKEN)
-                    role = getData(context = context, keyString = PreferencesKeys.ROLE)
+                    token = getData(context = context, keyString = PreferencesKeys.TOKEN) as? String
+                    role = getData(context = context, keyString = PreferencesKeys.ROLE) as? String
                 }
             }
-            if (viewModel.version.value != "" && viewModel.version.value != null) {
+
+            val versionName =
+                context.packageManager.getPackageInfo(context.packageName, 0).versionName
+
+            val appVersion by viewModel.version.collectAsState()
+
+
+            if (appVersion != null && appVersion != "" && appVersion != versionName) {
                 Log.d(
-                    "Prueba", "Prueba ${
-                        context.packageManager.getPackageInfo(
-                            context.packageName, 0
-                        ).versionName
-                    }, ${viewModel.version.value}"
+                    "Prueba", "$versionName, $appVersion"
                 )
-                if (context.packageManager.getPackageInfo(
-                        context.packageName, 0
-                    ).versionName != viewModel.version.value
-                ) {
-                    showDialog = true
-                    PopUpOneButtonDescription(
-                        onDismiss = { showDialog = false },
-                        onBack = { openPlayStore(context) },
-                        titleText = "NUEVA ACTUALIZACIÓN DISPONIBLE",
-                        descriptionText = "Necesitamos que actualices a la versión más reciente de la app para poder disfrutar de todas las nuevas funcionalidades y/o correciones implementadas.\n\nSi tienes alguna duda, contáctanos a support@infoking.tech\n\n¡Gracias por tu comprensión!",
-                        buttonText = "ACTUALIZAR"
-                    )
-                }
-            } else if (!showDialog) {
+                showDialog = true
+                PopUpOneButtonDescription(
+                    onDismiss = { showDialog = false },
+                    onBack = { openPlayStore(context) },
+                    titleText = "NUEVA ACTUALIZACIÓN DISPONIBLE",
+                    descriptionText = "Necesitamos que actualices a la versión más reciente de la app para poder disfrutar de todas las nuevas funcionalidades y/o correcciones implementadas.\n\nSi tienes alguna duda, contáctanos a support@infoking.tech\n\n¡Gracias por tu comprensión!",
+                    buttonText = "ACTUALIZAR"
+                )
+            } else if (appVersion != null && appVersion != "") {
+                Log.d(
+                    "Prueba", "$versionName, $appVersion"
+                )
                 if (id != null && id != "") {
-                    viewModel.getUserData(
-                        context = context, id = id as String
-                    )
-                } else viewModel.finished.value = true
-                Log.d(
-                    "Prueba", "${activation} $role $token ${viewModel.finished.value}"
-                )
+                    viewModel.getUserData(context = context, id = id!!)
+                } else {
+                    viewModel.finished.value = true
+                }
+
                 if (token == null || role == null && !viewModel.finished.value) {
-
                     LoadingScreen()
-
                 } else if (!activation) {
                     if (token == null || token == "" || role == null || role == "" && viewModel.finished.value) {
                         AuthScreen(onClick = {
@@ -97,7 +95,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     } else if (viewModel.finished.value) {
                         setLastTime(context, true)
                         if (role == "PLAYER_ROLE") {
-                            Log.d("Prueba", "Entro aca")
                             navController.popBackStack()
                             navController.navigate(Graph.BATTLE)
                             viewModel.finished.value = false
@@ -114,6 +111,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                 }
             }
         }
+
 
         // Login
         composable(route = AuthScreen.Login.route) {

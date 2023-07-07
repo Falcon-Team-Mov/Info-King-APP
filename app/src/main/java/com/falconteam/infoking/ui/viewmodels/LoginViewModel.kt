@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.falconteam.infoking.RetrofitApplication
@@ -21,23 +20,27 @@ import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.components.setFullData
 import com.falconteam.infoking.ui.components.setFullDataUser
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class LoginViewModel() : ViewModel() {
+class LoginViewModel : ViewModel() {
     val data = mutableStateMapOf<Int, LoginResponse>()
     val predata = mutableStateMapOf<Int, LoginDataResponse>()
     val finished = mutableStateOf(false)
     val startcount = mutableStateOf(false)
     val errors: MutableState<String> = mutableStateOf("")
-    var version = MutableLiveData<String>()
+    private val _version = MutableStateFlow("")
+    val version: StateFlow<String> = _version
+
 
     val repository_Login = RetrofitApplication()._loginRepository
 
     fun getVersion() {
         runBlocking {
             viewModelScope.launch {
-                version.value = repository_Login.getVersion()
+                _version.value = repository_Login.getVersion()
             }
         }
 
@@ -92,8 +95,35 @@ class LoginViewModel() : ViewModel() {
     fun startCount(context: Context) {
         viewModelScope.launch {
             while (true) {
+                val vida = getData(
+                    context,
+                    keyInt = PreferencesKeys.VIDA,
+                    type = 2
+                ).toString().toInt()
+                val energia = getData(
+                    context,
+                    keyInt = PreferencesKeys.ENERGIA,
+                    type = 2
+                ).toString().toInt()
+                val nivel = getData(
+                    context,
+                    keyInt = PreferencesKeys.NIVEL,
+                    type = 2
+                ).toString().toInt()
 
                 delay(1000)
+                if (vida >= (100 * nivel) && energia >= (20 * nivel)) setData(
+                    context,
+                    BooleanKey = PreferencesKeys.OPEN_GAME,
+                    dataBoolean = false,
+                    type = 4
+                )
+                else setData(
+                    context,
+                    BooleanKey = PreferencesKeys.OPEN_GAME,
+                    dataBoolean = true,
+                    type = 4
+                )
                 if (getData(
                         context,
                         keyBoolean = PreferencesKeys.OPEN_GAME,
