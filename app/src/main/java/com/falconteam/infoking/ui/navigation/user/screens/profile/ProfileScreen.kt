@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.screens.profile
 
 import android.content.Context
-import android.opengl.Visibility
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -55,6 +55,7 @@ import com.falconteam.infoking.ui.components.ClearData
 import com.falconteam.infoking.ui.components.ElementResponsiveSize
 import com.falconteam.infoking.ui.components.FormatTime
 import com.falconteam.infoking.ui.components.HealtTimer
+import com.falconteam.infoking.ui.components.PopUpTwoButtons
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
@@ -82,6 +83,7 @@ fun ProfileScreen(
     onLogout: () -> Unit
 ) {
     val viewModel: RankingViewModel = viewModel()
+    var showDialog by remember { mutableStateOf(false) }
     InfoKingTheme {
         val context = LocalContext.current
         var logout by remember {
@@ -120,7 +122,7 @@ fun ProfileScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(horizontal = 36.dp)
+                        .padding(horizontal = 24.dp)
 
                 ) {
                     // Player's info
@@ -234,7 +236,8 @@ fun ProfileScreen(
                     ) {
                         Button(
                             onClick = {
-                                logout = true
+                                showDialog = true
+                                //logout = true
                             },
                             colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                             modifier = Modifier
@@ -251,13 +254,20 @@ fun ProfileScreen(
                     }
                 }
             }
+            if (showDialog) {
+                PopUpTwoButtons(
+                    onDismiss = { showDialog = false },
+                    onBack = { logout = true },
+                    titleText = "CERRAR SESIÓN",
+                    descriptionText = "¿Está seguro que desea cerrar sesión?",
+                    firstButtonText = "CANCELAR",
+                    secondButtonText = "ACEPTAR"
+                )
+            }
             if (logout) {
                 ClearData(context = context)
                 onLogout()
             }
-//            } else {
-//                LoadingScreen()
-//            }
         }
     }
 }
@@ -405,7 +415,8 @@ fun StatsSection(context: Context) {
                         color = Color.White,
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
-                        fontSize = TextResponsiveSize(size = 24.sp)
+                        fontSize = TextResponsiveSize(size = 20.sp),
+                        fontWeight = FontWeight.Bold
                     )
                 }
                 Column(
@@ -461,7 +472,9 @@ fun HealthStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(secondaryBlueColor.copy(alpha = 0.9f), RoundedCornerShape(12.dp))
+                .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -484,7 +497,8 @@ fun HealthStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp),
+                    lineHeight = TextResponsiveSize(size = 28.sp)
                 )
             }
         }
@@ -501,7 +515,9 @@ fun DefenseStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(secondaryBlueColor.copy(alpha = 0.9f), RoundedCornerShape(12.dp))
+                .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -524,6 +540,7 @@ fun DefenseStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
+                    lineHeight = TextResponsiveSize(size = 28.sp),
                     fontSize = TextResponsiveSize(size = 20.sp)
                 )
             }
@@ -541,7 +558,9 @@ fun AttackStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(secondaryBlueColor.copy(alpha = 0.9f), RoundedCornerShape(12.dp))
+                .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -563,7 +582,8 @@ fun AttackStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp),
+                    lineHeight = TextResponsiveSize(size = 28.sp)
                 )
             }
         }
@@ -580,7 +600,9 @@ fun EnergyStatCard() {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(secondaryBlueColor.copy(alpha = 0.9f), RoundedCornerShape(12.dp))
+                .padding(vertical = 4.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -604,7 +626,8 @@ fun EnergyStatCard() {
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = TextResponsiveSize(size = 20.sp)
+                    fontSize = TextResponsiveSize(size = 20.sp),
+                    lineHeight = TextResponsiveSize(size = 28.sp)
                 )
             }
         }

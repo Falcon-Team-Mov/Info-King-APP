@@ -42,7 +42,7 @@ import com.falconteam.infoking.data.models.StatsUpdate
 import com.falconteam.infoking.data.models.npc
 import com.falconteam.infoking.data.network.dto.ranking.RankingRequest
 import com.falconteam.infoking.ui.components.Background
-import com.falconteam.infoking.ui.components.MessagePopUp
+import com.falconteam.infoking.ui.components.PopUpOneButton
 import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.CREATED_AT
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
@@ -84,8 +84,7 @@ import kotlinx.coroutines.runBlocking
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun FightScreen(
-    data: npc,
-    onBack: () -> Unit
+    data: npc, onBack: () -> Unit
 ) {
     com.falconteam.infoking.ui.theme.InfoKingTheme() {
         Background()
@@ -114,12 +113,9 @@ fun FightScreen(
 
                 if (activated) {
                     enemy = runBlocking {
-                        attackgenerator(
-                            data.ataque,
-                            runBlocking {
-                                getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
-                            }
-                        )
+                        attackgenerator(data.ataque, runBlocking {
+                            getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
+                        })
                     }
                     if (enemy > 0) {
                         ataque = enemy
@@ -165,8 +161,7 @@ fun FightScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 Text(
                     text = "CIUDAD INICIAL",
@@ -174,24 +169,20 @@ fun FightScreen(
                     fontSize = 18.sp,
                     color = buttonOKColor,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(top = 75.dp, bottom = 24.dp)
+                    modifier = Modifier.padding(top = 75.dp, bottom = 24.dp)
                 )
                 Card(
                     colors = CardDefaults.cardColors(secondaryBlueColor),
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     ) {
 
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth(0.8f),
+                            modifier = Modifier.fillMaxWidth(0.8f),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -228,8 +219,7 @@ fun FightScreen(
                                     runBlocking {
                                         getData(current, keyInt = ATAQUE, type = 2).toString()
                                             .toInt()
-                                    },
-                                    data.defensa
+                                    }, data.defensa
                                 )
                             }
                             if (player > 0f) {
@@ -267,10 +257,7 @@ fun FightScreen(
                         .size(width = 221.dp, height = 40.dp)
                 ) {
                     Text(
-                        text = "ATACAR",
-                        fontFamily = jostBold,
-                        fontSize = 16.sp,
-                        color = white
+                        text = "ATACAR", fontFamily = jostBold, fontSize = 16.sp, color = white
                     )
                 }
             }
@@ -377,14 +364,12 @@ fun FightScreen(
                 viewModel.putUser(
                     runBlocking {
                         getData(current, keyString = ID, type = 1).toString()
-                    },
-                    user
+                    }, user
                 )
                 viewModel.putStats(
                     runBlocking {
                         getData(current, keyString = _ID, type = 1).toString()
-                    },
-                    StatsUpdate(
+                    }, StatsUpdate(
                         runBlocking {
                             getData(current, keyString = PERSONAJE_ID, type = 1).toString()
                         },
@@ -408,23 +393,19 @@ fun FightScreen(
                 if (showDialog) {
                     if (win) {
                         Log.d("uwu", win.toString())
-                        MessagePopUp(
-                            { showDialog = false },
-                            { onBack() },
-                            closeAcceptPopUp = false,
-                            closePopUp = true,
+                        PopUpOneButton(
+                            onDismiss = { showDialog = false },
+                            onBack = { onBack() },
                             titleText = "¡HAS GANADO!",
-                            ""
+                            buttonText = "CERRAR"
                         )
                     } else if (!win) {
                         Log.d("uwu", win.toString())
-                        MessagePopUp(
-                            { showDialog = false },
-                            { onBack() },
-                            closeAcceptPopUp = false,
-                            closePopUp = true,
+                        PopUpOneButton(
+                            onDismiss = { showDialog = false },
+                            onBack = { onBack() },
                             titleText = "¡HAS PERDIDO!",
-                            ""
+                            buttonText = "CERRAR"
                         )
                     }
                 }
@@ -471,8 +452,7 @@ fun FightItemCharacter(vida: Int) {
                 color = white,
                 fontFamily = jostSemiBold,
                 fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(top = 12.dp)
+                modifier = Modifier.padding(top = 12.dp)
 
             )
             LinearProgressIndicator(
@@ -528,8 +508,7 @@ fun FightItemEnemy(data: npc) {
                 color = white,
                 fontFamily = jostSemiBold,
                 fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(top = 12.dp)
+                modifier = Modifier.padding(top = 12.dp)
             )
             LinearProgressIndicator(
                 progress = data.vida.toFloat(),
@@ -551,58 +530,44 @@ fun FightItemEnemy(data: npc) {
 @Composable
 fun Fightdetail(vida: Int) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth(0.7f)
+        modifier = Modifier.fillMaxWidth(0.7f)
     ) {
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
+            verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier
         ) {
             val context = LocalContext.current
             Text(
                 text = "Ataque:",
                 fontFamily = jostSemiBold,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp)
             )
             Text(
                 text = runBlocking {
                     getData(context, keyInt = ATAQUE, type = 2).toString()
-                },
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
+                }, fontFamily = jostRegular, color = white, modifier = Modifier
             )
 
             Text(
                 text = "Defensa:",
                 fontFamily = jostSemiBold,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
             Text(
                 text = runBlocking {
                     getData(context, keyInt = DEFENSA, type = 2).toString()
-                },
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
+                }, fontFamily = jostRegular, color = white, modifier = Modifier
             )
 
             Text(
                 text = "Vida:",
                 fontFamily = jostSemiBold,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
             Text(
-                text = vida.toString(),
-                fontFamily = jostRegular,
-                color = white,
-                modifier = Modifier
+                text = vida.toString(), fontFamily = jostRegular, color = white, modifier = Modifier
             )
         }
     }
@@ -611,20 +576,16 @@ fun Fightdetail(vida: Int) {
 @Composable
 fun Fightdetail2(data: npc) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth(0.7f)
+        horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth(0.7f)
     ) {
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
+            verticalArrangement = Arrangement.SpaceBetween, modifier = Modifier
         ) {
             Text(
                 text = "Ataque:",
                 fontFamily = jostSemiBold,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
             Text(
                 text = data.ataque.toString(),
@@ -637,8 +598,7 @@ fun Fightdetail2(data: npc) {
                 text = "Defensa:",
                 fontFamily = jostSemiBold,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
             Text(
                 text = data.defensa.toString(),
@@ -651,8 +611,7 @@ fun Fightdetail2(data: npc) {
                 text = "Vida:",
                 fontFamily = jostSemiBold,
                 color = white,
-                modifier = Modifier
-                    .padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
             Text(
                 text = data.vida.toString(),
@@ -668,15 +627,7 @@ fun Fightdetail2(data: npc) {
 @Preview
 @Composable
 fun PreviewFightScreen() {
-    FightScreen(
-        data = npc(
-            "",
-            "",
-            0,
-            0,
-            0,
-            ""
-        ),
-        onBack = {}
-    )
+    FightScreen(data = npc(
+        "", "", 0, 0, 0, ""
+    ), onBack = {})
 }

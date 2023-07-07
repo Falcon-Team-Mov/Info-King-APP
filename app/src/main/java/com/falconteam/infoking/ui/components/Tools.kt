@@ -45,6 +45,13 @@ fun ElementResponsiveSize(size: Dp): Dp {
     return (size * scaleFactor)
 }
 
+@Composable
+fun resizePopUp(size: Dp): Dp {
+    val configuration = LocalConfiguration.current
+    val scaleFactor = if (configuration.smallestScreenWidthDp >= 600) 1.5f else 0.1f
+    return (size * scaleFactor)
+}
+
 suspend fun generateRandomNumber(max: Int, min: Int = 1): Int {
     return withContext(Dispatchers.Default) {
         val randomNumber = Random.nextInt(min, max - 1)

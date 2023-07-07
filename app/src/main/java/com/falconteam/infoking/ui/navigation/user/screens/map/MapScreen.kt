@@ -2,6 +2,7 @@ package com.falconteam.infoking.ui.navigation.user.screens.map
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.components.ElementResponsiveSize
+import com.falconteam.infoking.ui.components.PopUpOneButtonDescription
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
@@ -36,6 +42,7 @@ import com.falconteam.infoking.ui.theme.secondaryBlueColor
 @Composable
 fun MapScreen() {
     InfoKingTheme {
+        var showDialog by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,13 +68,15 @@ fun MapScreen() {
                     Icon(
                         modifier = Modifier
                             .padding(end = 32.dp)
-                            .size(ElementResponsiveSize(size = 40.dp)),
+                            .size(ElementResponsiveSize(size = 52.dp))
+                            .clickable(onClick = {
+                                showDialog = true
+                            }),
                         imageVector = Icons.Default.Info,
                         contentDescription = "Info Button",
                         tint = buttonOKColor
                     )
                 }
-
                 Image(
                     modifier = Modifier
                         .fillMaxSize()
@@ -77,6 +86,15 @@ fun MapScreen() {
                     alignment = Alignment.Center,
                     contentScale = ContentScale.FillWidth
                 )
+                if (showDialog) {
+                    PopUpOneButtonDescription(
+                        onDismiss = { showDialog = false },
+                        onBack = {},
+                        titleText = "PRÓXIMAMENTE...",
+                        descriptionText = "Esta funcionalidad se encuentra en desarrollo. ¡Gracias por tu paciencia!",
+                        buttonText = "CERRAR"
+                    )
+                }
             }
         }
     }
