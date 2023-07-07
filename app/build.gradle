@@ -11,8 +11,8 @@ android {
         applicationId "tech.falconteam.infoking"
         minSdk 24
         targetSdk 33
-        versionCode 14
-        versionName "2.0.1"
+        versionCode 15
+        versionName "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

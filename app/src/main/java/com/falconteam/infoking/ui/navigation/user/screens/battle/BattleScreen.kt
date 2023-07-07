@@ -132,20 +132,16 @@ fun BattleCard(onClick: () -> Unit) {
                 onClick = {
                     val energia = runBlocking {
                         getData(
-                            context,
-                            keyInt = PreferencesKeys.ENERGIA,
-                            type = 2
+                            context, keyInt = PreferencesKeys.ENERGIA, type = 2
                         ).toString().toInt()
                     }
                     val health = runBlocking {
                         getData(
-                            context,
-                            keyInt = PreferencesKeys.VIDA,
-                            type = 2
+                            context, keyInt = PreferencesKeys.VIDA, type = 2
                         ).toString().toInt()
                     }
                     Log.d("uwu", health.toString())
-                    if (energia > 0) {
+                    if (energia > 0 && health > 30) {
                         runBlocking {
                             setData(
                                 context,
@@ -156,9 +152,10 @@ fun BattleCard(onClick: () -> Unit) {
                         }
                         viewLogin.setStatsProfile(context)
                         onClick()
-                    } else if (health < 30) {
+                    }
+                    else if (health <= 30) {
                         noHealthPopUp = true
-                    } else {
+                    } else if (energia <= 0) {
                         noEnerygyPopUp = true
                     }
                 },

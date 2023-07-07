@@ -2,6 +2,7 @@ package com.falconteam.infoking.ui.navigation.user.screens.fight
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -107,6 +108,11 @@ fun FightScreen(
                 getData(current, keyInt = VIDA, type = 2).toString().toInt()
             })
         }
+        val maxvida = runBlocking {
+            getData(current, keyInt = VIDA, type = 2).toString().toInt()
+        }
+
+        val maxvidanpc = data.vida
 
         GlobalScope.launch(Dispatchers.Main) {
             while (!finished) {
@@ -117,7 +123,7 @@ fun FightScreen(
                             getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
                         })
                     }
-                    if (enemy > 0) {
+                    if (enemy > 0 && vida > 0) {
                         ataque = enemy
                         setData(current, IntKey = VIDA, dataInt = vida - 1, type = 2)
                         vida -= 1
@@ -127,23 +133,20 @@ fun FightScreen(
                     val totalvida = ((runBlocking {
                         getData(current, keyInt = VIDA, type = 2).toString().toInt()
                     } + data.vida).toFloat()) * 6f
-                    //Log.d("Prueba", "totalvida: $ataque")
+
                     progress -= (ataque / totalvida)
-
-                    if (progress >= 1f || data.vida < 0 || vida < 0 || progress < 0f) {
-                        finished = true
-                        if (activated && progress >= 1f) {
-                            showDialog = true
-                            win = true
-                        } else if (activated && progress <= 0f) {
-                            showDialog = true
-                            win = false
-                        }
-                        activated = false
-
-                    }
                 }
-
+                if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
+                    finished = true
+                    if (activated && (progress >= 1f || data.vida <= 0)) {
+                        showDialog = true
+                        win = true
+                    } else if (activated && (progress <= 0f || vida <= 0)) {
+                        showDialog = true
+                        win = false
+                    }
+                    activated = false
+                }
                 delay(200)
             }
         }
@@ -187,10 +190,10 @@ fun FightScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column {
-                                FightItemCharacter(vida)
+                                FightItemCharacter(vida, maxvida)
                             }
                             Column {
-                                FightItemEnemy(data = data)
+                                FightItemEnemy(data = data, maxvidanpc = maxvidanpc)
                             }
                         }
 
@@ -211,37 +214,39 @@ fun FightScreen(
                     onClick = {
 
                         if (!finished) {
-                            if (progress > 0.15f) {
+                            if (progress > 0.1f) {
                                 activated = true
                             }
-                            player = runBlocking {
-                                attackgenerator(
-                                    runBlocking {
-                                        getData(current, keyInt = ATAQUE, type = 2).toString()
-                                            .toInt()
-                                    }, data.defensa
-                                )
-                            }
-                            if (player > 0f) {
-                                ataque = player
-                                data.vida -= 1
-                            } else {
-                                ataque = 0f
+                            if (data.vida > 0 || vida > 0) {
+                                player = runBlocking {
+                                    attackgenerator(
+                                        runBlocking {
+                                            getData(current, keyInt = ATAQUE, type = 2).toString()
+                                                .toInt()
+                                        }, data.defensa
+                                    )
+                                }
+                                if (player > 0f && data.vida > 0) {
+                                    ataque = player
+                                    data.vida -= 1
+                                } else {
+                                    ataque = 0f
 
-                            }
-                            val totalvida = ((runBlocking {
-                                getData(current, keyInt = VIDA, type = 2).toString().toInt()
-                            } + data.vida).toFloat()) * 4f
+                                }
+                                val totalvida = ((runBlocking {
+                                    getData(current, keyInt = VIDA, type = 2).toString().toInt()
+                                } + data.vida).toFloat()) * 4f
 
-                            progress += (ataque / totalvida)
+                                progress += (ataque / totalvida)
+                            }
 
                             //Log.d("Prueba", "Enemy: $progress")
                             if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
                                 finished = true
-                                if (activated && progress >= 1f) {
+                                if (activated && (progress >= 1f || data.vida <= 0)) {
                                     showDialog = true
                                     win = true
-                                } else if (activated && progress <= 0f) {
+                                } else if (activated && (progress <= 0f || vida <= 0)) {
                                     showDialog = true
                                     win = false
                                 }
@@ -354,7 +359,6 @@ fun FightScreen(
                         getData(current, keyInt = TIME_PLAYING, type = 2).toString().toInt()
                     },
                 )
-                //Log.d("Prueba", "$user")
                 viewModel.putUser(
                     runBlocking {
                         getData(current, keyString = ID, type = 1).toString()
@@ -383,7 +387,6 @@ fun FightScreen(
                 )
                 enviado = true
             } else if (finished) {
-                //Log.d("Prueba", "FightScreen: $win, $showDialog")
                 if (showDialog) {
                     if (win) {
                         PopUpOneButton(
@@ -410,7 +413,7 @@ fun FightScreen(
 }
 
 @Composable
-fun FightItemCharacter(vida: Int) {
+fun FightItemCharacter(vida: Int, maxVida: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -450,10 +453,13 @@ fun FightItemCharacter(vida: Int) {
                 modifier = Modifier.padding(top = 12.dp)
 
             )
+            val total = runBlocking {
+                getData(context, keyInt = VIDA, type = 2).toString().toInt()
+            }.toFloat()
+            val current = if (total > 0 && maxVida > 0) vida.toFloat() / maxVida else 0f
+            Log.d("Prueba", "${current} $vida, $maxVida")
             LinearProgressIndicator(
-                progress = vida / runBlocking {
-                    getData(context, keyInt = VIDA, type = 2).toString().toInt()
-                }.toFloat(),
+                progress = current,
                 color = buttonCancelColor,
                 trackColor = buttonOKColor,
                 modifier = Modifier
@@ -470,7 +476,7 @@ fun FightItemCharacter(vida: Int) {
 }
 
 @Composable
-fun FightItemEnemy(data: npc) {
+fun FightItemEnemy(data: npc, maxvidanpc: Int) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -505,8 +511,10 @@ fun FightItemEnemy(data: npc) {
                 fontSize = 16.sp,
                 modifier = Modifier.padding(top = 12.dp)
             )
+            var current =
+                if (data.vida > 0 && maxvidanpc > 0) data.vida.toFloat() / maxvidanpc else 0f
             LinearProgressIndicator(
-                progress = data.vida.toFloat(),
+                progress = current,
                 color = buttonCancelColor,
                 trackColor = buttonOKColor,
                 modifier = Modifier
