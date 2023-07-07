@@ -62,6 +62,13 @@ object PreferencesKeys {
     val NOMBRE_4 = stringPreferencesKey("nombre_4")
     val CANTIDAD_4 = intPreferencesKey("cantidad_4")
     val OPEN_GAME = booleanPreferencesKey("open_game")
+
+    val RANKING_USERNAME = stringPreferencesKey("ranking_username")
+    val RANKING_NIVEL = intPreferencesKey("ranking_nivel")
+    val RANKING_ATAQUE = intPreferencesKey("ranking_ataque")
+    val RANKING_DEFENSA = intPreferencesKey("ranking_defensa")
+    val RANKING_VICTORIAS = stringPreferencesKey("ranking_victorias")
+    val RANKING_DERROTAS = stringPreferencesKey("ranking_derrotas")
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "IKG_AUTH")
