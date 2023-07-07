@@ -1,11 +1,8 @@
 package com.falconteam.infoking.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -30,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.buttonCancelColor
@@ -48,67 +46,75 @@ fun Screen() {
     }
 
     if (showDialog) {
-        MessagePopUp(onDismiss = { showDialog = false })
+        MessagePopUp(onDismiss = { showDialog = false }, {}, true, false, "", "")
     }
 }
 
 
 @Composable
-fun MessagePopUp(onDismiss: () -> Unit) {
-    val areTwoButtons = true
+fun MessagePopUp(
+    onDismiss: () -> Unit,
+    onBack: () -> Unit,
+    closeAcceptPopUp: Boolean,
+    closePopUp: Boolean,
+    titleText: String,
+    descriptionText: String
+) {
     val okButtonText = "ACEPTAR"
     val cancelButtonText = "RECHAZAR"
     val closeButtonText = "CERRAR"
-    val titleText = "< POP-UP TITLE >"
-    val descriptionText = "< POP-UP DESCRIPTION >"
 
     InfoKingTheme {
         Dialog(
-            onDismissRequest = { onDismiss() }
+            onDismissRequest = {},
         ) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(28.dp),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(24.dp),
+                color = primaryColorLight
             ) {
-                Column(
-                    modifier = Modifier
-                        .background(primaryColorLight),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp, bottom = 4.dp),
-                        text = titleText,
-                        textAlign = TextAlign.Center,
-                        style = Typography.displayMedium,
-                        fontSize = TextResponsiveSize(size = 16.sp),
-                        fontWeight = FontWeight.Bold,
-                        color = secondaryAquaColor
-                    )
-
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = descriptionText,
-                        textAlign = TextAlign.Center,
-                        style = Typography.displayMedium,
-                        fontSize = TextResponsiveSize(size = 16.sp),
-                        fontWeight = FontWeight.Bold,
-                        color = secondaryAquaColor
-                    )
-
+                if (closeAcceptPopUp) {
                     Column(
-                        verticalArrangement = Arrangement.SpaceAround,
-                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 4.dp, bottom = 8.dp)
-                            .padding(horizontal = 8.dp, vertical = 16.dp)
+                            .background(primaryColorLight),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        if (areTwoButtons) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp, bottom = 4.dp),
+                            text = titleText,
+                            textAlign = TextAlign.Center,
+                            style = Typography.displayMedium,
+                            fontSize = TextResponsiveSize(size = 16.sp),
+                            fontWeight = FontWeight.Bold,
+                            color = secondaryAquaColor
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp),
+                            text = descriptionText,
+                            textAlign = TextAlign.Center,
+                            style = Typography.displayMedium,
+                            fontSize = TextResponsiveSize(size = 16.sp),
+                            fontWeight = FontWeight.Bold,
+                            color = secondaryAquaColor,
+                            lineHeight = TextResponsiveSize(20.sp)
+                        )
+
+                        Column(
+                            verticalArrangement = Arrangement.SpaceAround,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp, bottom = 8.dp)
+                                .padding(horizontal = 8.dp, vertical = 16.dp)
+                        ) {
                             Button(
                                 modifier = Modifier
                                     .heightIn(min = 36.dp)
@@ -137,7 +143,7 @@ fun MessagePopUp(onDismiss: () -> Unit) {
                                     .padding(horizontal = 16.dp),
                                 colors = ButtonDefaults.buttonColors(buttonOKColor),
                                 onClick = {
-                                    // modificar según acción
+                                    onBack()
                                 }
                             ) {
                                 Text(
@@ -147,7 +153,35 @@ fun MessagePopUp(onDismiss: () -> Unit) {
                                     fontSize = TextResponsiveSize(size = 20.sp)
                                 )
                             }
-                        } else {
+                        }
+                    }
+                } else if (closePopUp) {
+                    Column(
+                        modifier = Modifier
+                            .background(primaryColorLight),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp),
+                            text = titleText,
+                            textAlign = TextAlign.Center,
+                            style = Typography.displayMedium,
+                            fontSize = TextResponsiveSize(size = 18.sp),
+                            fontWeight = FontWeight.Bold,
+                            color = secondaryAquaColor
+                        )
+
+                        Column(
+                            verticalArrangement = Arrangement.SpaceAround,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                                .padding(horizontal = 8.dp, vertical = 16.dp)
+                        ) {
                             Button(
                                 modifier = Modifier
                                     .heightIn(min = 32.dp)
@@ -156,6 +190,7 @@ fun MessagePopUp(onDismiss: () -> Unit) {
                                 colors = ButtonDefaults.buttonColors(buttonCancelColor),
                                 onClick = {
                                     onDismiss()
+                                    onBack()
                                 }
                             ) {
                                 Text(
@@ -176,12 +211,12 @@ fun MessagePopUp(onDismiss: () -> Unit) {
 @Composable
 @Preview
 fun MessagePopUpPreview() {
-    Screen()
-    //MessagePopUp(onDismiss = {})
+    //Screen()
+    MessagePopUp(onDismiss = {}, {}, false, true, "¡HAS GANADO!", "Esta es una descripción del pop-up. Es un poco larga para ver qué pasa. Esta es una descripción del pop-up. Es un poco larga para ver qué pasa")
 }
 
 @Composable
-fun resize(size: Dp): Dp{
+fun resize(size: Dp): Dp {
     val configuration = LocalConfiguration.current
     val scaleFactor = if (configuration.smallestScreenWidthDp >= 600) 1.5f else 0.1f
     return (size * scaleFactor)
