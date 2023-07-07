@@ -1,7 +1,9 @@
 package com.falconteam.infoking.ui.navigation.graphs
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,7 @@ import com.falconteam.infoking.ui.navigation.admin.graphs.adminHomeNavGraph
 import com.falconteam.infoking.ui.navigation.user.graphs.homeNavGraph
 import com.falconteam.infoking.ui.theme.primaryColor
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

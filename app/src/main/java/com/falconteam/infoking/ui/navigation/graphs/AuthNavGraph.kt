@@ -16,6 +16,7 @@ import androidx.navigation.navigation
 import com.falconteam.infoking.data.models.SignUpFormOne
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.openPlayStore
 import com.falconteam.infoking.ui.components.setLastTime
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.AuthScreen
 import com.falconteam.infoking.ui.navigation.user.screens.authentication.ForgotPassScreen
@@ -37,17 +38,37 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         composable(route = AuthScreen.Auth.route) {
             val viewModel: LoginViewModel = viewModel()
             val context = LocalContext.current
+            runBlocking { viewModel.getVersion() }
             var id by remember { mutableStateOf<Any?>(null) }
 
             var token by remember { mutableStateOf<Any?>(null) }
             var role by remember { mutableStateOf<Any?>(null) }
             var activation by remember { mutableStateOf(false) }
 
+
             runBlocking {
                 id = getData(context = context, keyString = PreferencesKeys.ID) as String
                 if (!activation) {
                     token = getData(context = context, keyString = PreferencesKeys.TOKEN)
                     role = getData(context = context, keyString = PreferencesKeys.ROLE)
+                }
+            }
+            if (viewModel.version.value != "") {
+                Log.d(
+                    "Prueba",
+                    "Prueba ${
+                        context.packageManager.getPackageInfo(
+                            context.packageName,
+                            0
+                        ).versionName
+                    }, ${viewModel.version.value}"
+                )
+                if (context.packageManager.getPackageInfo(
+                        context.packageName,
+                        0
+                    ).versionName != viewModel.version.value
+                ) {
+                    openPlayStore(context)
                 }
             }
             if (id != null && id != "") {
@@ -61,6 +82,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                 "${activation} $role $token ${viewModel.finished.value}"
             )
             if (token == null || role == null && !viewModel.finished.value) {
+
                 LoadingScreen()
 
             } else if (!activation) {
