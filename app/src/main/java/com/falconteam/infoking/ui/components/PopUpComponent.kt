@@ -196,6 +196,7 @@ fun MessagePopUp(
                                 Text(
                                     modifier = Modifier,
                                     text = closeButtonText,
+                                    color = Color.White,
                                     style = Typography.headlineSmall,
                                     fontSize = TextResponsiveSize(size = 20.sp)
                                 )

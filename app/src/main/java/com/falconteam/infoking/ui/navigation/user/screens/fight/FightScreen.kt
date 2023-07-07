@@ -3,7 +3,6 @@ package com.falconteam.infoking.ui.navigation.user.screens.fight
 import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -129,25 +128,26 @@ fun FightScreen(
                     } else {
                         ataque = 0f
                     }
-                }
-                val totalvida = ((runBlocking {
-                    getData(current, keyInt = VIDA, type = 2).toString().toInt()
-                } + data.vida).toFloat()) * 6f
-                Log.d("Prueba", "totalvida: $ataque")
-                progress -= (ataque / totalvida)
+                    val totalvida = ((runBlocking {
+                        getData(current, keyInt = VIDA, type = 2).toString().toInt()
+                    } + data.vida).toFloat()) * 6f
+                    Log.d("Prueba", "totalvida: $ataque")
+                    progress -= (ataque / totalvida)
 
-                if (progress >= 1f || data.vida < 0 || vida < 0 || progress < 0f) {
-                    finished = true
-                    if (activated && progress >= 1f) {
-                        showDialog = true
-                        win = true
-                    } else if (activated && progress <= 0f) {
-                        showDialog = true
-                        win = false
+                    if (progress >= 1f || data.vida < 0 || vida < 0 || progress < 0f) {
+                        finished = true
+                        if (activated && progress >= 1f) {
+                            showDialog = true
+                            win = true
+                        } else if (activated && progress <= 0f) {
+                            showDialog = true
+                            win = false
+                        }
+                        activated = false
+
                     }
-                    activated = false
-
                 }
+
                 delay(400)
             }
         }
@@ -404,26 +404,29 @@ fun FightScreen(
                 )
                 enviado = true
             } else if (finished) {
-                if (showDialog && win) {
-                    Log.d("uwu", win.toString())
-                    MessagePopUp(
-                        { showDialog = false },
-                        { onBack() },
-                        closeAcceptPopUp = false,
-                        closePopUp = true,
-                        titleText = "¡HAS GANADO!",
-                        ""
-                    )
-                } else if (!win) {
-                    Log.d("uwu", win.toString())
-                    MessagePopUp(
-                        { showDialog = false },
-                        { onBack() },
-                        closeAcceptPopUp = false,
-                        closePopUp = true,
-                        titleText = "¡HAS PERDIDO!",
-                        ""
-                    )
+                Log.d("Prueba", "FightScreen: $win, $showDialog")
+                if (showDialog) {
+                    if (win) {
+                        Log.d("uwu", win.toString())
+                        MessagePopUp(
+                            { showDialog = false },
+                            { onBack() },
+                            closeAcceptPopUp = false,
+                            closePopUp = true,
+                            titleText = "¡HAS GANADO!",
+                            ""
+                        )
+                    } else if (!win) {
+                        Log.d("uwu", win.toString())
+                        MessagePopUp(
+                            { showDialog = false },
+                            { onBack() },
+                            closeAcceptPopUp = false,
+                            closePopUp = true,
+                            titleText = "¡HAS PERDIDO!",
+                            ""
+                        )
+                    }
                 }
             }
         }
