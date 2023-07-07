@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.falconteam.infoking.ui.navigation.graphs.BattleNavGraph
 
 sealed class UserBottomBar (
     val route: String,

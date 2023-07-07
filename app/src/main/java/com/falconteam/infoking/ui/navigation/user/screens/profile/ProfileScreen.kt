@@ -59,7 +59,6 @@ import com.falconteam.infoking.ui.components.PopUpTwoButtons
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
-import com.falconteam.infoking.ui.components.PreferencesKeys.ENERGIA
 import com.falconteam.infoking.ui.components.PreferencesKeys.EXP
 import com.falconteam.infoking.ui.components.PreferencesKeys.IMAGE_3D
 import com.falconteam.infoking.ui.components.PreferencesKeys.NIVEL
@@ -77,6 +76,7 @@ import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.viewmodels.RankingViewModel
 import kotlinx.coroutines.runBlocking
+import kotlin.math.log
 
 @Composable
 fun ProfileScreen(
@@ -103,7 +103,7 @@ fun ProfileScreen(
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 40.sp)
             )
-            Log.d("Prueba", "${viewModel.dataRankingProfile[0]}")
+            //Log.d("Prueba", "${viewModel.dataRankingProfile[0]}")
             if (viewModel.dataRankingProfile[0] === null) viewModel.getPosition(context)
             //if (viewModel.finished_profile.value && viewModel.dataRankingProfile.values != null) {
             var logout by remember {
@@ -237,7 +237,6 @@ fun ProfileScreen(
                         Button(
                             onClick = {
                                 showDialog = true
-                                //logout = true
                             },
                             colors = ButtonDefaults.buttonColors(secondaryAquaColor),
                             modifier = Modifier
@@ -276,8 +275,7 @@ fun ProfileScreen(
 fun ProfileSection() {
     val context = LocalContext.current
     Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+        modifier = Modifier.clip(RoundedCornerShape(16.dp))
     ) {
         Column(
             modifier = Modifier
@@ -293,8 +291,7 @@ fun ProfileSection() {
                     "Nivel $nivel"
                 }),
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier
-                    .padding(bottom = 16.dp),
+                modifier = Modifier.padding(bottom = 16.dp),
                 color = Color.White,
                 fontSize = TextResponsiveSize(size = 18.sp)
             )
@@ -318,21 +315,18 @@ fun ProfileSection() {
             Text(
                 text = runBlocking {
                     getData(
-                        context,
-                        keyString = USERNAME
+                        context, keyString = USERNAME
                     ).toString()
                 },
                 style = MaterialTheme.typography.headlineSmall,
                 fontSize = TextResponsiveSize(size = 20.sp),
-                modifier = Modifier
-                    .padding(top = 12.dp, bottom = 16.dp),
+                modifier = Modifier.padding(top = 12.dp, bottom = 16.dp),
                 color = Color.White,
             )
-
             LinearProgressIndicator(
                 progress = (runBlocking {
-                    val exp = getData(context, keyInt = EXP, type = 2) as? Float ?: 0f
-                    val nivel = getData(context, keyInt = NIVEL, type = 2) as? Float ?: 1f
+                    val exp = getData(context, keyInt = EXP, type = 2).toString().toFloat()
+                    val nivel = getData(context, keyInt = NIVEL, type = 2).toString().toFloat()
                     exp / (50f * nivel)
                 }),
                 color = buttonCancelColor,
@@ -346,8 +340,7 @@ fun ProfileSection() {
             )
 
             Text(
-                modifier = Modifier
-                    .padding(bottom = 4.dp),
+                modifier = Modifier.padding(bottom = 4.dp),
                 text = (runBlocking {
                     val exp = getData(context, keyInt = EXP, type = 2) as? Int ?: 0
                     val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
@@ -387,8 +380,7 @@ fun StatsSection(context: Context) {
         }
     }
     Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+        modifier = Modifier.clip(RoundedCornerShape(16.dp))
     ) {
         Column(
             modifier = Modifier
@@ -403,8 +395,7 @@ fun StatsSection(context: Context) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                 ) {
                     HealthStatCard()
                 }
@@ -420,8 +411,7 @@ fun StatsSection(context: Context) {
                     )
                 }
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                 ) {
                     EnergyStatCard()
                 }
@@ -433,8 +423,7 @@ fun StatsSection(context: Context) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                 ) {
                     AttackStatCard()
                 }
@@ -449,8 +438,7 @@ fun StatsSection(context: Context) {
                     )
                 }
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                 ) {
                     DefenseStatCard()
                 }
@@ -464,6 +452,28 @@ fun StatsSection(context: Context) {
 @Composable
 fun HealthStatCard() {
     val context = LocalContext.current
+    val vida = remember {
+        mutableStateOf(runBlocking {
+            getData(
+                context, keyInt = VIDA, type = 2
+            )
+        }.toString().toInt())
+    }
+    val nivel = remember {
+        mutableStateOf(runBlocking {
+            getData(
+                context, keyInt = NIVEL, type = 2
+            )
+        }.toString().toInt())
+    }
+
+    LaunchedEffect(Unit) {
+        context.dataStore.data.collect { preferences ->
+            val value = preferences[PreferencesKeys.VIDA] ?: -1
+            vida.value = value
+        }
+    }
+
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
@@ -490,11 +500,7 @@ fun HealthStatCard() {
             }
             Column {
                 Text(
-                    text = (runBlocking {
-                        val vida = getData(context, keyInt = VIDA, type = 2) as? Int ?: 1
-                        val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
-                        "Vida:\n$vida/${100 * nivel}"
-                    }),
+                    text = "Vida:\n${vida.value}/${100 * nivel.value}",
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = TextResponsiveSize(size = 20.sp),
@@ -509,9 +515,7 @@ fun HealthStatCard() {
 fun DefenseStatCard() {
     val context = LocalContext.current
     Card(
-        colors = CardDefaults.cardColors(Color.Transparent),
-        modifier = Modifier
-            .padding(16.dp)
+        colors = CardDefaults.cardColors(Color.Transparent), modifier = Modifier.padding(16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -552,9 +556,7 @@ fun DefenseStatCard() {
 fun AttackStatCard() {
     val context = LocalContext.current
     Card(
-        colors = CardDefaults.cardColors(Color.Transparent),
-        modifier = Modifier
-            .padding(16.dp)
+        colors = CardDefaults.cardColors(Color.Transparent), modifier = Modifier.padding(16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -593,10 +595,29 @@ fun AttackStatCard() {
 @Composable
 fun EnergyStatCard() {
     val context = LocalContext.current
+
+    val energia = remember {
+        mutableStateOf(runBlocking {
+            getData(
+                context, keyInt = PreferencesKeys.ENERGIA, type = 2
+            )
+        }.toString().toInt())
+    }
+    val nivel = remember {
+        mutableStateOf(runBlocking {
+            getData(
+                context, keyInt = NIVEL, type = 2
+            )
+        }.toString().toInt())
+    }
+    LaunchedEffect(Unit) {
+        context.dataStore.data.collect { preferences ->
+            val value = preferences[PreferencesKeys.ENERGIA] ?: -1
+            energia.value = value
+        }
+    }
     Card(
-        colors = CardDefaults.cardColors(Color.Transparent),
-        modifier = Modifier
-            .padding(16.dp)
+        colors = CardDefaults.cardColors(Color.Transparent), modifier = Modifier.padding(16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -619,11 +640,7 @@ fun EnergyStatCard() {
 
             Column {
                 Text(
-                    text = (runBlocking {
-                        val energia = getData(context, keyInt = ENERGIA, type = 2) as? Int ?: 1
-                        val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
-                        "Energía:\n$energia/${20 * nivel}"
-                    }),
+                    text = "Energía:\n${energia.value}/${20 * nivel.value}",
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = TextResponsiveSize(size = 20.sp),
