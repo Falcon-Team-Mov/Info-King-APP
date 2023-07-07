@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.falconteam.infoking.data.models.SignUpFormOne
+import com.falconteam.infoking.ui.components.PopUpOneButtonDescription
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.getData
 import com.falconteam.infoking.ui.components.openPlayStore
@@ -30,8 +31,7 @@ import kotlinx.coroutines.runBlocking
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(
-        route = Graph.AUTH,
-        startDestination = AuthScreen.Auth.route
+        route = Graph.AUTH, startDestination = AuthScreen.Auth.route
     ) {
 
         // Auth
@@ -44,7 +44,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             var token by remember { mutableStateOf<Any?>(null) }
             var role by remember { mutableStateOf<Any?>(null) }
             var activation by remember { mutableStateOf(false) }
-
+            var showDialog by remember { mutableStateOf(false) }
 
             runBlocking {
                 id = getData(context = context, keyString = PreferencesKeys.ID) as String
@@ -53,60 +53,63 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     role = getData(context = context, keyString = PreferencesKeys.ROLE)
                 }
             }
-            if (viewModel.version.value != "") {
+            if (viewModel.version.value != "" && viewModel.version.value != null) {
                 Log.d(
-                    "Prueba",
-                    "Prueba ${
+                    "Prueba", "Prueba ${
                         context.packageManager.getPackageInfo(
-                            context.packageName,
-                            0
+                            context.packageName, 0
                         ).versionName
                     }, ${viewModel.version.value}"
                 )
                 if (context.packageManager.getPackageInfo(
-                        context.packageName,
-                        0
+                        context.packageName, 0
                     ).versionName != viewModel.version.value
                 ) {
-                    openPlayStore(context)
+                    showDialog = true
+                    PopUpOneButtonDescription(
+                        onDismiss = { showDialog = false },
+                        onBack = { openPlayStore(context) },
+                        titleText = "NUEVA ACTUALIZACIÓN DISPONIBLE",
+                        descriptionText = "Necesitamos que actualices a la versión más reciente de la app para poder disfrutar de todas las nuevas funcionalidades y/o correciones implementadas.\n\nSi tienes alguna duda, contáctanos a support@infoking.tech\n\n¡Gracias por tu comprensión!",
+                        buttonText = "ACTUALIZAR"
+                    )
                 }
-            }
-            if (id != null && id != "") {
-                viewModel.getUserData(
-                    context = context,
-                    id = id as String
+            } else if (!showDialog) {
+                if (id != null && id != "") {
+                    viewModel.getUserData(
+                        context = context, id = id as String
+                    )
+                } else viewModel.finished.value = true
+                Log.d(
+                    "Prueba", "${activation} $role $token ${viewModel.finished.value}"
                 )
-            } else viewModel.finished.value = true
-            Log.d(
-                "Prueba",
-                "${activation} $role $token ${viewModel.finished.value}"
-            )
-            if (token == null || role == null && !viewModel.finished.value) {
+                if (token == null || role == null && !viewModel.finished.value) {
 
-                LoadingScreen()
+                    LoadingScreen()
 
-            } else if (!activation) {
-                if (token == null || token == "" || role == null || role == "" && viewModel.finished.value) {
-                    AuthScreen(onClick = {
-                        navController.navigate(AuthScreen.Login.route)
-                    }) {
-                        navController.navigate(AuthScreen.SignUp.route)
-                    }
-                } else if (viewModel.finished.value) {
-                    setLastTime(context, true)
-                    if (role == "PLAYER_ROLE") {
-                        Log.d("Prueba", "Entro aca")
-                        navController.popBackStack()
-                        navController.navigate(Graph.BATTLE)
-                        viewModel.finished.value = false
-                        viewModel.startcount.value = true
-                        activation = true
-                    } else if (role == "ADMIN_ROLE") {
-                        navController.popBackStack()
-                        navController.navigate(Graph.ADMIN_HOME)
-                        viewModel.finished.value = false
-                        viewModel.startcount.value = true
-                        activation = true
+                } else if (!activation) {
+                    if (token == null || token == "" || role == null || role == "" && viewModel.finished.value) {
+                        AuthScreen(onClick = {
+                            navController.navigate(AuthScreen.Login.route)
+                        }) {
+                            navController.navigate(AuthScreen.SignUp.route)
+                        }
+                    } else if (viewModel.finished.value) {
+                        setLastTime(context, true)
+                        if (role == "PLAYER_ROLE") {
+                            Log.d("Prueba", "Entro aca")
+                            navController.popBackStack()
+                            navController.navigate(Graph.BATTLE)
+                            viewModel.finished.value = false
+                            viewModel.startcount.value = true
+                            activation = true
+                        } else if (role == "ADMIN_ROLE") {
+                            navController.popBackStack()
+                            navController.navigate(Graph.ADMIN_HOME)
+                            viewModel.finished.value = false
+                            viewModel.startcount.value = true
+                            activation = true
+                        }
                     }
                 }
             }
@@ -115,22 +118,25 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         // Login
         composable(route = AuthScreen.Login.route) {
 
-            LoginScreen(
-                onClick = {
-                    if (it.user.role == "PLAYER_ROLE") {
-                        navController.popBackStack()
-                        navController.navigate(Graph.BATTLE)
-                        { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
-                    } else if (it.user.role == "ADMIN_ROLE") {
-                        navController.popBackStack()
-                        navController.navigate(Graph.ADMIN_HOME)
-                        { popUpTo(AuthScreen.Auth.route) { inclusive = true } }
+            LoginScreen(onClick = {
+                if (it.user.role == "PLAYER_ROLE") {
+                    navController.popBackStack()
+                    navController.navigate(Graph.BATTLE) {
+                        popUpTo(AuthScreen.Auth.route) {
+                            inclusive = true
+                        }
                     }
-                },
-                ForgotPassword = {
-                    navController.navigate(AuthScreen.ForgotPass.route)
+                } else if (it.user.role == "ADMIN_ROLE") {
+                    navController.popBackStack()
+                    navController.navigate(Graph.ADMIN_HOME) {
+                        popUpTo(AuthScreen.Auth.route) {
+                            inclusive = true
+                        }
+                    }
                 }
-            )
+            }, ForgotPassword = {
+                navController.navigate(AuthScreen.ForgotPass.route)
+            })
         }
 
         // Forgot Password
@@ -169,19 +175,16 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             val password = backStackEntry.arguments?.getString("password") ?: ""
             val infoRegister = SignUpFormOne(username, email, password, "")
 
-            SignUpCharacterScreen(
-                onSignUp = {},
-                onBack = { msg ->
-                    var returnValue: String? = null
-                    msg?.let {
-                        if (it == "Cuenta creada exitosamente, verifica tu correo electronico") {
-                            navController.popBackStack(AuthScreen.Auth.route, false)
-                        }
-                        returnValue = it
+            SignUpCharacterScreen(onSignUp = {}, onBack = { msg ->
+                var returnValue: String? = null
+                msg?.let {
+                    if (it == "Cuenta creada exitosamente, verifica tu correo electronico") {
+                        navController.popBackStack(AuthScreen.Auth.route, false)
                     }
-                    returnValue ?: ""
-                },
-                infoRegister = infoRegister
+                    returnValue = it
+                }
+                returnValue ?: ""
+            }, infoRegister = infoRegister
             )
 
         }
