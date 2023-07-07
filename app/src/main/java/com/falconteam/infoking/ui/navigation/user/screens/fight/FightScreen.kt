@@ -43,6 +43,7 @@ import com.falconteam.infoking.data.models.StatsUpdate
 import com.falconteam.infoking.data.models.npc
 import com.falconteam.infoking.data.network.dto.ranking.RankingRequest
 import com.falconteam.infoking.ui.components.Background
+import com.falconteam.infoking.ui.components.MessagePopUp
 import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.CREATED_AT
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
@@ -100,6 +101,8 @@ fun FightScreen(
         val current = LocalContext.current
         val last_conection = getCurrentDateTime()
         var enviado by remember { mutableStateOf(false) }
+        var showDialog by remember { mutableStateOf(false) }
+        var win by remember { mutableStateOf(false) }
 
         var vida by remember {
             mutableStateOf(runBlocking {
@@ -135,15 +138,13 @@ fun FightScreen(
 
                 if (progress >= 1f || data.vida < 0 || vida < 0 || progress < 0f) {
                     finished = true
-                    if (activated && progress >= 1f) Toast.makeText(
-                        current,
-                        "GANASTE",
-                        Toast.LENGTH_SHORT
-                    ).show() else if (activated && progress <= 0f) Toast.makeText(
-                        current,
-                        "PERDISTE",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (activated && progress >= 1f) {
+                        showDialog = true
+                        win = true
+                    } else if (activated && progress <= 0f) {
+                        showDialog = true
+                        win = false
+                    }
                     activated = false
 
                 }
@@ -247,17 +248,14 @@ fun FightScreen(
                             Log.d("Prueba", "Enemy: $progress")
                             if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
                                 finished = true
-                                if (activated && progress >= 1f) Toast.makeText(
-                                    current,
-                                    "GANASTE",
-                                    Toast.LENGTH_SHORT
-                                ).show() else if (activated && progress <= 0f) Toast.makeText(
-                                    current,
-                                    "PERDISTE",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                if (activated && progress >= 1f) {
+                                    showDialog = true
+                                    win = true
+                                } else if (activated && progress <= 0f) {
+                                    showDialog = true
+                                    win = false
+                                }
                                 activated = false
-
                             }
                         }
                     },
@@ -405,8 +403,28 @@ fun FightScreen(
                     )
                 )
                 enviado = true
-
-                onBack()
+            } else if (finished) {
+                if (showDialog && win) {
+                    Log.d("uwu", win.toString())
+                    MessagePopUp(
+                        { showDialog = false },
+                        { onBack() },
+                        closeAcceptPopUp = false,
+                        closePopUp = true,
+                        titleText = "¡HAS GANADO!",
+                        ""
+                    )
+                } else if (!win) {
+                    Log.d("uwu", win.toString())
+                    MessagePopUp(
+                        { showDialog = false },
+                        { onBack() },
+                        closeAcceptPopUp = false,
+                        closePopUp = true,
+                        titleText = "¡HAS PERDIDO!",
+                        ""
+                    )
+                }
             }
         }
     }
