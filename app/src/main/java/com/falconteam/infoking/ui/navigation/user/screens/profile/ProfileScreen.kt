@@ -1,5 +1,8 @@
 package com.falconteam.infoking.ui.navigation.user.screens.profile
 
+import android.content.Context
+import android.opengl.Visibility
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,15 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.ElectricBolt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.Button
@@ -33,6 +32,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,16 +53,20 @@ import coil.compose.AsyncImage
 import com.falconteam.infoking.R
 import com.falconteam.infoking.ui.components.ClearData
 import com.falconteam.infoking.ui.components.ElementResponsiveSize
+import com.falconteam.infoking.ui.components.FormatTime
+import com.falconteam.infoking.ui.components.HealtTimer
+import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
+import com.falconteam.infoking.ui.components.PreferencesKeys.ENERGIA
 import com.falconteam.infoking.ui.components.PreferencesKeys.EXP
 import com.falconteam.infoking.ui.components.PreferencesKeys.IMAGE_3D
 import com.falconteam.infoking.ui.components.PreferencesKeys.NIVEL
 import com.falconteam.infoking.ui.components.PreferencesKeys.USERNAME
 import com.falconteam.infoking.ui.components.PreferencesKeys.VIDA
 import com.falconteam.infoking.ui.components.TextResponsiveSize
+import com.falconteam.infoking.ui.components.dataStore
 import com.falconteam.infoking.ui.components.getData
-import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
 import com.falconteam.infoking.ui.theme.buttonCancelColor
@@ -87,7 +91,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(primaryColor),
-                //.padding(bottom = 64.dp),
+            //.padding(bottom = 64.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -97,159 +101,160 @@ fun ProfileScreen(
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 40.sp)
             )
-            viewModel.getPosition(context)
+            Log.d("Prueba", "${viewModel.dataRankingProfile[0]}")
+            if (viewModel.dataRankingProfile[0] === null) viewModel.getPosition(context)
             //if (viewModel.finished_profile.value && viewModel.dataRankingProfile.values != null) {
-                var logout by remember {
-                    mutableStateOf(false)
-                }
+            var logout by remember {
+                mutableStateOf(false)
+            }
 
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(primaryColor)
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 64.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(primaryColor)
-                        .verticalScroll(rememberScrollState())
-                        .padding(bottom = 64.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(horizontal = 36.dp)
+
                 ) {
+                    // Player's info
+                    ProfileSection()
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Stats
+                    StatsSection(context)
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Bonus
                     Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(horizontal = 36.dp)
-
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        verticalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        // Player's info
-                        ProfileSection()
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        // Stats
-                        StatsSection()
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        // Bonus
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 16.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            Row {
-                                Column {
-                                    Text(
-                                        text = "Total de victorias:",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
-
-                                Column {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = "${viewModel.dataRankingProfile[0]?.victorias}",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        textAlign = TextAlign.End,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
-                            }
-                            Row {
-                                Column {
-                                    Text(
-                                        text = "Total de derrotas:",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
-
-                                Column {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = "${viewModel.dataRankingProfile[0]?.derrotas}",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        textAlign = TextAlign.End,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Total de victorias:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
                             }
 
-                            Row {
-                                Column {
-                                    Text(
-                                        text = "Puntos totales:",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
-
-                                Column {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = "${viewModel.dataRankingProfile[0]?.score}",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        textAlign = TextAlign.End,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
-                            }
-                            Row {
-                                Column {
-                                    Text(
-                                        text = "Posicion del ranking:",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
-
-
-                                Column {
-                                    Text(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        text = "${viewModel.dataRankingProfile[0]?.position}",
-                                        color = buttonOKColor,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        textAlign = TextAlign.End,
-                                        fontSize = TextResponsiveSize(size = 20.sp)
-                                    )
-                                }
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${viewModel.dataRankingProfile[0]?.victorias}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
                             }
                         }
-                        Column(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Button(
-                                onClick = {
-                                    logout = true
-                                },
-                                colors = ButtonDefaults.buttonColors(secondaryAquaColor),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 24.dp)
-                            ) {
+                        Row {
+                            Column {
                                 Text(
-                                    text = "CERRAR SESIÓN",
-                                    style = Typography.headlineSmall,
-                                    color = Color.White,
-                                    fontSize = TextResponsiveSize(size = 24.sp)
+                                    text = "Total de derrotas:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${viewModel.dataRankingProfile[0]?.derrotas}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+                        }
+
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Puntos totales:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${viewModel.dataRankingProfile[0]?.score}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+                        }
+                        Row {
+                            Column {
+                                Text(
+                                    text = "Posicion del ranking:",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
+                                )
+                            }
+
+
+                            Column {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    text = "${viewModel.dataRankingProfile[0]?.position}",
+                                    color = buttonOKColor,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    fontSize = TextResponsiveSize(size = 20.sp)
                                 )
                             }
                         }
                     }
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = {
+                                logout = true
+                            },
+                            colors = ButtonDefaults.buttonColors(secondaryAquaColor),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp)
+                        ) {
+                            Text(
+                                text = "CERRAR SESIÓN",
+                                style = Typography.headlineSmall,
+                                color = Color.White,
+                                fontSize = TextResponsiveSize(size = 24.sp)
+                            )
+                        }
+                    }
                 }
-                if (logout) {
-                    ClearData(context = context)
-                    onLogout()
-                }
+            }
+            if (logout) {
+                ClearData(context = context)
+                onLogout()
+            }
 //            } else {
 //                LoadingScreen()
 //            }
@@ -284,13 +289,15 @@ fun ProfileSection() {
                 fontSize = TextResponsiveSize(size = 18.sp)
             )
 
+            val img = runBlocking {
+                getData(
+                    context = context,
+                    keyString = IMAGE_3D,
+                )
+            } as? String ?: ""
+
             AsyncImage(
-                model = runBlocking {
-                    getData(
-                        context = context,
-                        keyString = IMAGE_3D,
-                    )
-                },
+                model = img,
                 contentDescription = "Foto de perfil",
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
@@ -342,7 +349,13 @@ fun ProfileSection() {
             )
 
             Text(
-                text = "50 EXP necesario para subir de nivel",
+                text = "${
+                    (runBlocking {
+                        val exp = getData(context, keyInt = EXP, type = 2) as? Int ?: 0
+                        val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
+                        (50 * nivel) - exp
+                    })
+                } EXP necesario para subir de nivel",
                 style = MaterialTheme.typography.labelMedium,
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 20.sp),
@@ -352,7 +365,17 @@ fun ProfileSection() {
 }
 
 @Composable
-fun StatsSection() {
+fun StatsSection(context: Context) {
+
+    val timepoJuego = remember { mutableStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        context.dataStore.data.collect { preferences ->
+            val value = preferences[PreferencesKeys.TIME_PLAYING] ?: -1
+            timepoJuego.value = value
+            HealtTimer(context, timepoJuego.value)
+        }
+    }
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
@@ -375,11 +398,21 @@ fun StatsSection() {
                 ) {
                     HealthStatCard()
                 }
+                Column {
+                    Text(
+                        modifier = Modifier,
+                        text = FormatTime(totalSeconds = (10 * 60) - timepoJuego.value ?: 0),
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        fontSize = TextResponsiveSize(size = 24.sp)
+                    )
+                }
                 Column(
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    DefenseStatCard()
+                    EnergyStatCard()
                 }
             }
 
@@ -394,11 +427,21 @@ fun StatsSection() {
                 ) {
                     AttackStatCard()
                 }
+                Column {
+                    Text(
+                        modifier = Modifier,
+                        text = "00:00s",
+                        color = Color.Transparent,
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        fontSize = TextResponsiveSize(size = 24.sp)
+                    )
+                }
                 Column(
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    EnergyStatCard()
+                    DefenseStatCard()
                 }
             }
         }
@@ -436,7 +479,8 @@ fun HealthStatCard() {
                 Text(
                     text = (runBlocking {
                         val vida = getData(context, keyInt = VIDA, type = 2) as? Int ?: 1
-                        "Vida:\n$vida"
+                        val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
+                        "Vida:\n$vida/${100 * nivel}"
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
@@ -453,6 +497,7 @@ fun DefenseStatCard() {
     Card(
         colors = CardDefaults.cardColors(Color.Transparent),
         modifier = Modifier
+            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier
@@ -553,8 +598,9 @@ fun EnergyStatCard() {
             Column {
                 Text(
                     text = (runBlocking {
-                        val energia = getData(context, keyInt = DEFENSA, type = 2) as? Int ?: 1
-                        "Energía:\n$energia"
+                        val energia = getData(context, keyInt = ENERGIA, type = 2) as? Int ?: 1
+                        val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
+                        "Energía:\n$energia/${20 * nivel}"
                     }),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,

@@ -6,7 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -371,7 +370,6 @@ fun FightScreen(
                     last_conection,
                     runBlocking {
                         getData(current, keyString = CREATED_AT, type = 1).toString()
-                            .toString()
                     },
                     runBlocking {
                         getData(current, keyInt = TIME_PLAYING, type = 2).toString().toInt()

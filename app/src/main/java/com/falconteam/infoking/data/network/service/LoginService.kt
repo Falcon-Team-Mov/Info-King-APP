@@ -1,11 +1,14 @@
 package com.falconteam.infoking.data.network.service
 
+import com.falconteam.infoking.data.models.ConnectionData
 import com.falconteam.infoking.data.models.LoginDataResponse
+import com.falconteam.infoking.data.models.StatsProfileData
 import com.falconteam.infoking.data.network.dto.login.LoginRequest
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface LoginService {
@@ -17,4 +20,10 @@ interface LoginService {
 
     @GET("api/version")
     suspend fun getVersion(): String
+
+    @PUT("api/users/connection/{id}")
+    suspend fun setConnection(@Path("id") id: String, @Body data: ConnectionData)
+
+    @PUT("api/stats/statsprofile/{id}")
+    suspend fun setStatsProfile(@Path("id") id: String, @Body data: StatsProfileData)
 }

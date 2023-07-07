@@ -1,8 +1,10 @@
 package com.falconteam.infoking.ui.components
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
@@ -41,8 +43,8 @@ object PreferencesKeys {
     val NOMBRE = stringPreferencesKey("nombre")
     val BUFF = doublePreferencesKey("buff")
     val NERF = doublePreferencesKey("nerf")
-    val IMAGE_3D = stringPreferencesKey("image_2d")
-    val IMAGE_2D = stringPreferencesKey("image_3d")
+    val IMAGE_2D = stringPreferencesKey("image_2d")
+    val IMAGE_3D = stringPreferencesKey("image_3d")
 
     val _ID_1 = stringPreferencesKey("_id_1")
     val NOMBRE_1 = stringPreferencesKey("nombre_1")
@@ -59,6 +61,7 @@ object PreferencesKeys {
     val _ID_4 = stringPreferencesKey("_id_4")
     val NOMBRE_4 = stringPreferencesKey("nombre_4")
     val CANTIDAD_4 = intPreferencesKey("cantidad_4")
+    val OPEN_GAME = booleanPreferencesKey("open_game")
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "IKG_AUTH")
@@ -161,10 +164,12 @@ fun setFullDataUser(
         dataInt = data.time_playing ?: -1, IntKey = PreferencesKeys.TIME_PLAYING,
         type = 2
     )
-    setData(context, dataInt = data.stats.vida,  IntKey = PreferencesKeys.VIDA, type = 2)
-    setData(context, dataInt = data.stats.ataque,  IntKey = PreferencesKeys.ATAQUE, type = 2)
-    setData(context, dataInt = data.stats.defensa,  IntKey = PreferencesKeys.DEFENSA, type = 2)
-    setData(context, dataInt = data.stats.energia,  IntKey = PreferencesKeys.ENERGIA, type = 2)
+    Log.d("Tiempos", "setFullDataUser: ${data.time_playing}")
+    setData(context, data.img, PreferencesKeys.IMAGE_3D)
+    setData(context, dataInt = data.stats.vida, IntKey = PreferencesKeys.VIDA, type = 2)
+    setData(context, dataInt = data.stats.ataque, IntKey = PreferencesKeys.ATAQUE, type = 2)
+    setData(context, dataInt = data.stats.defensa, IntKey = PreferencesKeys.DEFENSA, type = 2)
+    setData(context, dataInt = data.stats.energia, IntKey = PreferencesKeys.ENERGIA, type = 2)
 }
 
 fun setData(
@@ -175,6 +180,8 @@ fun setData(
     IntKey: Preferences.Key<Int> = PreferencesKeys.VIDA,
     dataDouble: Double = 0.0,
     DoubleKey: Preferences.Key<Double> = PreferencesKeys.BUFF,
+    dataBoolean: Boolean = false,
+    BooleanKey: Preferences.Key<Boolean> = PreferencesKeys.OPEN_GAME,
     type: Int = 1
 ) = runBlocking {
     context.dataStore.edit { preferences ->
@@ -189,6 +196,9 @@ fun setData(
 
             3 -> {
                 preferences[DoubleKey] = dataDouble
+            }
+            4 -> {
+                preferences[BooleanKey] = dataBoolean
             }
         }
     }
@@ -213,6 +223,7 @@ suspend fun getData(
     keyString: Preferences.Key<String> = PreferencesKeys.TOKEN,
     keyInt: Preferences.Key<Int> = PreferencesKeys.VIDA,
     keyDouble: Preferences.Key<Double> = PreferencesKeys.BUFF,
+    keyBoolean: Preferences.Key<Boolean> = PreferencesKeys.OPEN_GAME,
     type: Int = 1
 ): Any? {
     val preferences = context.dataStore.data.first()
@@ -222,6 +233,7 @@ suspend fun getData(
         2 -> preferences[keyInt] ?: -1
         3 -> preferences[keyDouble] ?: -1.0
         4 -> preferences[keyDouble]?.toFloat()
+        5 -> preferences[keyBoolean]
         else -> null
     }
 }

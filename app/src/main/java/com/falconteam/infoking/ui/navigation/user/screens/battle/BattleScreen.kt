@@ -14,17 +14,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.falconteam.infoking.ui.components.Background
+import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.TextResponsiveSize
+import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.theme.buttonCancelColor
 import com.falconteam.infoking.ui.theme.jostBold
 import com.falconteam.infoking.ui.theme.jostRegular
 import com.falconteam.infoking.ui.theme.jostSemiBold
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.theme.white
+import com.falconteam.infoking.ui.viewmodels.LoginViewModel
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun BattleScreen(
@@ -49,6 +56,8 @@ fun BattleScreen(
 
 @Composable
 fun BattleCard(onClick: () -> Unit) {
+    val context = LocalContext.current
+    val viewLogin: LoginViewModel = viewModel()
     Card(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         modifier = Modifier
@@ -74,7 +83,31 @@ fun BattleCard(onClick: () -> Unit) {
                 modifier = Modifier.padding(top = 25.dp)
             )
             Button(
-                onClick = { onClick() },
+                onClick = {
+                    val energia = runBlocking {
+                        getData(
+                            context,
+                            keyInt = PreferencesKeys.ENERGIA,
+                            type = 2
+                        ).toString().toInt()
+                    }
+                    if (energia > 0) {
+                        runBlocking {
+                            setData(
+                                context,
+                                IntKey = PreferencesKeys.ENERGIA,
+                                dataInt = energia - 1,
+                                type = 2
+                            )
+                        }
+                        viewLogin.setStatsProfile(context)
+                        onClick()
+                    }
+                    else{
+                        //Agregar POPUP que no puede atacar
+                        TODO()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(buttonCancelColor),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,7 +129,5 @@ fun BattleCard(onClick: () -> Unit) {
 @Preview
 @Composable
 fun PreviewBattleScreen() {
-    BattleScreen(
-        onClick = {}
-    )
+    BattleScreen(onClick = {})
 }

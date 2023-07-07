@@ -1,10 +1,19 @@
 package com.falconteam.infoking.data.network.repository
 
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.falconteam.infoking.data.models.ConnectionData
 import com.falconteam.infoking.data.models.LoginDataResponse
+import com.falconteam.infoking.data.models.StatsProfileData
 import com.falconteam.infoking.data.network.ApiResponse
 import com.falconteam.infoking.data.network.dto.login.LoginRequest
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
 import com.falconteam.infoking.data.network.service.LoginService
+import com.falconteam.infoking.ui.components.PreferencesKeys
+import com.falconteam.infoking.ui.components.getCurrentDateTime
+import com.falconteam.infoking.ui.components.getData
+import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -51,4 +60,69 @@ class LoginRepository(private val api: LoginService) {
             return ApiResponse.Error(e)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun updateLastConnection(context: Context) {
+        try {
+            val id = runBlocking {
+                getData(
+                    context,
+                    keyString = PreferencesKeys.ID,
+                    type = 1
+                )
+            }.toString()
+            val date = getData(
+                context,
+                keyInt = PreferencesKeys.TIME_PLAYING,
+                type = 2
+            ).toString().toInt()
+            api.setConnection(id, ConnectionData(getCurrentDateTime(), date))
+        } catch (e: HttpException) {
+            if (e.code() === 400) {
+                return
+            } else if (e.code() === 404) {
+                return
+            }
+            return
+        } catch (e: IOException) {
+            return
+        }
+    }
+
+    suspend fun setStatsProfile(context: Context) {
+        try {
+            val id = runBlocking {
+                getData(
+                    context,
+                    keyString = PreferencesKeys._ID,
+                    type = 1
+                )
+            }.toString()
+            val vida = runBlocking {
+                getData(
+                    context,
+                    keyInt = PreferencesKeys.VIDA,
+                    type = 2
+                )
+            }.toString().toInt()
+            val energia = runBlocking {
+                getData(
+                    context,
+                    keyInt = PreferencesKeys.ENERGIA,
+                    type = 2
+                )
+            }.toString().toInt()
+            api.setStatsProfile(id, StatsProfileData(vida, energia))
+        } catch (e: HttpException) {
+            if (e.code() === 400) {
+                return
+            } else if (e.code() === 404) {
+                return
+            }
+            return
+        } catch (e: IOException) {
+            return
+        }
+    }
+
 }

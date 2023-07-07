@@ -1,6 +1,7 @@
 package com.falconteam.infoking.data.models
 
 import com.google.gson.annotations.SerializedName
+import java.time.format.DateTimeFormatter
 
 data class SessionUserData(
     @SerializedName("_id") val id: String,
@@ -9,7 +10,7 @@ data class SessionUserData(
     @SerializedName("role") val role: String,
     @SerializedName("exp") val exp: Int,
     @SerializedName("nivel") val nivel: Int,
-    @SerializedName("last_conection") val last_conection: String?,
+    @SerializedName("last_conection") val last_conection: String,
     @SerializedName("creacion") val created_at: String,
     @SerializedName("time_playing") val time_playing: Int,
 )
