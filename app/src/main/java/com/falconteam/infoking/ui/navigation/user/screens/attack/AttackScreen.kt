@@ -39,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.npc
 import com.falconteam.infoking.ui.components.Background
+import com.falconteam.infoking.ui.components.PopUpOneButtonDescription
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.components.getData
@@ -175,6 +176,9 @@ fun AttackCard(
     val sizeFont = TextResponsiveSize(16.sp)
     var finish by remember { mutableStateOf(finished) }
     val viewLogin: LoginViewModel = viewModel()
+    var noEnerygyPopUp by remember {
+        mutableStateOf(false)
+    }
     Card(
         colors = CardDefaults.cardColors(primaryColor.copy(alpha = opacity)),
         modifier = Modifier
@@ -246,8 +250,7 @@ fun AttackCard(
                             getData(context = context, keyString = PreferencesKeys.ID)
                         } as String))
                     } else {
-                        //Agregar POPUP de que ya no puede pasar
-                        TODO()
+                        noEnerygyPopUp = true
                     }
                 },
                 colors = ButtonDefaults.buttonColors(secondaryAquaColor),
@@ -275,6 +278,16 @@ fun AttackCard(
 
         }
 
+    }
+
+    if (noEnerygyPopUp) {
+        PopUpOneButtonDescription(
+            onDismiss = { noEnerygyPopUp = false },
+            onBack = {},
+            titleText = "¡NO TIENES ENERGÍA!",
+            descriptionText = "Necesitas tener al menos 1 punto de energía para poder buscar otro enemigo. Intenta de nuevo más tarde.",
+            buttonText = "CERRAR"
+        )
     }
 
 }

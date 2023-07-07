@@ -141,7 +141,7 @@ fun BattleCard(onClick: () -> Unit) {
                         ).toString().toInt()
                     }
                     Log.d("uwu", health.toString())
-                    if (energia > 0 && health > 30) {
+                    if (energia > 0 && health >= 30) {
                         runBlocking {
                             setData(
                                 context,
@@ -153,7 +153,7 @@ fun BattleCard(onClick: () -> Unit) {
                         viewLogin.setStatsProfile(context)
                         onClick()
                     }
-                    else if (health <= 30) {
+                    else if (health < 30) {
                         noHealthPopUp = true
                     } else if (energia <= 0) {
                         noEnerygyPopUp = true

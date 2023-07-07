@@ -3,6 +3,7 @@ package com.falconteam.infoking.ui.navigation.user.screens.fight
 import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -89,6 +90,7 @@ fun FightScreen(
 ) {
     com.falconteam.infoking.ui.theme.InfoKingTheme() {
         Background()
+
         val viewModel: AttackViewModel = viewModel()
 
         var player by remember { mutableStateOf(0f) }
@@ -114,7 +116,7 @@ fun FightScreen(
 
         val maxvidanpc = data.vida
 
-        GlobalScope.launch(Dispatchers.Main) {
+        val job = GlobalScope.launch(Dispatchers.Main) {
             while (!finished) {
 
                 if (activated) {
@@ -149,6 +151,10 @@ fun FightScreen(
                 }
                 delay(200)
             }
+        }
+        BackHandler() {
+            Log.d("Prueba", "Entre en job")
+            job.cancel()
         }
         Column(
             modifier = Modifier
