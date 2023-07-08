@@ -15,6 +15,7 @@ import com.falconteam.infoking.ui.components.PreferencesKeysBattle.ATAQUE_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.DEFENSA_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.ID_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.IMAGEN_NPC
+import com.falconteam.infoking.ui.components.PreferencesKeysBattle.NIVEL_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.NOMBRE_NPC
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.VIDA_NPC
 import com.falconteam.infoking.ui.components.PressBackAgainToExit
@@ -158,6 +159,9 @@ fun NavGraphBuilder.homeNavGraph(navController: NavController) {
                 },
                 vida = runBlocking {
                     getDataBattle(context, keyInt = VIDA_NPC, type = 2).toString().toInt()
+                },
+                nivel = runBlocking {
+                    getDataBattle(context, keyInt = NIVEL_NPC, type = 2).toString().toInt()
                 },
                 ataque = runBlocking {
                     getDataBattle(context, keyInt = ATAQUE_NPC, type = 2).toString()

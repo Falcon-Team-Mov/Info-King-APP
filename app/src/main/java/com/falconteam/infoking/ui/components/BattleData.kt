@@ -19,6 +19,7 @@ object PreferencesKeysBattle {
     val DEFENSA_NPC = intPreferencesKey("npc_defensa")
     val ATAQUE_NPC = intPreferencesKey("npc_ataque")
     val IMAGEN_NPC = stringPreferencesKey("npc_imagen")
+    val NIVEL_NPC = intPreferencesKey("npc_nivel")
 }
 
 val Context.dataStoreBattle: DataStore<Preferences> by preferencesDataStore(name = "IKG_BATTLE")
@@ -47,6 +48,12 @@ fun setFullDataBattle(
         context,
         dataInt = data.defensa ?: -1,
         IntKey = PreferencesKeysBattle.DEFENSA_NPC,
+        type = 2
+    )
+    setDataBattle(
+        context,
+        dataInt = data.nivel ?: -1,
+        IntKey = PreferencesKeysBattle.NIVEL_NPC,
         type = 2
     )
     setDataBattle(

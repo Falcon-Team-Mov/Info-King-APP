@@ -95,14 +95,14 @@ class LoginViewModel : ViewModel() {
     fun startCount(context: Context) {
         viewModelScope.launch {
             while (true) {
-                val vida = getData(
+                val max_vida = getData(
                     context,
-                    keyInt = PreferencesKeys.VIDA,
+                    keyInt = PreferencesKeys.MAX_VIDA,
                     type = 2
                 ).toString().toInt()
-                val energia = getData(
+                val max_energia = getData(
                     context,
-                    keyInt = PreferencesKeys.ENERGIA,
+                    keyInt = PreferencesKeys.MAX_ENERGIA,
                     type = 2
                 ).toString().toInt()
                 val nivel = getData(
@@ -111,8 +111,21 @@ class LoginViewModel : ViewModel() {
                     type = 2
                 ).toString().toInt()
 
+                val vida = getData(
+                    context,
+                    keyInt = PreferencesKeys.VIDA,
+                    type = 2
+                ).toString().toInt()
+
+                val energia = getData(
+                    context,
+                    keyInt = PreferencesKeys.ENERGIA,
+                    type = 2
+                ).toString().toInt()
+
+
                 delay(1000)
-                if (vida >= (100 * nivel) && energia >= (20 * nivel)) setData(
+                if (vida >= max_vida && energia >= max_energia) setData(
                     context,
                     BooleanKey = PreferencesKeys.OPEN_GAME,
                     dataBoolean = false,
@@ -135,8 +148,6 @@ class LoginViewModel : ViewModel() {
                         keyInt = TIME_PLAYING,
                         type = 2
                     ).toString().toInt()
-
-                    //Log.d("Tiempos", "startCount: $previousTimePlaying")
 
                     setData(
                         context,
@@ -184,4 +195,9 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+    fun putUserMaxData(context: Context){
+        viewModelScope.launch {
+            repository_Login.putUserMaxData(context)
+        }
+    }
 }

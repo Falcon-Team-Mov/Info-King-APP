@@ -27,4 +27,7 @@ interface LoginService {
 
     @PUT("api/stats/statsprofile/{id}")
     suspend fun setStatsProfile(@Path("id") id: String, @Body data: StatsProfileData)
+
+    @PUT("api/stats/max/{id}")
+    suspend fun setMaxStatsProfile(@Path("id") id: String, @Body data: StatsProfileData)
 }

@@ -127,4 +127,39 @@ class LoginRepository(private val api: LoginService) {
         }
     }
 
+    suspend fun putUserMaxData(context: Context) {
+        try {
+            val id = runBlocking {
+                getData(
+                    context,
+                    keyString = PreferencesKeys._ID,
+                    type = 1
+                )
+            }.toString()
+            val vidaMax = runBlocking {
+                getData(
+                    context,
+                    keyInt = PreferencesKeys.MAX_VIDA,
+                    type = 2
+                )
+            }.toString().toInt()
+            val energiaMax = runBlocking {
+                getData(
+                    context,
+                    keyInt = PreferencesKeys.MAX_ENERGIA,
+                    type = 2
+                )
+            }.toString().toInt()
+            api.setMaxStatsProfile(id, StatsProfileData(vidaMax, energiaMax))
+        } catch (e: HttpException) {
+            if (e.code() === 400) {
+                return
+            } else if (e.code() === 404) {
+                return
+            }
+            return
+        } catch (e: IOException) {
+            return
+        }
+    }
 }
