@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.components
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -12,6 +11,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.falconteam.infoking.data.models.LoginDataResponse
+import com.falconteam.infoking.data.models.RankingUserInfo
 import com.falconteam.infoking.data.network.dto.login.LoginResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -64,11 +64,12 @@ object PreferencesKeys {
     val OPEN_GAME = booleanPreferencesKey("open_game")
 
     val RANKING_USERNAME = stringPreferencesKey("ranking_username")
+    val RANKING_ICON = stringPreferencesKey("ranking_icon")
     val RANKING_NIVEL = intPreferencesKey("ranking_nivel")
     val RANKING_ATAQUE = intPreferencesKey("ranking_ataque")
     val RANKING_DEFENSA = intPreferencesKey("ranking_defensa")
-    val RANKING_VICTORIAS = stringPreferencesKey("ranking_victorias")
-    val RANKING_DERROTAS = stringPreferencesKey("ranking_derrotas")
+    val RANKING_VICTORIAS = intPreferencesKey("ranking_victorias")
+    val RANKING_DERROTAS = intPreferencesKey("ranking_derrotas")
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "IKG_AUTH")
@@ -179,6 +180,19 @@ fun setFullDataUser(
     setData(context, dataInt = data.stats.energia, IntKey = PreferencesKeys.ENERGIA, type = 2)
 }
 
+fun setFullDataRanking(
+    context: Context,
+    data: RankingUserInfo
+) {
+    setData(context, data.username, PreferencesKeys.RANKING_USERNAME)
+    setData(context, data.icon, PreferencesKeys.RANKING_ICON)
+    setData(context, dataInt = data.nivel, IntKey = PreferencesKeys.RANKING_NIVEL, type = 2)
+    setData(context, dataInt = data.ataque, IntKey = PreferencesKeys.RANKING_ATAQUE, type = 2)
+    setData(context, dataInt = data.defensa, IntKey = PreferencesKeys.RANKING_DEFENSA, type = 2)
+    setData(context, dataInt = data.victorias, IntKey = PreferencesKeys.RANKING_VICTORIAS, type = 2)
+    setData(context, dataInt = data.derrotas, IntKey = PreferencesKeys.RANKING_DERROTAS, type = 2)
+}
+
 fun setData(
     context: Context,
     dataString: String = "",
@@ -204,6 +218,7 @@ fun setData(
             3 -> {
                 preferences[DoubleKey] = dataDouble
             }
+
             4 -> {
                 preferences[BooleanKey] = dataBoolean
             }

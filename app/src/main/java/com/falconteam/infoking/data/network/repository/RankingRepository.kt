@@ -1,6 +1,8 @@
 package com.falconteam.infoking.data.network.repository
 
+import android.util.Log
 import com.falconteam.infoking.data.models.ProfileRankingData
+import com.falconteam.infoking.data.models.RankingUserInfo
 import com.falconteam.infoking.data.models.Rankings
 import com.falconteam.infoking.data.network.dto.ranking.RankingAllResponse
 import com.falconteam.infoking.data.network.dto.ranking.RankingResponse
@@ -65,42 +67,30 @@ class RankingRepository(private val api: RankingService) {
         }
     }
 
-    suspend fun getRanking(id: String): RankingResponse {
+    suspend fun getRanking(id: String): RankingUserInfo {
         try {
             return api.getRanking(id)
         } catch (e: HttpException) {
-            if (e.code() === 400) {
-                return RankingResponse(
-                    ranking = Rankings(
-                        "",
-                        "",
-                        "",
-                        -1,
-                        -1,
-                    ),
-                    msg = "E-RO"
-                )
-            }
-            return RankingResponse(
-                ranking = Rankings(
-                    "",
-                    "",
-                    "",
-                    -1,
-                    -1,
-                ),
-                msg = "E-RO-D-1"
+            return RankingUserInfo(
+                "",
+                "",
+                "",
+                -1,
+                -1,
+                -1,
+                -1,
+                -1
             )
         } catch (e: IOException) {
-            return RankingResponse(
-                ranking = Rankings(
-                    "",
-                    "",
-                    "",
-                    -1,
-                    -1,
-                ),
-                msg = "E-RO-D-2"
+            return RankingUserInfo(
+                "",
+                "",
+                "",
+                -1,
+                -1,
+                -1,
+                -1,
+                -1
             )
         }
     }

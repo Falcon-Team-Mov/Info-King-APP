@@ -1,6 +1,8 @@
 package com.falconteam.infoking.ui.navigation.user.screens.ranking
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,10 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -28,7 +34,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.Rankings
-import com.falconteam.infoking.ui.components.FormatNumber
+import com.falconteam.infoking.ui.components.formatNumber
+import com.falconteam.infoking.ui.components.formatNumberWithComma
+import com.falconteam.infoking.ui.components.PopUpWithIcon
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
@@ -46,7 +54,7 @@ fun RankingScreen(
     val viewModel: RankingViewModel = viewModel()
     val context = LocalContext.current
     var _finish = finish
-    InfoKingTheme() {
+    InfoKingTheme {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,6 +101,9 @@ fun RankingItem(
     position: Int,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+    val viewModel: RankingViewModel = viewModel()
     Card(
         colors = CardDefaults.cardColors(secondaryBlueColor),
         shape = RoundedCornerShape(25.dp),
@@ -100,7 +111,10 @@ fun RankingItem(
             .padding(horizontal = 4.dp, vertical = 5.dp)
             .fillMaxWidth(0.9f)
             .fillMaxHeight(0.18f)
-
+            .clickable(onClick = {
+                viewModel.getRanking(ranking.id, context)
+                showDialog = true
+            })
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -110,6 +124,29 @@ fun RankingItem(
                 .padding(6.dp)
         ) {
             RankingDetail(position, ranking)
+        }
+        val username = viewModel.dataRankingUser[0]?.username
+        val icon = viewModel.dataRankingUser[0]?.icon
+        val level = viewModel.dataRankingUser[0]?.nivel
+        val attack = viewModel.dataRankingUser[0]?.ataque?.let { formatNumberWithComma(it) }
+        val defense = viewModel.dataRankingUser[0]?.defensa?.let { formatNumberWithComma(it) }
+        val victories = viewModel.dataRankingUser[0]?.victorias?.let { formatNumberWithComma(it) }
+        val loses = viewModel.dataRankingUser[0]?.derrotas?.let { formatNumberWithComma(it) }
+
+        if (showDialog && viewModel.finishedRanking.value) {
+            Log.d("getsIcon", icon.toString())
+            PopUpWithIcon(
+                onDismiss = { showDialog = false; viewModel.finishedRanking.value = false },
+                onBack = {},
+                titleText = username ?: "",
+                descriptionText = "Nivel: $level\n" +
+                        "Ataque: $attack\n" +
+                        "Defensa: $defense\n" +
+                        "Victorias: $victories\n" +
+                        "Derrotas: $loses",
+                buttonText = "CERRAR",
+                icon = icon ?: ""
+            )
         }
     }
 }
@@ -169,7 +206,7 @@ fun RankingDetail(position: Int, ranking: Rankings, modifier: Modifier = Modifie
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = FormatNumber(ranking.victorias - ranking.derrotas),
+                text = formatNumber(ranking.victorias - ranking.derrotas),
                 textAlign = TextAlign.End,
                 color = buttonOKColor,
                 fontFamily = jostSemiBold,

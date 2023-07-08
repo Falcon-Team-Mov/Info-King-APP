@@ -4,30 +4,24 @@ import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.util.Log
-import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.rememberNavController
-import com.falconteam.infoking.ui.navigation.graphs.RootNavGraph
-import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.random.Random
 
 @Composable
@@ -220,15 +214,35 @@ suspend fun attackgenerator(attack: Int, defensa: Int): Float {
 }
 
 @Composable
-fun FormatNumber(number: Int): String {
+fun formatNumber(number: Int): String {
     val formattedNumber = when {
         number >= 1_000_000 -> {
             val decimalFormat = DecimalFormat("#.#")
-            "${decimalFormat.format(number / 1_000_000.0)} M"
+            val formatted = decimalFormat.format(number / 1_000_000.0)
+            val commaFormatted = NumberFormat.getNumberInstance(Locale.US).format(formatted.toDouble())
+            "$commaFormatted M"
         }
-
+        number in 1_000..999_999 -> {
+            val decimalFormat = DecimalFormat("#.##")
+            val formatted = decimalFormat.format(number / 1_000.0)
+            val commaFormatted = NumberFormat.getNumberInstance(Locale.US).format(formatted.toDouble())
+            "$commaFormatted k"
+        }
         else -> number.toString()
     }
-    //Log.d("debug", formattedNumber)
+    // Log.d("debug", formattedNumber)
     return formattedNumber
 }
+
+@Composable
+fun formatNumberWithComma(number: Int): String {
+    val formattedNumber = when {
+        number >= 1_000_000 -> {
+            val thousands = String.format("%,d", number / 1_000)
+            "${thousands}k"
+        }
+        else -> String.format("%,d", number)
+    }
+    return formattedNumber
+}
+
