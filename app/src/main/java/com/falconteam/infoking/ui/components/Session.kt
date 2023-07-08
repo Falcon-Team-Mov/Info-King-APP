@@ -40,6 +40,9 @@ object PreferencesKeys {
     val DEFENSA = intPreferencesKey("defensa")
     val ENERGIA = intPreferencesKey("energia")
 
+    val MAX_VIDA = intPreferencesKey("max_vida")
+    val MAX_ENERGIA = intPreferencesKey("max_energia")
+
     val NOMBRE = stringPreferencesKey("nombre")
     val BUFF = doublePreferencesKey("buff")
     val NERF = doublePreferencesKey("nerf")
@@ -68,6 +71,8 @@ object PreferencesKeys {
     val RANKING_NIVEL = intPreferencesKey("ranking_nivel")
     val RANKING_ATAQUE = intPreferencesKey("ranking_ataque")
     val RANKING_DEFENSA = intPreferencesKey("ranking_defensa")
+
+    val BATTLE_ACTIVE = booleanPreferencesKey("battle_active")
     val RANKING_VICTORIAS = intPreferencesKey("ranking_victorias")
     val RANKING_DERROTAS = intPreferencesKey("ranking_derrotas")
 }
@@ -107,6 +112,9 @@ fun setFullData(
     setData(context, dataInt = data.stats.ataque ?: -1, IntKey = PreferencesKeys.ATAQUE, type = 2)
     setData(context, dataInt = data.stats.defensa ?: -1, IntKey = PreferencesKeys.DEFENSA, type = 2)
     setData(context, dataInt = data.stats.energia ?: -1, IntKey = PreferencesKeys.ENERGIA, type = 2)
+
+    setData(context, dataInt = data.stats.max_vida ?: -1, IntKey = PreferencesKeys.MAX_VIDA, type = 2)
+    setData(context, dataInt = data.stats.max_energia ?: -1, IntKey = PreferencesKeys.MAX_ENERGIA, type = 2)
 
     setData(context, data.personaje.nombre ?: "", PreferencesKeys.NOMBRE)
     setData(
@@ -178,6 +186,9 @@ fun setFullDataUser(
     setData(context, dataInt = data.stats.ataque, IntKey = PreferencesKeys.ATAQUE, type = 2)
     setData(context, dataInt = data.stats.defensa, IntKey = PreferencesKeys.DEFENSA, type = 2)
     setData(context, dataInt = data.stats.energia, IntKey = PreferencesKeys.ENERGIA, type = 2)
+
+    setData(context, dataInt = data.stats.max_vida ?: -1, IntKey = PreferencesKeys.MAX_VIDA, type = 2)
+    setData(context, dataInt = data.stats.max_energia ?: -1, IntKey = PreferencesKeys.MAX_ENERGIA, type = 2)
 }
 
 fun setFullDataRanking(

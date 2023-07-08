@@ -6,12 +6,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModelProvider
+import com.falconteam.infoking.data.models.SessionUserData
+import com.falconteam.infoking.data.models.StatsUpdate
+import com.falconteam.infoking.ui.viewmodels.AttackViewModel
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -21,6 +25,7 @@ import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.ceil
 import java.util.Locale
 import kotlin.random.Random
 
@@ -32,6 +37,158 @@ fun TextResponsiveSize(size: TextUnit): TextUnit {
     val scaleFactor = if (configuration.smallestScreenWidthDp >= 600) 1.2f else 0.6f
 
     return (size * scaleFactor)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun saveData(current: Context, viewModel: AttackViewModel) {
+    val user = SessionUserData(
+        runBlocking {
+            getData(current, keyString = PreferencesKeys.ID, type = 1).toString()
+        },
+        runBlocking {
+            getData(
+                current,
+                keyString = PreferencesKeys.USERNAME,
+                type = 1
+            ).toString()
+        },
+        runBlocking {
+            getData(current, keyString = PreferencesKeys.EMAIL, type = 1).toString()
+        },
+        runBlocking {
+            getData(current, keyString = PreferencesKeys.ROLE, type = 1).toString()
+        },
+        runBlocking {
+            getData(current, keyInt = PreferencesKeys.EXP, type = 2).toString()
+                .toInt()
+        },
+        runBlocking {
+            getData(current, keyInt = PreferencesKeys.NIVEL, type = 2).toString()
+                .toInt()
+        },
+        getCurrentDateTime(),
+        runBlocking {
+            getData(
+                current,
+                keyString = PreferencesKeys.CREATED_AT,
+                type = 1
+            ).toString()
+        },
+        runBlocking {
+            getData(
+                current,
+                keyInt = PreferencesKeys.TIME_PLAYING,
+                type = 2
+            ).toString().toInt()
+        },
+    )
+    viewModel.putUser(
+        runBlocking {
+            getData(current, keyString = PreferencesKeys.ID, type = 1).toString()
+        }, user
+    )
+    viewModel.putStats(
+        runBlocking {
+            getData(current, keyString = PreferencesKeys._ID, type = 1).toString()
+        }, StatsUpdate(
+            runBlocking {
+                getData(current, keyString = PreferencesKeys.PERSONAJE_ID, type = 1).toString()
+            },
+            runBlocking {
+                getData(current, keyInt = PreferencesKeys.VIDA, type = 2).toString().toInt()
+            },
+            runBlocking {
+                getData(current, keyInt = PreferencesKeys.ATAQUE, type = 2).toString().toInt()
+            },
+            runBlocking {
+                getData(current, keyInt = PreferencesKeys.DEFENSA, type = 2).toString().toInt()
+            },
+            runBlocking {
+                getData(current, keyInt = PreferencesKeys.ENERGIA, type = 2).toString().toInt()
+            },
+        )
+    )
+}
+
+fun calculateLevel(current: Context, npc: Int, viewModel: LoginViewModel) {
+    var exp = runBlocking {
+        getData(current, keyInt = PreferencesKeys.EXP, type = 2).toString().toInt()
+    }
+    val nivel = runBlocking {
+        getData(current, keyInt = PreferencesKeys.NIVEL, type = 2).toString().toInt()
+    }
+    val vida = runBlocking {
+        getData(current, keyInt = PreferencesKeys.MAX_VIDA, type = 2).toString().toInt()
+    }
+    val ataque = runBlocking {
+        getData(current, keyInt = PreferencesKeys.ATAQUE, type = 2).toString().toInt()
+    }
+    val defensa = runBlocking {
+        getData(current, keyInt = PreferencesKeys.DEFENSA, type = 2).toString().toInt()
+    }
+    val energia = runBlocking {
+        getData(current, keyInt = PreferencesKeys.MAX_ENERGIA, type = 2).toString().toInt()
+    }
+
+    Log.d(
+        "calculateLevel",
+        "exp: $exp nivel: $nivel vida: $vida ataque: $ataque defensa: $defensa energia: $energia"
+    )
+
+    setData(
+        current,
+        IntKey = PreferencesKeys.EXP,
+        dataInt = exp + expObtain(player = nivel, npc = npc ?: 1),
+        type = 2
+    )
+    exp = runBlocking {
+        getData(current, keyInt = PreferencesKeys.EXP, type = 2).toString().toInt()
+    }
+    if (exp >= expTotal(nivel)) {
+        setData(current, IntKey = PreferencesKeys.EXP, dataInt = (exp % expTotal(nivel)), type = 2)
+        setData(current, IntKey = PreferencesKeys.NIVEL, dataInt = nivel + 1, type = 2)
+        setData(
+            current,
+            IntKey = PreferencesKeys.MAX_VIDA,
+            dataInt = vida + runBlocking { generateRandomNumber(ceil((vida / 8).toDouble()).toInt()) },
+            type = 2
+        )
+        setData(
+            current,
+            IntKey = PreferencesKeys.ATAQUE,
+            dataInt = ataque + runBlocking { generateRandomNumber(ceil((ataque / 8).toDouble()).toInt()) },
+            type = 2
+        )
+        setData(
+            current,
+            IntKey = PreferencesKeys.DEFENSA,
+            dataInt = defensa + runBlocking { generateRandomNumber(ceil((defensa / 8).toDouble()).toInt()) },
+            type = 2
+        )
+        setData(
+            current,
+            IntKey = PreferencesKeys.MAX_ENERGIA,
+            dataInt = energia + runBlocking { generateRandomNumber(ceil((energia / 8).toDouble()).toInt()) },
+            type = 2
+        )
+        viewModel.putUserMaxData(current)
+    }
+
+}
+
+fun expObtain(player: Int, npc: Int): Int {
+    val result = when {
+        player < npc -> 4
+        player == npc -> 3
+        player - 2 > npc -> 1
+        else -> 2
+    }
+    Log.d("Pruebas", "expObtain: $result")
+    return result
+}
+
+fun expTotal(nivel: Int): Int {
+    return 75 * nivel
 }
 
 @Composable
@@ -52,8 +209,8 @@ fun resizePopUp(size: Dp): Dp {
 }
 
 suspend fun generateRandomNumber(max: Int, min: Int = 1): Int {
-    return withContext(Dispatchers.Default) {
-        val randomNumber = Random.nextInt(min, max - 1)
+    return if (max == 0 || max == 1) 1 else withContext(Dispatchers.Default) {
+        val randomNumber = Random.nextInt(min, max)
         randomNumber
     }
 }
@@ -141,7 +298,7 @@ fun HealtTimer(context: Context, seconds: Int, popup: Boolean = false): Boolean 
     return update
 }
 
-fun NestedUpdate(context: Context, viewModel: LoginViewModel){
+fun NestedUpdate(context: Context, viewModel: LoginViewModel) {
     val packageName = context.packageName
 
     val uri = Uri.parse("market://details?id=$packageName")

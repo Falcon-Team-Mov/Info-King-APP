@@ -1,6 +1,7 @@
 package com.falconteam.infoking.ui.navigation.user.screens.attack
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import com.falconteam.infoking.ui.components.Background
 import com.falconteam.infoking.ui.components.PopUpOneButtonDescription
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.TextResponsiveSize
+import com.falconteam.infoking.ui.components.expObtain
 import com.falconteam.infoking.ui.components.getData
 import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
@@ -124,7 +126,7 @@ fun AttackScreen(
                         verticalArrangement = Arrangement.Center,
                     ) {
                         LinearProgressIndicator(
-                            progress = viewModel.data[0]?.vida?.toFloat()!! / viewModel.data[0]?.vida?.toFloat()!!,
+                            progress = 1f,
                             color = buttonCancelColor,
                             trackColor = buttonOKColor,
                             modifier = Modifier
@@ -195,9 +197,14 @@ fun AttackCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
+            val nivel = runBlocking {
+                getData(context, keyInt = PreferencesKeys.NIVEL, type = 2).toString().toInt()
+            }
+
             Text(
                 text = "Te has encontrado con ${data?.nombre} que tiene ${data?.vida ?: 0} de vida, \n" +
-                        "${data?.ataque} de ataque y ${data?.defensa} de defensa. \n" +
+                        "${data?.ataque} de ataque, ${data?.defensa} de defensa\n" +
+                        "y te dara ${expObtain(player = nivel, npc = data?.nivel ?: 1)} de exp.\n" +
                         "¿Deseas atacarlo?",
                 color = white,
                 fontSize = sizeFont,

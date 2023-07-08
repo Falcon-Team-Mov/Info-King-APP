@@ -61,11 +61,14 @@ import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
 import com.falconteam.infoking.ui.components.PreferencesKeys.EXP
 import com.falconteam.infoking.ui.components.PreferencesKeys.IMAGE_3D
+import com.falconteam.infoking.ui.components.PreferencesKeys.MAX_ENERGIA
+import com.falconteam.infoking.ui.components.PreferencesKeys.MAX_VIDA
 import com.falconteam.infoking.ui.components.PreferencesKeys.NIVEL
 import com.falconteam.infoking.ui.components.PreferencesKeys.USERNAME
 import com.falconteam.infoking.ui.components.PreferencesKeys.VIDA
 import com.falconteam.infoking.ui.components.TextResponsiveSize
 import com.falconteam.infoking.ui.components.dataStore
+import com.falconteam.infoking.ui.components.expTotal
 import com.falconteam.infoking.ui.components.getData
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.Typography
@@ -121,8 +124,7 @@ fun ProfileScreen(
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
+                    modifier = Modifier.padding(horizontal = 24.dp)
 
                 ) {
                     // Player's info
@@ -344,7 +346,7 @@ fun ProfileSection() {
                 text = (runBlocking {
                     val exp = getData(context, keyInt = EXP, type = 2) as? Int ?: 0
                     val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
-                    "$exp / ${50 * nivel}"
+                    "$exp / ${expTotal(nivel)}"
                 }),
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White,
@@ -356,7 +358,7 @@ fun ProfileSection() {
                     (runBlocking {
                         val exp = getData(context, keyInt = EXP, type = 2) as? Int ?: 0
                         val nivel = getData(context, keyInt = NIVEL, type = 2) as? Int ?: 1
-                        (50 * nivel) - exp
+                        (expTotal(nivel)) - exp
                     })
                 } EXP necesario para subir de nivel",
                 style = MaterialTheme.typography.labelMedium,
@@ -459,17 +461,19 @@ fun HealthStatCard() {
             )
         }.toString().toInt())
     }
-    val nivel = remember {
+
+    val max_vida = remember {
         mutableStateOf(runBlocking {
             getData(
-                context, keyInt = NIVEL, type = 2
+                context, keyInt = MAX_VIDA, type = 2
             )
         }.toString().toInt())
     }
 
     LaunchedEffect(Unit) {
         context.dataStore.data.collect { preferences ->
-            val value = preferences[PreferencesKeys.VIDA] ?: -1
+            val value = preferences[VIDA] ?: -1
+            max_vida.value = preferences[MAX_VIDA] ?: -1
             vida.value = value
         }
     }
@@ -500,7 +504,7 @@ fun HealthStatCard() {
             }
             Column {
                 Text(
-                    text = "Vida:\n${vida.value}/${100 * nivel.value}",
+                    text = "Vida:\n${vida.value}/${max_vida.value}",
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = TextResponsiveSize(size = 20.sp),
@@ -603,17 +607,21 @@ fun EnergyStatCard() {
             )
         }.toString().toInt())
     }
-    val nivel = remember {
+    val max_energia = remember {
         mutableStateOf(runBlocking {
+
             getData(
-                context, keyInt = NIVEL, type = 2
+                context, keyInt = MAX_ENERGIA, type = 2
             )
         }.toString().toInt())
     }
+
     LaunchedEffect(Unit) {
         context.dataStore.data.collect { preferences ->
             val value = preferences[PreferencesKeys.ENERGIA] ?: -1
+            max_energia.value = preferences[MAX_ENERGIA] ?: -1
             energia.value = value
+
         }
     }
     Card(
@@ -640,7 +648,7 @@ fun EnergyStatCard() {
 
             Column {
                 Text(
-                    text = "Energía:\n${energia.value}/${20 * nivel.value}",
+                    text = "Energía:\n${energia.value}/${max_energia.value}",
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = TextResponsiveSize(size = 20.sp),

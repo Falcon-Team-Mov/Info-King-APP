@@ -7,4 +7,6 @@ data class SessionStatsData(
     val ataque: Int,
     val defensa: Int,
     val energia: Int,
+    val max_vida: Int,
+    val max_energia: Int,
 )

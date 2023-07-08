@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.falconteam.infoking.RetrofitApplication
-import com.falconteam.infoking.data.models.SessionStatsData
 import com.falconteam.infoking.data.models.SessionUserData
 import com.falconteam.infoking.data.models.StatsUpdate
 import com.falconteam.infoking.data.models.npc
@@ -28,7 +27,7 @@ class AttackViewModel() : ViewModel() {
                 null -> {
 
                     if (value.total > 0) {
-                        val id = generateRandomNumber(value.total)
+                        val id = generateRandomNumber(value.total-1)
                         val npcs = value.npcs[id]
                         data[0] = npcs!!
                         finished.value = true

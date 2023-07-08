@@ -9,18 +9,24 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.falconteam.infoking.R
+import com.falconteam.infoking.data.network.dto.ranking.RankingRequest
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.PreferencesKeys.LAST_CONECTION
 import com.falconteam.infoking.ui.components.getCurrentDateTime
+import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.saveData
 import com.falconteam.infoking.ui.components.setData
 import com.falconteam.infoking.ui.components.setLastTime
 import com.falconteam.infoking.ui.navigation.graphs.RootNavGraph
 import com.falconteam.infoking.ui.theme.InfoKingTheme
+import com.falconteam.infoking.ui.viewmodels.AttackViewModel
 import com.falconteam.infoking.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     private val viewModel: LoginViewModel by viewModels()
+    private val viewAttack: AttackViewModel by viewModels()
     private val context = this@MainActivity
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,6 +57,27 @@ class MainActivity : ComponentActivity() {
             BooleanKey = PreferencesKeys.OPEN_GAME,
             type = 4
         )
+        if (runBlocking {
+                getData(
+                    context,
+                    keyBoolean = PreferencesKeys.BATTLE_ACTIVE,
+                    type = 5
+                ) as Boolean
+            }) {
+            viewAttack.putDerrotRanking(
+                RankingRequest(
+                    runBlocking {
+                        getData(context, keyString = PreferencesKeys.ID, type = 1).toString()
+                    },
+                    runBlocking {
+                        getData(
+                            context, keyString = PreferencesKeys.PERSONAJE_ID, type = 1
+                        ).toString()
+                    },
+                )
+            )
+            saveData(context, viewAttack)
+        }
         viewModel.updateLastConnection(this@MainActivity)
         setData(
             context = this@MainActivity,
