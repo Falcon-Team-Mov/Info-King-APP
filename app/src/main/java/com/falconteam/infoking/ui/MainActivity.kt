@@ -58,11 +58,12 @@ class MainActivity : ComponentActivity() {
             type = 4
         )
         val batalla = runBlocking {
-            getData(
+            val data = getData(
                 context,
                 keyBoolean = PreferencesKeys.BATTLE_ACTIVE,
                 type = 5
-            ).toString().toBoolean()
+            )
+            data?.toString()?.toBoolean() ?: false
         }
         if (batalla) {
             viewAttack.putDerrotRanking(

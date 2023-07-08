@@ -265,8 +265,8 @@ fun HealtTimer(context: Context, seconds: Int, popup: Boolean = false): Boolean 
         val nivel = runBlocking {
             getData(context, keyInt = PreferencesKeys.NIVEL, type = 2).toString().toInt()
         }
-        val vidaMax = nivel * 100
-        val vidaFinal = if (vida + ((seconds) / (10 * 60)) * 10 > vidaMax) {
+        val vidaMax = runBlocking { getData(context, keyInt = PreferencesKeys.MAX_VIDA, type = 2).toString().toInt() }
+        val vidaFinal = if (vida + ((seconds) / (10 * 60)) * 30 > vidaMax) {
             vidaMax
         } else {
             vida + ((seconds) / (10 * 60)) * 30
@@ -274,7 +274,7 @@ fun HealtTimer(context: Context, seconds: Int, popup: Boolean = false): Boolean 
         val energia = runBlocking {
             getData(context, keyInt = PreferencesKeys.ENERGIA, type = 2).toString().toInt()
         }
-        val energiaMax = nivel * 20
+        val energiaMax = runBlocking { getData(context, keyInt = PreferencesKeys.MAX_ENERGIA, type = 2).toString().toInt() }
         val energiaFinal = if (energia + ((seconds) / (10 * 60)) > energiaMax) {
             energiaMax
         } else {
