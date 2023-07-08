@@ -47,7 +47,8 @@ fun PopUpOneButton(
             ) {
                 Column(
                     modifier = Modifier
-                        .background(primaryColorLight),
+                        .background(primaryColorLight)
+                        .padding(ElementResponsiveSize(size = 12.dp)),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -75,7 +76,7 @@ fun PopUpOneButton(
                                 .heightIn(min = 36.dp)
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
-                                .padding(bottom = resizePopUp(size = 8.dp)),
+                                .padding(top = resizePopUp(size = 16.dp), bottom = resizePopUp(size = 8.dp)),
                             colors = ButtonDefaults.buttonColors(buttonCancelColor),
                             onClick = {
                                 onDismiss()

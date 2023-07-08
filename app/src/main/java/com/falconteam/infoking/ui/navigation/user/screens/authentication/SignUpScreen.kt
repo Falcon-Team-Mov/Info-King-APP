@@ -112,7 +112,7 @@ fun SignUpScreen(
                 Text(
                     text = "REGISTRO",
                     color = secondaryAquaColor,
-                    modifier = Modifier,
+                    modifier = Modifier.padding(top = 24.dp),
                     fontSize = TextResponsiveSize(size = 24.sp)
                 )
             }

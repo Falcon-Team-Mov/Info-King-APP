@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.falconteam.infoking.RetrofitApplication
 import com.falconteam.infoking.data.models.ProfileRankingData
+import com.falconteam.infoking.data.models.RankingUserInfo
 import com.falconteam.infoking.data.models.Rankings
 import com.falconteam.infoking.ui.components.PreferencesKeys.ID
 import com.falconteam.infoking.ui.components.getData
+import com.falconteam.infoking.ui.components.setFullDataRanking
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -19,6 +21,8 @@ class RankingViewModel : ViewModel() {
     val finished = mutableStateOf<Boolean>(false)
     val finished_profile = mutableStateOf(false)
     val repository_ranking = RetrofitApplication()._rankingRepository
+    val dataRankingUser = mutableStateMapOf<Int, RankingUserInfo>()
+    var finishedRanking = mutableStateOf(false)
 
     fun GetAll(context: Context) {
         viewModelScope.launch {
@@ -50,6 +54,15 @@ class RankingViewModel : ViewModel() {
             )
             dataRankingProfile[0] = value
             finished_profile.value = true
+        }
+    }
+
+    fun getRanking(id: String, context: Context) {
+        viewModelScope.launch {
+            val value = repository_ranking.getRanking(id)
+            setFullDataRanking(context, value)
+            dataRankingUser[0] = value
+            finishedRanking.value = true
         }
     }
 }

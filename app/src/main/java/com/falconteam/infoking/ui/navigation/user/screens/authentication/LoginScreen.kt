@@ -70,7 +70,7 @@ fun LoginScreen(
 
         val context = LocalContext.current
 
-        val secondaryColor = secondaryBlueColor
+        val secondaryColor = secondaryAquaColor
         val errorColor = buttonCancelColor
         val maxLength = 32
 
@@ -88,10 +88,10 @@ fun LoginScreen(
         // Supporting Texts and Colors
         val usernameSupportingText = if (usernameError) "Error: Obligatorio" else "*Obligatorio"
         val usernameSupportingColor =
-            if (usernameError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
+            if (usernameError) buttonCancelColor else secondaryAquaColor.copy(alpha = 0.5f)
         val passwordSupportingText = if (passwordError) "Mínimo 8 caracteres" else "*Obligatorio"
         val passwordSupportingColor =
-            if (passwordError) buttonCancelColor else secondaryColor.copy(alpha = 0.5f)
+            if (passwordError) buttonCancelColor else secondaryAquaColor.copy(alpha = 0.5f)
         val loginViewModel: LoginViewModel = viewModel()
         val errors = loginViewModel.errors.value
         var data = loginViewModel.data[0]
@@ -114,7 +114,7 @@ fun LoginScreen(
                 ) {
                     Text(
                         text = "INICIO DE SESIÓN",
-                        color = secondaryColor,
+                        color = secondaryAquaColor,
                         modifier = Modifier.padding(bottom = 64.dp),
                         fontSize = TextResponsiveSize(size = 24.sp)
                     )
@@ -139,7 +139,7 @@ fun LoginScreen(
                         label = {
                             Text(
                                 "Usuario",
-                                fontSize = TextResponsiveSize(size = 20.sp)
+                                fontSize = TextResponsiveSize(size = 20.sp),
                             )
                         },
                         placeholder = { Text(text = "e.g. DirtyDan") },
@@ -182,7 +182,7 @@ fun LoginScreen(
                         label = {
                             Text(
                                 text = "Contraseña",
-                                fontSize = TextResponsiveSize(size = 20.sp)
+                                fontSize = TextResponsiveSize(size = 20.sp),
                             )
                         },
                         placeholder = { Text(text = "••••••••") },
