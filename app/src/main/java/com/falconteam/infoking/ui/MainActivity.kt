@@ -57,13 +57,14 @@ class MainActivity : ComponentActivity() {
             BooleanKey = PreferencesKeys.OPEN_GAME,
             type = 4
         )
-        if (runBlocking {
-                getData(
-                    context,
-                    keyBoolean = PreferencesKeys.BATTLE_ACTIVE,
-                    type = 5
-                ) as Boolean
-            }) {
+        val batalla = runBlocking {
+            getData(
+                context,
+                keyBoolean = PreferencesKeys.BATTLE_ACTIVE,
+                type = 5
+            ).toString().toBoolean()
+        }
+        if (batalla) {
             viewAttack.putDerrotRanking(
                 RankingRequest(
                     runBlocking {
