@@ -361,7 +361,6 @@ suspend fun attackgenerator(attack: Int, defensa: Int): Float {
     } else {
         val random = (generateRandomNumber(defensa, defensa / 2))
         val _attack = (attack * random / (defensa * 1f))
-        //Log.d("Prueba", "attackgenerator: $_attack, random: $random, defensa: $defensa")
         return if (_attack <= 0) {
             0f
         } else {

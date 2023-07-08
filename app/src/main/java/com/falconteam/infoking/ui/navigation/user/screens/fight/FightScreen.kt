@@ -140,7 +140,7 @@ fun FightScreen(
                     }
                     val totalvida = ((runBlocking {
                         getData(current, keyInt = VIDA, type = 2).toString().toInt()
-                    } + data.vida).toFloat()) * 6f
+                    } + data.vida).toFloat()) * 8f
 
                     progress -= (ataque / totalvida)
                 }
@@ -253,7 +253,7 @@ fun FightScreen(
                                 }
                                 val totalvida = ((runBlocking {
                                     getData(current, keyInt = VIDA, type = 2).toString().toInt()
-                                } + data.vida).toFloat()) * 4f
+                                } + data.vida).toFloat()) * 2f
 
                                 progress += (ataque / totalvida)
                             }
@@ -446,7 +446,7 @@ fun FightItemEnemy(data: npc, maxvidanpc: Int) {
                 modifier = Modifier.padding(top = 12.dp)
             )
             var current =
-                if (data.vida > 0 && maxvidanpc > 0) data.vida.toFloat() / maxvidanpc else 0f
+                if (data.vida > 0 && maxvidanpc > 0) (data.vida.toFloat() / maxvidanpc) * 100f else 0f
             LinearProgressIndicator(
                 progress = current,
                 color = buttonCancelColor,

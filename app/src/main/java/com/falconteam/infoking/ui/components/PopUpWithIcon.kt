@@ -46,7 +46,7 @@ fun PopUpWithIcon(
 ) {
     InfoKingTheme {
         Dialog(
-            onDismissRequest = {},
+            onDismissRequest = {onDismiss()},
         ) {
             Surface(
                 modifier = Modifier
