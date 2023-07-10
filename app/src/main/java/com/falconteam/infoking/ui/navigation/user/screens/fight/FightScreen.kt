@@ -312,6 +312,8 @@ fun FightScreen(
                                     )
                                 )
                                 saveData(current, viewModel)
+
+                                setData(current, dataBoolean = false, BooleanKey = PreferencesKeys.BATTLE_ACTIVE, type = 4)
                             },
                             onBack = { onBack() },
                             titleText = "¡HAS GANADO!",
@@ -333,6 +335,8 @@ fun FightScreen(
                                     )
                                 )
                                 saveData(current, viewModel)
+
+                                setData(current, dataBoolean = false, BooleanKey = PreferencesKeys.BATTLE_ACTIVE, type = 4)
                                 showDialog = false
                             },
                             onBack = { onBack() },

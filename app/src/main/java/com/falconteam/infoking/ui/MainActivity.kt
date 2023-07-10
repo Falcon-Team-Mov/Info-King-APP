@@ -79,6 +79,7 @@ class MainActivity : ComponentActivity() {
                 )
             )
             saveData(context, viewAttack)
+            setData(context, dataBoolean = false, BooleanKey = PreferencesKeys.BATTLE_ACTIVE, type = 4)
         }
         viewModel.updateLastConnection(this@MainActivity)
         setData(
