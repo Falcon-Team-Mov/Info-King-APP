@@ -180,7 +180,6 @@ fun setFullDataUser(
         dataInt = data.time_playing ?: -1, IntKey = PreferencesKeys.TIME_PLAYING,
         type = 2
     )
-    //Log.d("Tiempos", "setFullDataUser: ${data.time_playing}")
     setData(context, data.img, PreferencesKeys.IMAGE_3D)
     setData(context, dataInt = data.stats.vida, IntKey = PreferencesKeys.VIDA, type = 2)
     setData(context, dataInt = data.stats.ataque, IntKey = PreferencesKeys.ATAQUE, type = 2)

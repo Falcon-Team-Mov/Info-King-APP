@@ -2,7 +2,6 @@ package com.falconteam.infoking.ui.navigation.user.screens.fight
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -38,8 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.falconteam.infoking.data.models.SessionUserData
-import com.falconteam.infoking.data.models.StatsUpdate
 import com.falconteam.infoking.data.models.npc
 import com.falconteam.infoking.data.network.dto.ranking.RankingRequest
 import com.falconteam.infoking.ui.components.Background
@@ -47,27 +44,16 @@ import com.falconteam.infoking.ui.components.PopUpOneButton
 import com.falconteam.infoking.ui.components.PreferencesKeys
 import com.falconteam.infoking.ui.components.PreferencesKeys.ATAQUE
 import com.falconteam.infoking.ui.components.PreferencesKeys.BATTLE_ACTIVE
-import com.falconteam.infoking.ui.components.PreferencesKeys.CREATED_AT
 import com.falconteam.infoking.ui.components.PreferencesKeys.DEFENSA
-import com.falconteam.infoking.ui.components.PreferencesKeys.EMAIL
-import com.falconteam.infoking.ui.components.PreferencesKeys.ENERGIA
-import com.falconteam.infoking.ui.components.PreferencesKeys.EXP
 import com.falconteam.infoking.ui.components.PreferencesKeys.ID
 import com.falconteam.infoking.ui.components.PreferencesKeys.IMAGE_2D
-import com.falconteam.infoking.ui.components.PreferencesKeys.NIVEL
+import com.falconteam.infoking.ui.components.PreferencesKeys.MAX_VIDA
 import com.falconteam.infoking.ui.components.PreferencesKeys.PERSONAJE_ID
-import com.falconteam.infoking.ui.components.PreferencesKeys.ROLE
-import com.falconteam.infoking.ui.components.PreferencesKeys.TIME_PLAYING
 import com.falconteam.infoking.ui.components.PreferencesKeys.USERNAME
 import com.falconteam.infoking.ui.components.PreferencesKeys.VIDA
-import com.falconteam.infoking.ui.components.PreferencesKeys._ID
 import com.falconteam.infoking.ui.components.PreferencesKeysBattle.ID_NPC
-import com.falconteam.infoking.ui.components.attackgenerator
+import com.falconteam.infoking.ui.components.attackSystem
 import com.falconteam.infoking.ui.components.calculateLevel
-import com.falconteam.infoking.ui.components.expObtain
-import com.falconteam.infoking.ui.components.expTotal
-import com.falconteam.infoking.ui.components.generateRandomNumber
-import com.falconteam.infoking.ui.components.getCurrentDateTime
 import com.falconteam.infoking.ui.components.getData
 import com.falconteam.infoking.ui.components.getDataBattle
 import com.falconteam.infoking.ui.components.saveData
@@ -116,7 +102,7 @@ fun FightScreen(
             })
         }
         val maxvida = runBlocking {
-            getData(current, keyInt = VIDA, type = 2).toString().toInt()
+            getData(current, keyInt = MAX_VIDA, type = 2).toString().toInt()
         }
 
         val maxvidanpc = data.vida
@@ -125,24 +111,17 @@ fun FightScreen(
             while (!finished) {
 
                 if (activated) {
-                    enemy = runBlocking {
-                        attackgenerator(data.ataque, runBlocking {
-                            getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
-                        })
+                    val PlayerDefense = runBlocking {
+                        getData(current, keyInt = DEFENSA, type = 2).toString().toInt()
                     }
-                    if (enemy > 0 && vida > 0) {
-
-                        ataque = enemy
-                        setData(current, IntKey = VIDA, dataInt = vida - 1, type = 2)
-                        vida -= 1
-                    } else {
-                        ataque = 0f
-                    }
-                    val totalvida = ((runBlocking {
+                    vida = runBlocking {
                         getData(current, keyInt = VIDA, type = 2).toString().toInt()
-                    } + data.vida).toFloat()) * 8f
+                    }
 
-                    progress -= (ataque / totalvida)
+                    progress -= attackSystem(current, PlayerDefense, data.ataque, ((runBlocking {
+                        getData(current, keyInt = VIDA, type = 2).toString().toInt()
+                    } + data.vida).toFloat()) * 8f,
+                        vida = vida)
                 }
                 if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
                     finished = true
@@ -159,7 +138,6 @@ fun FightScreen(
             }
         }
         BackHandler() {
-            Log.d("Prueba", "Entre en job")
             job.cancel()
         }
         Column(
@@ -227,38 +205,35 @@ fun FightScreen(
 
                         if (!finished) {
                             setData(
-                                current,
-                                BooleanKey = BATTLE_ACTIVE,
-                                dataBoolean = true,
-                                type = 4
+                                current, BooleanKey = BATTLE_ACTIVE, dataBoolean = true, type = 4
                             )
                             if (progress > 0.1f) {
                                 activated = true
                             }
                             if (data.vida > 0 || vida > 0) {
-                                player = runBlocking {
-                                    attackgenerator(
-                                        runBlocking {
-                                            getData(current, keyInt = ATAQUE, type = 2).toString()
-                                                .toInt()
-                                        }, data.defensa
-                                    )
+                                val attack = runBlocking {
+                                    getData(
+                                        current, keyInt = ATAQUE, type = 2
+                                    ).toString().toInt()
                                 }
-                                if (player > 0f && data.vida > 0) {
-                                    ataque = player
-                                    data.vida -= 1
-                                } else {
-                                    ataque = 0f
-
-                                }
-                                val totalvida = ((runBlocking {
+                                val totalAttack = ((runBlocking {
                                     getData(current, keyInt = VIDA, type = 2).toString().toInt()
                                 } + data.vida).toFloat()) * 2f
+                                val obtainAttack = attackSystem(
+                                    current,
+                                    data.defensa,
+                                    attack,
+                                    totalAttack,
+                                    player = true
+                                )
 
-                                progress += (ataque / totalvida)
+                                if ((obtainAttack * totalAttack) - (data.defensa / 2) > 0) {
+                                    data.vida -= 1
+                                }
+
+                                progress += obtainAttack
                             }
 
-                            //Log.d("Prueba", "Enemy: $progress")
                             if (progress >= 1f || data.vida <= 0 || vida <= 0 || progress < 0f) {
                                 finished = true
                                 if (activated && (progress >= 1f || data.vida <= 0)) {
@@ -297,7 +272,9 @@ fun FightScreen(
                                 viewModel.putVictoryRanking(
                                     RankingRequest(
                                         runBlocking {
-                                            getData(current, keyString = ID, type = 1).toString()
+                                            getData(
+                                                current, keyString = ID, type = 1
+                                            ).toString()
                                         },
                                         runBlocking {
                                             getData(
@@ -313,7 +290,12 @@ fun FightScreen(
                                 )
                                 saveData(current, viewModel)
 
-                                setData(current, dataBoolean = false, BooleanKey = PreferencesKeys.BATTLE_ACTIVE, type = 4)
+                                setData(
+                                    current,
+                                    dataBoolean = false,
+                                    BooleanKey = PreferencesKeys.BATTLE_ACTIVE,
+                                    type = 4
+                                )
                             },
                             onBack = { onBack() },
                             titleText = "¡HAS GANADO!",
@@ -325,7 +307,9 @@ fun FightScreen(
                                 viewModel.putDerrotRanking(
                                     RankingRequest(
                                         runBlocking {
-                                            getData(current, keyString = ID, type = 1).toString()
+                                            getData(
+                                                current, keyString = ID, type = 1
+                                            ).toString()
                                         },
                                         runBlocking {
                                             getData(
@@ -336,7 +320,12 @@ fun FightScreen(
                                 )
                                 saveData(current, viewModel)
 
-                                setData(current, dataBoolean = false, BooleanKey = PreferencesKeys.BATTLE_ACTIVE, type = 4)
+                                setData(
+                                    current,
+                                    dataBoolean = false,
+                                    BooleanKey = PreferencesKeys.BATTLE_ACTIVE,
+                                    type = 4
+                                )
                                 showDialog = false
                             },
                             onBack = { onBack() },
@@ -395,7 +384,6 @@ fun FightItemCharacter(vida: Int, maxVida: Int) {
                 getData(context, keyInt = VIDA, type = 2).toString().toInt()
             }.toFloat()
             val current = if (total > 0 && maxVida > 0) vida.toFloat() / maxVida else 0f
-            Log.d("Prueba", "${current} $vida, $maxVida")
             LinearProgressIndicator(
                 progress = current,
                 color = buttonCancelColor,
@@ -450,7 +438,7 @@ fun FightItemEnemy(data: npc, maxvidanpc: Int) {
                 modifier = Modifier.padding(top = 12.dp)
             )
             var current =
-                if (data.vida > 0 && maxvidanpc > 0) (data.vida.toFloat() / maxvidanpc) * 100f else 0f
+                if (data.vida > 0 && maxvidanpc > 0) (data.vida.toFloat() / maxvidanpc) else 0f
             LinearProgressIndicator(
                 progress = current,
                 color = buttonCancelColor,
@@ -568,7 +556,8 @@ fun Fightdetail2(data: npc) {
 @Preview
 @Composable
 fun PreviewFightScreen() {
-    FightScreen(data = npc(
-        "", "", 0, 0, 0, 0, ""
-    ), onBack = {})
+    FightScreen(
+        data = npc(
+            "", "", 0, 0, 0, 0, ""
+        ), onBack = {})
 }

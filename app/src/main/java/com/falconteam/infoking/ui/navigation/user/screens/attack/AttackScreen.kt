@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.screens.attack
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -202,9 +201,14 @@ fun AttackCard(
             }
 
             Text(
-                text = "Te has encontrado con ${data?.nombre} que tiene ${data?.vida ?: 0} de vida, \n" +
-                        "${data?.ataque} de ataque, ${data?.defensa} de defensa\n" +
-                        "y te dara ${expObtain(player = nivel, npc = data?.nivel ?: 1)} de exp.\n" +
+                text = "Te has encontrado con ${data?.nombre} que tiene ${data?.vida ?: 0} de vida, " +
+                        "${data?.ataque} de ataque, ${data?.defensa} de defensa " +
+                        "y te dará ${
+                            expObtain(
+                                player = nivel,
+                                npc = data?.nivel ?: 1
+                            )
+                        } de experiencia. " +
                         "¿Deseas atacarlo?",
                 color = white,
                 fontSize = sizeFont,

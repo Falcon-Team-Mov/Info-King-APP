@@ -1,6 +1,5 @@
 package com.falconteam.infoking.ui.navigation.user.screens.ranking
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,10 +33,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.falconteam.infoking.data.models.Rankings
-import com.falconteam.infoking.ui.components.formatNumber
-import com.falconteam.infoking.ui.components.formatNumberWithComma
 import com.falconteam.infoking.ui.components.PopUpWithIcon
 import com.falconteam.infoking.ui.components.TextResponsiveSize
+import com.falconteam.infoking.ui.components.formatNumber
+import com.falconteam.infoking.ui.components.formatNumberWithComma
 import com.falconteam.infoking.ui.navigation.user.screens.tools.LoadingScreen
 import com.falconteam.infoking.ui.theme.InfoKingTheme
 import com.falconteam.infoking.ui.theme.buttonOKColor
@@ -134,7 +133,6 @@ fun RankingItem(
         val loses = viewModel.dataRankingUser[0]?.derrotas?.let { formatNumberWithComma(it) }
 
         if (showDialog && viewModel.finishedRanking.value) {
-            Log.d("getsIcon", icon.toString())
             PopUpWithIcon(
                 onDismiss = { showDialog = false; viewModel.finishedRanking.value = false },
                 onBack = {},

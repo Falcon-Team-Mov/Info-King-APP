@@ -38,7 +38,6 @@ class LoginRepository(private val api: LoginService) {
     suspend fun getVersion(): String {
         try {
             val response = api.getVersion()
-            Log.d("AppVer", "getVersion: ${response.version}")
             return response.version
         } catch (e: HttpException) {
             return "0.0.0"

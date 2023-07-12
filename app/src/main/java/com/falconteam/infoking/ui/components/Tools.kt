@@ -9,6 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -25,8 +26,8 @@ import java.text.NumberFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.math.ceil
 import java.util.Locale
+import kotlin.math.ceil
 import kotlin.random.Random
 
 @Composable
@@ -130,11 +131,6 @@ fun calculateLevel(current: Context, npc: Int, viewModel: LoginViewModel) {
         getData(current, keyInt = PreferencesKeys.MAX_ENERGIA, type = 2).toString().toInt()
     }
 
-    Log.d(
-        "calculateLevel",
-        "exp: $exp nivel: $nivel vida: $vida ataque: $ataque defensa: $defensa energia: $energia"
-    )
-
     setData(
         current,
         IntKey = PreferencesKeys.EXP,
@@ -183,7 +179,6 @@ fun expObtain(player: Int, npc: Int): Int {
         player - 2 > npc -> 1
         else -> 2
     }
-    Log.d("Pruebas", "expObtain: $result")
     return result
 }
 
@@ -265,7 +260,9 @@ fun HealtTimer(context: Context, seconds: Int, popup: Boolean = false): Boolean 
         val nivel = runBlocking {
             getData(context, keyInt = PreferencesKeys.NIVEL, type = 2).toString().toInt()
         }
-        val vidaMax = runBlocking { getData(context, keyInt = PreferencesKeys.MAX_VIDA, type = 2).toString().toInt() }
+        val vidaMax = runBlocking {
+            getData(context, keyInt = PreferencesKeys.MAX_VIDA, type = 2).toString().toInt()
+        }
         val vidaFinal = if (vida + ((seconds) / (10 * 60)) * 30 > vidaMax) {
             vidaMax
         } else {
@@ -274,7 +271,13 @@ fun HealtTimer(context: Context, seconds: Int, popup: Boolean = false): Boolean 
         val energia = runBlocking {
             getData(context, keyInt = PreferencesKeys.ENERGIA, type = 2).toString().toInt()
         }
-        val energiaMax = runBlocking { getData(context, keyInt = PreferencesKeys.MAX_ENERGIA, type = 2).toString().toInt() }
+        val energiaMax = runBlocking {
+            getData(
+                context,
+                keyInt = PreferencesKeys.MAX_ENERGIA,
+                type = 2
+            ).toString().toInt()
+        }
         val energiaFinal = if (energia + ((seconds) / (10 * 60)) > energiaMax) {
             energiaMax
         } else {
@@ -349,19 +352,18 @@ fun calculateTime(fechaInicioString: String, fechaFinString: String): Long {
 
         return segundosTranscurridos
     } catch (e: Exception) {
-        //Log.d("Prueba", "calcularMinutosTranscurridos: $e")
         return 0
     }
 }
 
 
-suspend fun attackgenerator(attack: Int, defensa: Int): Float {
-    if (attack <= 0 || defensa <= 0) {
+suspend fun attackgenerator(attack: Int): Float {
+    if (attack <= 0) {
         return 0f
     } else {
-        val random = (generateRandomNumber(defensa, defensa / 2))
-        val _attack = (attack * random / (defensa * 1f))
-        return if (_attack <= 0) {
+        val random = (generateRandomNumber(attack / 2, -attack / 2))
+        val _attack = (attack + random)
+        return if (_attack < -attack) {
             0f
         } else {
             _attack.toFloat()
@@ -375,18 +377,21 @@ fun formatNumber(number: Int): String {
         number >= 1_000_000 -> {
             val decimalFormat = DecimalFormat("#.#")
             val formatted = decimalFormat.format(number / 1_000_000.0)
-            val commaFormatted = NumberFormat.getNumberInstance(Locale.US).format(formatted.toDouble())
+            val commaFormatted =
+                NumberFormat.getNumberInstance(Locale.US).format(formatted.toDouble())
             "$commaFormatted M"
         }
+
         number in 1_000..999_999 -> {
             val decimalFormat = DecimalFormat("#.##")
             val formatted = decimalFormat.format(number / 1_000.0)
-            val commaFormatted = NumberFormat.getNumberInstance(Locale.US).format(formatted.toDouble())
+            val commaFormatted =
+                NumberFormat.getNumberInstance(Locale.US).format(formatted.toDouble())
             "$commaFormatted k"
         }
+
         else -> number.toString()
     }
-    // Log.d("debug", formattedNumber)
     return formattedNumber
 }
 
@@ -397,8 +402,26 @@ fun formatNumberWithComma(number: Int): String {
             val thousands = String.format("%,d", number / 1_000)
             "${thousands}k"
         }
+
         else -> String.format("%,d", number)
     }
     return formattedNumber
 }
 
+fun attackSystem(
+    current: Context,
+    defensa: Int,
+    ataque: Int,
+    totalvida: Float,
+    player: Boolean = false,
+    vida: Int = 0
+): Float {
+    var enemy = mutableStateOf(0f)
+    enemy.value = runBlocking {
+        attackgenerator(ataque)
+    }
+    if ((enemy.value - (defensa / 2)) > 0 && !player) {
+        setData(current, dataInt = vida - 1, IntKey = PreferencesKeys.VIDA, type = 2)
+    }
+    return (enemy.value.toInt() / totalvida)
+}

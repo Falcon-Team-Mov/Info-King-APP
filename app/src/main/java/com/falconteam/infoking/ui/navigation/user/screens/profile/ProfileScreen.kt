@@ -1,7 +1,6 @@
 package com.falconteam.infoking.ui.navigation.user.screens.profile
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -79,7 +77,6 @@ import com.falconteam.infoking.ui.theme.secondaryAquaColor
 import com.falconteam.infoking.ui.theme.secondaryBlueColor
 import com.falconteam.infoking.ui.viewmodels.RankingViewModel
 import kotlinx.coroutines.runBlocking
-import kotlin.math.log
 
 @Composable
 fun ProfileScreen(
@@ -106,9 +103,7 @@ fun ProfileScreen(
                 color = secondaryAquaColor,
                 fontSize = TextResponsiveSize(size = 40.sp)
             )
-            //Log.d("Prueba", "${viewModel.dataRankingProfile[0]}")
             if (viewModel.dataRankingProfile[0] === null) viewModel.getPosition(context)
-            //if (viewModel.finished_profile.value && viewModel.dataRankingProfile.values != null) {
             var logout by remember {
                 mutableStateOf(false)
             }

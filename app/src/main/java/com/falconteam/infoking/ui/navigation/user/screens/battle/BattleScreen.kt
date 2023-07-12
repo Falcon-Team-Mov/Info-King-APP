@@ -140,7 +140,6 @@ fun BattleCard(onClick: () -> Unit) {
                             context, keyInt = PreferencesKeys.VIDA, type = 2
                         ).toString().toInt()
                     }
-                    Log.d("uwu", health.toString())
                     if (energia > 0 && health >= 30) {
                         runBlocking {
                             setData(

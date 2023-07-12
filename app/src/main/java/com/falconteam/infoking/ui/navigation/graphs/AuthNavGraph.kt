@@ -62,9 +62,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
 
 
             if (appVersion != null && appVersion != "" && appVersion != versionName) {
-                Log.d(
-                    "Prueba", "$versionName, $appVersion"
-                )
                 showDialog = true
                 PopUpOneButtonDescription(
                     onDismiss = { showDialog = false },
@@ -74,9 +71,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                     buttonText = "ACTUALIZAR"
                 )
             } else if (appVersion != null && appVersion != "") {
-                Log.d(
-                    "Prueba", "$versionName, $appVersion"
-                )
+
                 if (id != null && id != "") {
                     viewModel.getUserData(context = context, id = id!!)
                 } else {
@@ -109,6 +104,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
                         }
                     }
                 }
+            } else {
+                LoadingScreen()
             }
         }
 
